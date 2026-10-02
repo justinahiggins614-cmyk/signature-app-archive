@@ -187,6 +187,7 @@ h2.cattitle{color:var(--gold)}
 <script id="appjsonld" type="application/ld+json">{}</script>
 <script src="code/appgen.js"></script>
 <script src="code/demos.js"></script>
+<script src="js/jah-talk-fallback.js"></script>
 <script>
 /* ============ tiered read-aloud: speechSynthesis -> ResponsiveVoice -> Google TTS ============ */
 var AU={q:[],i:0,active:false,paused:false,rate:1,label:""};
@@ -332,7 +333,7 @@ function showApp(o){
     '<button class="btn gold" onclick="dlAppPy()">⬇ Python source (.py)</button>'+
     '<button class="btn gold" onclick="dlAppZip()">📦 Thumbdrive / CD-ROM pack (.zip)</button></div>'+
     '<div class="xlinks">🔗 <b>Around the network:</b> <a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">sibling software in the Signature Cyber Mega-Mall</a> · <a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">runs on systems in the PC System Depository</a></div>'+
-    '<div class="qa"><div class="q">❓ Ask the AI helper</div><div id="qaout"><p class="note">Ask anything about '+esc(o.name)+' — answers come only from its file.</p></div>'+
+    '<div class="qa"><div class="q">❓ Ask the AI helper</div><div id="qaout"><p class="note">'+esc(qaGreet(o))+'</p></div>'+
     '<div class="qarow"><input id="qain" placeholder="e.g. What are the system requirements? How do I export?" aria-label="Ask about this app"><button class="btn" onclick="askQA()">Ask</button></div></div>'+
     '</div>';
   document.getElementById("appview").innerHTML=h;
@@ -419,6 +420,43 @@ async function dlAppZip(){
 /* ============ grounded AI helper — answers only from the app's file ============ */
 var QA_STOP=new Set("the,a,an,and,or,for,to,of,in,on,with,is,it,this,that,what,does,which,how,are,be,was,were,at,by,from,as,so,but,if,not,no,yes,up,out,about,into,over,after,than,then,there,their,them,they,he,she,his,her,its,tell,me,my,you,your,do,can,please,give,show,have,has,had,will,would,should,could,much,many,big,small".split(","));
 function qaTokens(t){return String(t||"").toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){return w.length>=3&&!QA_STOP.has(w)})}
+/* ============ JAHtalk conversational wiring (shared module: js/jah-talk-fallback.js) ============
+   The App Helper is a generic site helper — it claims NO canon JAH-AI ID.
+   Conversational layer: JAHtalk.reply() talks human as the fallback under the
+   grounded keyword engine; JAHtalk.guard() scrubs every final reply;
+   JAHtalk.greet() auto-greets when the helper opens. */
+function qaTalk(){return (typeof JAHtalk!=="undefined")?JAHtalk:null}
+function qaProfile(o){
+  return {name:"App Helper",
+    description:"I help you get the most out of "+o.name+" — what it does, how to use it, what it needs, and what you can download.",
+    abilities:["Explain "+o.name+"'s features in plain words",
+      "Walk you through how to use it, step by step",
+      "Tell you the system requirements and what it runs on",
+      "Describe version history and downloads: copy, .txt, .json, single-file app, Python source, thumbdrive pack"],
+    domain:o.name+" ("+o.id+") — this app's own file",kind:"helper"};
+}
+function qaIsSmallTalk(q){
+  var t=String(q||"").toLowerCase();
+  return /^(hi|hii+|hey|hello|yo|howdy|good\s?(morning|afternoon|evening|day)|greetings|sup|hiya)\b/.test(t)
+    ||/who are you|your name|introduce yourself|about yourself/.test(t)
+    ||/what are your duties|what is your duty|what do you do|what can you do|your duties|your job|your role|your abilities|your capabilities|explain your duties|what are you for/.test(t)
+    ||(/\bduties\b/.test(t)&&t.length<30)
+    ||/thank/.test(t)||/^(bye|goodbye|good ?night|see you|later|gtg)\b/.test(t)
+    ||/how are you|how's it going|how do you feel/.test(t);
+}
+function qaAnswerHtml(o,q,best){
+  var JT=qaTalk(),prof=qaProfile(o),html;
+  if(JT&&qaIsSmallTalk(q)){html=esc(JT.guard(JT.reply(prof,q),prof));}
+  else if(best){html="<b>"+esc(best.t)+":</b> "+esc(JT?JT.guard(best.h,prof):best.h);}
+  else if(JT){html=esc(JT.guard(JT.reply(prof,q),prof));}
+  else{html="I can only answer from this app's file — try asking about its features, how to use it, system requirements, versions, or downloads.";}
+  return '<div class="q">Q: '+esc(q)+'</div><div class="a">A: '+html+'</div>';
+}
+function qaGreet(o){
+  var JT=qaTalk();
+  if(JT){try{return JT.greet(qaProfile(o))}catch(e){}}
+  return "Ask anything about "+o.name+" — answers come only from its file.";
+}
 function askQA(){
   var inp=document.getElementById("qain"),q=inp.value.trim();if(!q)return;
   var o=A.cur,toks=qaTokens(q),out=document.getElementById("qaout");
@@ -435,8 +473,7 @@ function askQA(){
     var sc=0;toks.forEach(function(w){if(s.k.indexOf(w)>=0)sc+=2;if(s.h.toLowerCase().indexOf(w)>=0)sc+=1});
     if(sc>bs){bs=sc;best=s}
   });
-  var ans=best?("<b>"+best.t+":</b> "+esc(best.h)):"I can only answer from this app's file — try asking about its features, how to use it, system requirements, versions, or downloads.";
-  out.innerHTML='<div class="q">Q: '+esc(q)+'</div><div class="a">A: '+ans+'</div>';
+  out.innerHTML=qaAnswerHtml(o,q,best);
   inp.value="";
 }
 document.getElementById("aupause").onclick=auPauseToggle;
