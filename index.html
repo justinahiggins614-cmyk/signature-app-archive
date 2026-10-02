@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Signature App Archive — every app, Signature-made</title>
+<meta name="description" content="The Signature App Archive: original Signature-line versions of every phone and PC app — word processors, spreadsheets, email, accounting, games, utilities and more. Each app works right in your browser, with read-aloud, AI helper, downloads, and thumbdrive/CD-ROM packs. Marching to 1,000,000 apps.">
+<link rel="canonical" href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"The Signature App Archive","url":"https://justinahiggins614-cmyk.github.io/signature-app-archive/","description":"Original Signature-line versions of every phone and PC app class. Each app runs in the browser, with read-aloud, AI helper, and downloads."}
+</script>
+<style>
+:root{--bg:#070b16;--bg2:#0a0f1e;--line:#2a3a5f;--txt:#d7e3ff;--dim:#9aa4b2;--gold:#c9a227;--cy:#00f0ff;--am:#e8a020}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
+.jahnet{background:#0a0f1e;color:#9aa4b2;font-size:.72em;padding:7px 10px;text-align:center;line-height:2.1;letter-spacing:.02em;border-bottom:1px solid #2a3a5f}
+.jahnet-t{color:#c9a227;font-weight:700;letter-spacing:.25em;margin-right:10px}
+.jahnet a{color:#9fc2ff;text-decoration:none;margin:0 6px;white-space:nowrap}
+.jahnet a:hover{text-decoration:underline}
+.jahnet .cur{color:#c9a227;font-weight:700;margin:0 6px}
+.jahnet .bld{color:#6b7488;font-size:.9em}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.hero{padding:38px 0 22px;text-align:center;background:radial-gradient(700px 300px at 50% -40px,#12233f55,transparent)}
+.hero h1{font-size:2em;margin:.2em 0;color:var(--gold);letter-spacing:.02em}
+.hero .sub{color:var(--dim);max-width:760px;margin:0 auto}
+.stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:18px 0}
+.stat{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 18px;min-width:130px}
+.stat b{display:block;font-size:1.5em;color:var(--cy)}
+.stat span{font-size:.8em;color:var(--dim)}
+.march{max-width:560px;margin:6px auto 0}
+.march .bar{height:10px;background:#111a30;border-radius:6px;overflow:hidden}
+.march .fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--am))}
+.march small{color:var(--dim)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin:22px 0}
+.fcard{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:16px;cursor:pointer;transition:.15s}
+.fcard:hover{border-color:var(--cy);transform:translateY(-2px)}
+.fcard .ic{font-size:1.8em}
+.fcard h3{margin:.4em 0;font-size:1.02em;color:var(--txt)}
+.fcard p{font-size:.82em;color:var(--dim);margin:0}
+.fcard .go{color:var(--cy);font-size:.82em;margin-top:8px;display:block}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;align-items:center}
+.toolbar input[type=search]{flex:1;min-width:200px;padding:11px 14px;border-radius:10px;border:1px solid var(--line);background:#060b1c;color:var(--txt)}
+.toolbar select{padding:11px;border-radius:10px;border:1px solid var(--line);background:#060b1c;color:var(--txt)}
+.btn{background:#12233f;border:1px solid var(--cy);color:var(--cy);border-radius:10px;padding:10px 18px;cursor:pointer;font-size:.92em}
+.btn:hover{background:#1a3054}
+.btn.gold{border-color:var(--gold);color:var(--gold)}
+.btn.ghost{background:transparent}
+.az{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.az button{background:#0d1526;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:7px 11px;cursor:pointer}
+.az button.on{border-color:var(--gold);color:var(--gold)}
+.finderbar{display:flex;gap:10px;margin:16px 0 4px;flex-wrap:wrap}
+.finderbar input[type=search]{flex:1;min-width:200px;padding:11px 14px;border-radius:10px;border:1px solid var(--line);background:#060b1c;color:var(--txt);font-size:.95em}
+.fresults{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:13px;cursor:pointer}
+.card:hover{border-color:var(--cy)}
+.card h4{margin:.2em 0;font-size:.95em}
+.card .sku{font-size:.72em;color:var(--dim)}
+.card .tag{font-size:.8em;color:var(--dim)}
+.panel{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:18px;margin:16px 0}
+.panel h2{margin-top:0;color:var(--gold)}
+.sect{margin:16px 0}
+.sect h3{color:var(--cy);font-size:1em;margin:.4em 0;border-bottom:1px solid var(--line);padding-bottom:6px}
+table.spec{width:100%;border-collapse:collapse;font-size:.88em}
+table.spec td,table.spec th{border-bottom:1px solid #1a2440;padding:7px 8px;text-align:left}
+table.spec th{color:var(--dim);font-weight:400}
+.mbtns{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.qa{background:#0d1526;border:1px solid var(--line);border-radius:10px;padding:14px;margin-top:14px}
+.qa .q{font-weight:700;color:var(--gold)}
+.qa .a{margin-top:6px;font-size:.9em}
+.qarow{display:flex;gap:8px;margin-top:10px}
+.qarow input{flex:1;padding:10px;border-radius:8px;border:1px solid var(--line);background:#060b1c;color:var(--txt)}
+footer{border-top:1px solid var(--line);margin-top:30px;padding:20px 0 40px;color:var(--dim);font-size:.82em}
+footer .sites{line-height:2.2}
+footer .sites a{color:#9fc2ff;text-decoration:none;margin:0 6px}
+#aubar{position:fixed;bottom:0;left:0;right:0;background:#0a0f22;border-top:1px solid var(--cy);padding:10px 16px;display:none;align-items:center;gap:12px;z-index:9999}
+#aubar .prog{flex:1;font-size:.85em;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.staticcount{color:var(--dim);font-size:.85em;text-align:center}
+.backlink{display:inline-block;margin:10px 0;color:var(--cy);cursor:pointer}
+h2.cattitle{color:var(--gold)}
+.note{font-size:.8em;color:var(--dim)}
+/* ---- demo styles ---- */
+.drow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;align-items:center}
+.dbtn{background:#12233f;border:1px solid var(--cy);color:var(--cy);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.88em}
+.dbtn:hover{background:#1a3054}
+.dnote{font-size:.82em;color:var(--dim);margin:8px 0}
+.dgrid{border-collapse:collapse;margin:8px 0;max-width:100%;overflow-x:auto;display:block}
+.dgrid td,.dgrid th{border:1px solid var(--line);padding:4px 6px;font-size:.85em}
+.dgrid input{background:#060b1c;border:0;color:var(--txt);width:74px;padding:4px}
+.dgrid tr.dlow td{background:#3a1414}
+.dedit{min-height:160px;border:1px solid var(--line);border-radius:8px;padding:12px;background:#060b1c}
+.dslide{background:#0d1526;border:1px solid var(--line);border-radius:10px;padding:26px;min-height:150px;text-align:center}
+.dslidetitle{font-size:1.4em;color:var(--gold);margin-bottom:10px}
+.dpresent{position:fixed;inset:0;background:#04060d;z-index:10000;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.dpslide{text-align:center;max-width:80%}
+.dpslide h2{color:var(--gold);font-size:2.2em}
+.dmsg{padding:8px;border-bottom:1px solid #1a2440;cursor:pointer;font-size:.9em}
+.dmsgopen{padding:10px}
+.dsearch{padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:#060b1c;color:var(--txt);min-width:200px}
+.dkanban{display:flex;gap:10px;flex-wrap:wrap}
+.dkcol{flex:1;min-width:180px;background:#0d1526;border:1px solid var(--line);border-radius:8px;padding:10px}
+.dktask{background:#060b1c;border:1px solid var(--line);border-radius:6px;padding:8px;margin:8px 0;font-size:.85em}
+.dchatlog{max-height:220px;overflow-y:auto;border:1px solid var(--line);border-radius:8px;padding:10px;background:#060b1c;margin-bottom:8px}
+.dchat{margin:6px 0;font-size:.9em}
+.dframe{width:100%;height:280px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.dttt{display:grid;grid-template-columns:repeat(3,64px);gap:6px;margin:10px 0}
+.dttt button{width:64px;height:64px;font-size:1.6em;background:#0d1526;border:1px solid var(--line);color:var(--cy);border-radius:8px;cursor:pointer}
+.dmem{display:grid;grid-template-columns:repeat(4,64px);gap:6px;margin:10px 0}
+.dmem button{width:64px;height:64px;font-size:1.5em;background:#0d1526;border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.dsnake{border:1px solid var(--line);border-radius:8px;background:#060b1c}
+.dpaint{border:1px solid var(--line);border-radius:8px;touch-action:none;max-width:100%}
+.ddoc{background:#0d1526;border:1px solid var(--line);border-radius:8px;padding:14px;white-space:pre-wrap;font-size:.9em;min-height:120px}
+.dtl{display:flex;gap:4px;margin:10px 0;flex-wrap:wrap}
+.dclip{background:#12233f;border:1px solid var(--cy);border-radius:6px;padding:8px;font-size:.8em;color:var(--cy)}
+.dcode{width:100%;height:130px;background:#060b1c;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:10px;font-family:monospace}
+.dconsole{background:#060b1c;border:1px solid var(--line);border-radius:8px;padding:10px;font-family:monospace;font-size:.85em;min-height:44px;white-space:pre-wrap}
+.dsky{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.dcard2{background:#0d1526;border:1px solid var(--line);border-radius:8px;padding:10px;min-width:86px;text-align:center;font-size:.85em}
+.dfc{margin:10px 0}
+.dfccard{background:#0d1526;border:1px solid var(--gold);border-radius:10px;padding:30px;text-align:center;font-size:1.5em;max-width:340px}
+.dcards{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.dperson{background:#0d1526;border:1px solid var(--line);border-radius:8px;padding:10px;min-width:170px;font-size:.88em}
+.drec ul{margin:6px 0}
+.ddot{color:var(--gold)}
+.dsafety{background:#2a1a0a;border:1px solid var(--am);border-radius:10px;padding:12px 16px;font-size:.88em;color:#f0d9a8;margin:12px 0}
+.xlinks{background:#0d1526;border:1px dashed var(--line);border-radius:10px;padding:12px 16px;margin:14px 0;font-size:.88em}
+.xlinks a{color:#9fc2ff}
+</style>
+</head>
+<body>
+<nav class="jahnet" aria-label="The JAH Network"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Telephone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">The Signature PC System Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Signature Cyber Mega Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">The Signature Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">The Signature Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">The Signature Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">The Signature 3D Print Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Signature Backend</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">The Signature Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">The Signature AI Mix Lab</a> <span class="bld">(building)</span><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a> <span class="bld">(building)</span><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">The Signature Computer Chip Maker and Archive</a> <span class="bld">(building)</span><span class="cur">YOU ARE HERE: THE SIGNATURE APP ARCHIVE</span><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">The Signature AI Robot Matcher</a> <span class="bld">(building)</span></nav>
+
+<div class="wrap">
+<header class="hero">
+<h1>📱 The Signature App Archive</h1>
+<p class="sub">Original Signature-line versions of <b>every phone and PC app</b> — word processors, spreadsheets, email, calendars, accounting, inventory, point of sale, project boards, games, utilities, and every office, business, market, government and personal-life app. Each one <b>works right here in your browser</b>, reads aloud, answers your questions, and downloads for your thumbdrive or CD-ROM. Marching to 1,000,000 apps.</p>
+<div class="stats" id="stats"><div class="stat"><b>…</b><span>loading</span></div></div>
+<div class="march"><div class="bar"><div class="fill" id="marchfill"></div></div><small id="marchtxt">Marching to 1,000,000 apps</small></div>
+<p class="staticcount">1,500 Signature apps on file across 30 app categories, as of 2026-10-02. Live count above.</p>
+</header>
+
+<div id="home">
+<div class="toolbar">
+<input type="search" id="q" placeholder="Search apps — name, feature, or JAH-APP-…" aria-label="Search apps">
+<select id="fcat" aria-label="Category filter"><option value="">All categories</option></select>
+</div>
+<div class="finderbar"><input type="search" id="fq" maxlength="140" placeholder="Describe the app you need… e.g. something to track my shop inventory" aria-label="Describe the app you need"><button class="btn" id="fgo">Find it</button></div>
+<div id="fresults" class="fresults"></div>
+<div class="az" id="az"></div>
+<h2 style="color:var(--gold)">App categories</h2>
+<div class="grid" id="catgrid"></div>
+<h2 style="color:var(--gold)" id="freshtitle">Fresh from the archive</h2>
+<div class="cards" id="fresh"></div>
+</div>
+
+<div id="catview" style="display:none"></div>
+<div id="appview" style="display:none"></div>
+</div>
+
+<footer><div class="wrap">
+<p><b style="color:var(--gold)">The Signature App Archive</b> — every app an original Signature-line program by <b>Justin Addam Higgins</b>. Inspired by each app class, copying no product, brand, or design. Demos run live in your browser; downloads pack the app for thumbdrive or CD-ROM.</p>
+<div class="sites">THE JAH NETWORK ·
+<a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">Telephone Book</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">Dictionary</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Patent Catalog</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Spec Catalog</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">PC Depository</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Mega Mall</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/signature-university/">University</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/signature-books/">Book Depository</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/signature-comics/">Comic Store</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">Newspaper Archive</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">3D Print Depository</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Signature Backend</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">Generator Archive</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">Mix Lab</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">Chip Maker</a> ·
+<a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">Robot Matcher</a></div>
+</div></footer>
+
+<div id="aubar"><span id="aulabel">Reading…</span><span class="prog" id="auprog"></span><button class="btn ghost" id="aupause">⏸ Pause</button><button class="btn ghost" id="austop">⏹ Stop</button></div>
+<script id="appjsonld" type="application/ld+json">{}</script>
+<script src="code/appgen.js"></script>
+<script src="code/demos.js"></script>
+<script>
+/* ============ tiered read-aloud: speechSynthesis -> ResponsiveVoice -> Google TTS ============ */
+var AU={q:[],i:0,active:false,paused:false,rate:1,label:""};
+function auVoice(){try{var vs=window.speechSynthesis.getVoices().filter(function(v){return v.lang&&v.lang.toLowerCase().indexOf("en")===0});if(!vs.length)return null;var fem=/samantha|zira|joanna|amy|emma|kate|serena|moira|tessa|veena|fiona|karen|female|google us english/i;for(var i=0;i<vs.length;i++)if(fem.test(vs[i].name))return vs[i];var g=vs.filter(function(v){return v.name.toLowerCase().indexOf("google")>=0})[0];return g||vs[0]||null}catch(e){return null}}
+function auChunks(text){var out=[],cur="",parts=String(text).split(/([.!?]["']?(?:\s+|$))/);for(var i=0;i<parts.length;i+=2){var sent=((parts[i]||"")+(parts[i+1]||"")).replace(/\s+/g," ").trim();if(!sent)continue;if(cur&&(cur+" "+sent).length>220){out.push(cur.trim());cur=sent}else cur=cur?cur+" "+sent:sent}if(cur.trim())out.push(cur.trim());return out}
+function auShowBar(show){var bar=document.getElementById("aubar");if(bar)bar.style.display=show?"flex":"none"}
+function auPaintBtn(){var p=document.getElementById("aupause");if(p)p.innerHTML=AU.paused?"&#9654; Resume":"&#10074;&#10074; Pause";var l=document.getElementById("aulabel");if(l)l.textContent="Reading: "+AU.label;var pr=document.getElementById("auprog");if(pr)pr.textContent=AU.q.length?("chunk "+(AU.i+1)+" of "+AU.q.length):""}
+function auSpeakNext(){if(AU.i>=AU.q.length||!AU.active){auStop();return}auShowBar(true);auPaintBtn();var u=new SpeechSynthesisUtterance(AU.q[AU.i]);u.rate=AU.rate;u.lang="en-US";var v=auVoice();if(v)u.voice=v;u.onend=function(){if(!AU.active)return;AU.i++;auSpeakNext()};u.onerror=function(){if(!AU.active)return;AU.i++;auSpeakNext()};window.speechSynthesis.speak(u)}
+function hasSpeech(){try{return("speechSynthesis" in window)&&!!window.speechSynthesis&&typeof window.speechSynthesis.speak==="function"}catch(e){return false}}
+try{if(hasSpeech()){window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=function(){try{window.speechSynthesis.getVoices()}catch(e){}}}}catch(e){}
+function audMsg(m){var t=document.getElementById("audmsg");if(!t){t=document.createElement("div");t.id="audmsg";t.style.cssText="position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#0a0f22;border:1px solid #00f0ff;color:#d7e3ff;padding:10px 18px;border-radius:10px;z-index:10001;font-size:.9em;max-width:92vw;text-align:center";document.body.appendChild(t)}t.textContent=m;t.style.display="block";clearTimeout(t._h);t._h=setTimeout(function(){t.style.display="none"},2600)}
+var FX={audio:null,active:false,errs:0};
+var TTS_TIERS=[function(t){return "https://code.responsivevoice.org/getvoice.php?t="+encodeURIComponent(t)+"&tl=en-US"},function(t){return "https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q="+encodeURIComponent(t)},function(t){return "https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q="+encodeURIComponent(t)}];
+function fxChunks(text){var out=[],cur="",parts=String(text).split(/([.!?]["']?(?:\s+|$))/);function pushWords(s){var w=s.split(" "),c="";for(var k=0;k<w.length;k++){var t=(c+" "+w[k]).trim();if(t.length>180){if(c)out.push(c);c=w[k]}else c=t}if(c)out.push(c)}for(var i=0;i<parts.length;i+=2){var s=((parts[i]||"")+(parts[i+1]||"")).replace(/\s+/g," ").trim();if(!s)continue;if(s.length>180){if(cur){out.push(cur);cur=""}pushWords(s);continue}if(cur&&(cur+" "+s).length>180){out.push(cur);cur=s}else cur=cur?cur+" "+s:s}if(cur)out.push(cur);return out}
+function fxPlay(list,i,tier,retry,proven){if(!FX.active||!AU.active)return;if(i>=list.length){auStop();return}var a;try{a=new Audio(TTS_TIERS[tier](list[i]))}catch(e){auStop();return}try{a.playbackRate=AU.rate||1}catch(e){}FX.audio=a;a.onended=function(){if(AU.active&&FX.active){FX.errs=0;fxPlay(list,i+1,tier,0,true)}};a.onerror=function(){if(!AU.active||!FX.active)return;if(!proven){if(retry<1){fxPlay(list,i,tier,retry+1,false);return}if(tier+1<TTS_TIERS.length){fxPlay(list,i,tier+1,0,false);return}auStop();audMsg("I couldn't reach a voice service — check your connection, or open this page in Chrome for built-in voices.");return}if(retry<1){fxPlay(list,i,tier,retry+1,true);return}FX.errs=(FX.errs||0)+1;if(FX.errs>4){auStop();audMsg("The voice service dropped — check your connection, or open this page in Chrome.");return}fxPlay(list,i+1,tier,0,true)};try{var pr=a.play();if(pr&&pr.catch)pr.catch(function(){if(!proven&&i===0)audMsg("The browser blocked audio — tap the pause button, then play, to start it.")})}catch(e){}}
+function fxStart(text){FX.active=true;FX.errs=0;fxPlay(fxChunks(text),0,0,0,false)}
+function fxStop(){FX.active=false;if(FX.audio){try{FX.audio.pause()}catch(e){}FX.audio=null}}
+function auPauseToggle(){if(!AU.active)return;if(FX.active){var fa=FX.audio;try{if(AU.paused){if(fa)fa.play()}else{if(fa)fa.pause()}}catch(e){}AU.paused=!AU.paused;auPaintBtn();return}try{if(AU.paused)window.speechSynthesis.resume();else window.speechSynthesis.pause()}catch(e){}AU.paused=!AU.paused;auPaintBtn()}
+function auStop(){AU.active=false;AU.paused=false;AU.q=[];AU.i=0;fxStop();try{if(window.speechSynthesis)window.speechSynthesis.cancel()}catch(e){}auShowBar(false)}
+function appSpeakText(o){
+  var t=o.name+". "+o.tagline+". "+o.description+" ";
+  t+="Features. "+o.features.join(". ")+". ";
+  t+="How to use. "+o.how_to.join(" ")+" ";
+  t+="Runs on "+o.platforms+". Needs "+o.requirements.os.join(" or ")+", "+o.requirements.ram+", "+o.requirements.disk+". ";
+  t+="Version history. "+o.versions.map(function(v){return "Version "+v.v+": "+v.note}).join(" ");
+  return t.replace(/\s+/g," ").trim();
+}
+function readApp(o){auStop();AU.label=o.name;AU.q=auChunks(appSpeakText(o));AU.i=0;AU.active=true;AU.paused=false;if(hasSpeech()){try{window.speechSynthesis.cancel()}catch(e){}auSpeakNext()}else{auShowBar(true);auPaintBtn();fxStart(appSpeakText(o));audMsg("This browser has no built-in voice — reading with the online voice instead.")}}
+
+/* ============ app ============ */
+var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
+async function gz(url){var r=await fetch(url);if(!r.ok)throw new Error("HTTP "+r.status+" "+url);return await new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).text()}
+var A={manifest:null,idx:null,cats:[],cur:null};
+
+async function boot(){
+  try{A.manifest=await(await fetch("data/manifest.json")).json()}catch(e){}
+  A.cats=SigApp.families();
+  renderStats();renderCatGrid();renderCatFilter();renderAZ();
+  var qs=new URLSearchParams(location.search);
+  var app=qs.get("app"),cat=qs.get("cat");
+  if(app){showAppById(app);return}
+  if(cat&&SigApp.byKey(cat)){showCat(cat);return}
+  loadFresh();bindSearch();
+}
+function renderStats(){
+  var n=A.manifest?A.manifest.count:0,el=document.getElementById("stats");
+  el.innerHTML='<div class="stat"><b>'+n.toLocaleString()+'</b><span>apps on file</span></div>'+
+    '<div class="stat"><b>'+A.cats.length+'</b><span>app categories</span></div>'+
+    '<div class="stat"><b>1,000,000</b><span>march goal</span></div>';
+  document.getElementById("marchfill").style.width=Math.min(100,n/1000000*100)+"%";
+  document.getElementById("marchtxt").textContent=n.toLocaleString()+" / 1,000,000 apps";
+}
+function renderCatGrid(){
+  document.getElementById("catgrid").innerHTML=A.cats.map(function(c){
+    return '<div class="fcard" onclick="showCat(\''+c.key+'\')"><div class="ic">'+c.icon+'</div><h3>'+esc(c.name)+'</h3><p>'+esc(c.blurb)+'</p><span class="go">Browse apps →</span></div>';
+  }).join("");
+}
+function renderCatFilter(){
+  document.getElementById("fcat").innerHTML='<option value="">All categories</option>'+A.cats.map(function(c){return '<option value="'+c.key+'">'+esc(c.name)+'</option>'}).join("");
+}
+function renderAZ(){
+  var el=document.getElementById("az");
+  el.innerHTML='<button class="on" data-l="">#</button>'+"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(function(l){return '<button data-l="'+l+'">'+l+'</button>'}).join("");
+  el.querySelectorAll("button").forEach(function(b){b.onclick=function(){el.querySelectorAll("button").forEach(function(x){x.classList.remove("on")});b.classList.add("on");doSearch()}});
+}
+async function ensureIdx(){
+  if(A.idx)return A.idx;
+  try{var t=await gz("data/index.json.gz");A.idx=t.trim().split("\n").filter(Boolean).map(JSON.parse)}catch(e){A.idx=[]}
+  return A.idx;
+}
+function show(id){["home","catview","appview"].forEach(function(x){document.getElementById(x).style.display=x===id?"":"none"})}
+function catByKey(k){for(var i=0;i<A.cats.length;i++)if(A.cats[i].key===k)return A.cats[i];return null}
+async function loadFresh(){
+  var idx=await ensureIdx();
+  var rows=idx.slice(-12).reverse();
+  document.getElementById("fresh").innerHTML=rows.map(cardHTML).join("");
+}
+function cardHTML(r){
+  var c=catByKey(r[1]);
+  return '<div class="card" onclick="showAppById(\''+r[0]+'\')"><div class="sku">'+esc(r[0])+'</div><h4>'+(c?c.icon+" ":"")+esc(r[3])+'</h4><div class="tag">'+esc(r[4])+'</div></div>';
+}
+var searchT;
+function bindSearch(){
+  var q=document.getElementById("q");
+  q.addEventListener("input",function(){clearTimeout(searchT);searchT=setTimeout(doSearch,220)});
+  document.getElementById("fcat").addEventListener("change",doSearch);
+}
+async function doSearch(){
+  var idx=await ensureIdx();
+  var q=document.getElementById("q").value.trim().toLowerCase();
+  var cat=document.getElementById("fcat").value;
+  var L=document.querySelector("#az button.on").dataset.l;
+  var rows=idx.filter(function(r){
+    return (!cat||r[1]===cat)&&(!L||r[3].toUpperCase().charAt(0)===L)&&
+      (!q||r[0].toLowerCase().indexOf(q)>=0||r[3].toLowerCase().indexOf(q)>=0||r[4].toLowerCase().indexOf(q)>=0);
+  }).slice(-60).reverse();
+  document.getElementById("fresh").innerHTML=rows.length?rows.map(cardHTML).join(""):'<p class="note">No apps match — try another search.</p>';
+  document.getElementById("freshtitle").textContent=q||cat||L?"Search results":"Fresh from the archive";
+}
+async function showCat(key){
+  var c=catByKey(key);if(!c)return;
+  show("catview");history.replaceState(null,"","?cat="+key);window.scrollTo(0,0);
+  var idx=await ensureIdx();
+  var rows=idx.filter(function(r){return r[1]===key}).slice(-48).reverse();
+  document.getElementById("catview").innerHTML='<span class="backlink" onclick="goHome()">← All apps</span>'+
+    '<h2 class="cattitle">'+c.icon+' '+esc(c.name)+'</h2><p class="note">'+esc(c.blurb)+' — showing newest '+rows.length+'.</p>'+
+    '<div class="cards">'+rows.map(cardHTML).join("")+'</div>';
+}
+function goHome(){show("home");history.replaceState(null,"","./");window.scrollTo(0,0)}
+async function showAppById(id){
+  var idx=await ensureIdx();
+  var row=null;
+  for(var i=0;i<idx.length;i++)if(idx[i][0]===id){row=idx[i];break}
+  if(!row){goHome();return}
+  var o=SigApp.solve(row[1],row[2],row[0]);
+  showApp(o);
+}
+/* ============ app view ============ */
+function showApp(o){
+  A.cur=o;
+  show("appview");history.replaceState(null,"","?app="+o.id);window.scrollTo(0,0);
+  var c=catByKey(o.family);
+  setJsonLd(o,c);
+  var demo=DEMOS[o.demo]||null;
+  var h='<span class="backlink" onclick="goHome()">← All apps</span>'+
+    '<div class="panel"><div class="sku" style="font-size:.75em;color:var(--dim)">'+esc(o.id)+' · '+esc(o.platforms)+'</div>'+
+    '<h2>'+o.icon+' '+esc(o.name)+'</h2><p class="note">'+esc(o.tagline)+'</p>'+
+    '<div class="sect"><h3>📖 About this app</h3><p>'+esc(o.description)+'</p><p class="note">'+esc(o.lineage)+'</p></div>'+
+    '<div class="sect"><h3>✨ Features</h3><ul>'+o.features.map(function(f){return '<li>'+esc(f)+'</li>'}).join("")+'</ul></div>'+
+    '<div class="sect"><h3>🧭 How to use</h3><ol>'+o.how_to.map(function(f){return '<li>'+esc(f)+'</li>'}).join("")+'</ol></div>'+
+    '<div class="sect"><h3>🖥️ System requirements</h3><table class="spec">'+
+    '<tr><th>Operating system</th><td>'+esc(o.requirements.os.join(" / "))+'</td></tr>'+
+    '<tr><th>Memory</th><td>'+esc(o.requirements.ram)+'</td></tr>'+
+    '<tr><th>Disk space</th><td>'+esc(o.requirements.disk)+'</td></tr>'+
+    '<tr><th>Display</th><td>'+esc(o.requirements.display)+'</td></tr></table></div>'+
+    '<div class="sect"><h3>🕘 Version history</h3><table class="spec">'+o.versions.map(function(v){return '<tr><th>v'+esc(v.v)+'</th><td>'+esc(v.note)+'</td></tr>'}).join("")+'</table></div>'+
+    (demo?'<div class="sect"><h3>▶️ '+esc(demo.title)+'</h3><div id="demobox"></div></div>':"")+
+    '<div class="mbtns"><button class="btn" onclick="readApp(A.cur)">🔊 Read aloud</button>'+
+    '<button class="btn" onclick="copyApp()">📋 Copy</button>'+
+    '<button class="btn" onclick="dlApp(\'txt\')">⬇ .txt</button>'+
+    '<button class="btn" onclick="dlApp(\'json\')">⬇ .json</button>'+
+    '<button class="btn gold" onclick="dlAppHtml()">⬇ Single-file app (.html)</button>'+
+    '<button class="btn gold" onclick="dlAppPy()">⬇ Python source (.py)</button>'+
+    '<button class="btn gold" onclick="dlAppZip()">📦 Thumbdrive / CD-ROM pack (.zip)</button></div>'+
+    '<div class="xlinks">🔗 <b>Around the network:</b> <a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">sibling software in the Signature Cyber Mega-Mall</a> · <a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">runs on systems in the PC System Depository</a></div>'+
+    '<div class="qa"><div class="q">❓ Ask the AI helper</div><div id="qaout"><p class="note">Ask anything about '+esc(o.name)+' — answers come only from its file.</p></div>'+
+    '<div class="qarow"><input id="qain" placeholder="e.g. What are the system requirements? How do I export?" aria-label="Ask about this app"><button class="btn" onclick="askQA()">Ask</button></div></div>'+
+    '</div>';
+  document.getElementById("appview").innerHTML=h;
+  if(demo){try{DEMOS[o.demo].render(document.getElementById("demobox"),o)}catch(e){document.getElementById("demobox").innerHTML='<p class="note">Demo failed to start: '+esc(e.message)+'</p>'}}
+  var qi=document.getElementById("qain");if(qi)qi.addEventListener("keydown",function(e){if(e.key==="Enter")askQA()});
+}
+function setJsonLd(o,c){
+  document.getElementById("appjsonld").textContent=JSON.stringify({
+    "@context":"https://schema.org","@type":"SoftwareApplication",
+    "name":o.name,"applicationCategory":c?c.name:"App",
+    "operatingSystem":o.requirements.os.join(", "),
+    "description":o.description,"softwareVersion":o.versions[o.versions.length-1].v,
+    "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
+    "url":"https://justinahiggins614-cmyk.github.io/signature-app-archive/?app="+o.id
+  });
+}
+function appText(o){
+  var L=[];
+  L.push(o.name+" ("+o.id+")","",o.tagline,"",o.description,"","FEATURES");
+  o.features.forEach(function(f){L.push("- "+f)});
+  L.push("","HOW TO USE");o.how_to.forEach(function(f,i){L.push((i+1)+". "+f)});
+  L.push("","SYSTEM REQUIREMENTS","OS: "+o.requirements.os.join(" / "),"RAM: "+o.requirements.ram,"Disk: "+o.requirements.disk,"Display: "+o.requirements.display);
+  L.push("","VERSION HISTORY");o.versions.forEach(function(v){L.push("v"+v.v+" — "+v.note)});
+  L.push("",o.lineage);
+  return L.join("\n");
+}
+function copyApp(){
+  var t=appText(A.cur);
+  function done(){audMsg("Copied the full app file.")}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done).catch(function(){fallback()})}else fallback();
+  function fallback(){var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done()}catch(e){}document.body.removeChild(ta)}
+}
+function dlApp(kind){
+  var o=A.cur,blob;
+  if(kind==="json")blob=new Blob([JSON.stringify(o,null,1)],{type:"application/json"});
+  else blob=new Blob([appText(o)],{type:"text/plain"});
+  var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=o.id+"."+kind;document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},800);
+}
+/* ---- standalone single-file .html app ---- */
+async function appShell(o){
+  var ag=await(await fetch("code/appgen.js")).text();
+  var dm=await(await fetch("code/demos.js")).text();
+  var css="body{font-family:Arial,sans-serif;background:#070b16;color:#d7e3ff;max-width:900px;margin:0 auto;padding:20px;line-height:1.55}h1{color:#c9a227}.drow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;align-items:center}.dbtn{background:#12233f;border:1px solid #00f0ff;color:#00f0ff;border-radius:8px;padding:8px 14px;cursor:pointer}.dnote{font-size:.82em;color:#9aa4b2}.dgrid{border-collapse:collapse}.dgrid td,.dgrid th{border:1px solid #2a3a5f;padding:4px 6px}.dgrid input{background:#060b1c;border:0;color:#d7e3ff;width:74px;padding:4px}.dedit{min-height:160px;border:1px solid #2a3a5f;border-radius:8px;padding:12px;background:#060b1c}.dslide{background:#0d1526;border:1px solid #2a3a5f;border-radius:10px;padding:26px;min-height:150px;text-align:center}.dslidetitle{font-size:1.4em;color:#c9a227;margin-bottom:10px}.dpresent{position:fixed;inset:0;background:#04060d;z-index:10000;display:flex;align-items:center;justify-content:center;cursor:pointer}.dmsg{padding:8px;border-bottom:1px solid #1a2440;cursor:pointer}.dsearch{padding:10px;border-radius:8px;border:1px solid #2a3a5f;background:#060b1c;color:#d7e3ff}.dkanban{display:flex;gap:10px;flex-wrap:wrap}.dkcol{flex:1;min-width:160px;background:#0d1526;border:1px solid #2a3a5f;border-radius:8px;padding:10px}.dktask{background:#060b1c;border:1px solid #2a3a5f;border-radius:6px;padding:8px;margin:8px 0;font-size:.85em}.dchatlog{max-height:220px;overflow-y:auto;border:1px solid #2a3a5f;border-radius:8px;padding:10px;background:#060b1c}.dframe{width:100%;height:280px;border:1px solid #2a3a5f;background:#fff}.dttt{display:grid;grid-template-columns:repeat(3,64px);gap:6px}.dttt button{width:64px;height:64px;font-size:1.6em;background:#0d1526;border:1px solid #2a3a5f;color:#00f0ff;border-radius:8px}.dmem{display:grid;grid-template-columns:repeat(4,64px);gap:6px}.dmem button{width:64px;height:64px;font-size:1.5em;background:#0d1526;border:1px solid #2a3a5f;border-radius:8px}.dpaint{border:1px solid #2a3a5f;max-width:100%}.ddoc{background:#0d1526;border:1px solid #2a3a5f;border-radius:8px;padding:14px;white-space:pre-wrap}.dtl{display:flex;gap:4px;flex-wrap:wrap}.dclip{background:#12233f;border:1px solid #00f0ff;border-radius:6px;padding:8px;font-size:.8em;color:#00f0ff}.dcode{width:100%;height:130px;background:#060b1c;color:#d7e3ff;border:1px solid #2a3a5f;font-family:monospace}.dconsole{background:#060b1c;border:1px solid #2a3a5f;padding:10px;font-family:monospace;white-space:pre-wrap}.dsky{display:flex;gap:8px;flex-wrap:wrap}.dcard2{background:#0d1526;border:1px solid #2a3a5f;border-radius:8px;padding:10px;min-width:86px;text-align:center}.dfccard{background:#0d1526;border:1px solid #c9a227;border-radius:10px;padding:30px;text-align:center;font-size:1.5em;max-width:340px}.dperson{background:#0d1526;border:1px solid #2a3a5f;border-radius:8px;padding:10px;min-width:170px}.dsafety{background:#2a1a0a;border:1px solid #e8a020;border-radius:10px;padding:12px;color:#f0d9a8}";
+  return "<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"+
+    "<title>"+o.name.replace(/</g,"&lt;")+" — Signature App</title><style>"+css+"</style></head><body>"+
+    "<h1>"+o.icon+" "+o.name.replace(/</g,"&lt;")+"</h1><p><i>"+o.tagline.replace(/</g,"&lt;")+"</i></p>"+
+    "<p>"+o.description.replace(/</g,"&lt;")+"</p><div id='demobox'></div>"+
+    "<p style='color:#9aa4b2;font-size:.8em'>"+o.id+" · original Signature-line app by Justin Addam Higgins · from The Signature App Archive</p>"+
+    "<script>"+ag+"\n"+dm+"\nvar APP="+JSON.stringify(o)+";try{var d=DEMOS[APP.demo];if(d)d.render(document.getElementById('demobox'),APP);}catch(e){document.getElementById('demobox').innerHTML='<p>Demo failed: '+e.message+'</p>'}<\/script>"+
+    "</body></html>";
+}
+async function dlAppHtml(){
+  audMsg("Building your single-file app…");
+  var html=await appShell(A.cur);
+  dlFile(A.cur.id+"-app.html",html,"text/html");
+}
+async function dlAppPy(){
+  var o=A.cur;
+  var tmpl={};
+  try{tmpl=await(await fetch("code/pytmpl.json")).json()}catch(e){}
+  var src=(tmpl[o.demo]||tmpl["editor"]||"# companion").replace("{name}",o.name).replace("{id}",o.id).replace("{file}",o.id+".py");
+  dlFile(o.id+".py",src,"text/x-python");
+}
+async function dlAppZip(){
+  var o=A.cur;
+  audMsg("Packing thumbdrive / CD-ROM zip…");
+  var html=await appShell(o);
+  var tmpl={};try{tmpl=await(await fetch("code/pytmpl.json")).json()}catch(e){}
+  var py=(tmpl[o.demo]||tmpl["editor"]||"# companion").replace("{name}",o.name).replace("{id}",o.id).replace("{file}",o.id+".py");
+  var readme=["THUMBDRIVE / CD-ROM PACK — "+o.name+" ("+o.id+")","",
+    "Copy this whole folder to a thumbdrive, or burn it to a CD-ROM/DVD.",
+    "Then open index.html (this file) in any web browser — the app runs offline.",
+    "","CONTENTS:","  index.html  — the app (works offline, double-click to run)","  app.py      — Python companion (CLI version of the core function)","  spec.txt    — full app description, features, how-to, requirements","  spec.json   — machine-readable app record",
+    "","No installation needed. Your files stay on your own disc."].join("\n");
+  dlZip(o.id+"-pack.zip",[
+    {name:"index.html",data:html},
+    {name:"app.py",data:py},
+    {name:"spec.txt",data:appText(o)},
+    {name:"spec.json",data:JSON.stringify(o,null,1)},
+    {name:"README.txt",data:readme}
+  ]);
+}
+/* ============ grounded AI helper — answers only from the app's file ============ */
+var QA_STOP=new Set("the,a,an,and,or,for,to,of,in,on,with,is,it,this,that,what,does,which,how,are,be,was,were,at,by,from,as,so,but,if,not,no,yes,up,out,about,into,over,after,than,then,there,their,them,they,he,she,his,her,its,tell,me,my,you,your,do,can,please,give,show,have,has,had,will,would,should,could,much,many,big,small".split(","));
+function qaTokens(t){return String(t||"").toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){return w.length>=3&&!QA_STOP.has(w)})}
+function askQA(){
+  var inp=document.getElementById("qain"),q=inp.value.trim();if(!q)return;
+  var o=A.cur,toks=qaTokens(q),out=document.getElementById("qaout");
+  var sects=[
+    {k:["requirement","need","os","ram","disk","run","install","system"],t:"System requirements",h:"Needs "+o.requirements.os.join(" or ")+", "+o.requirements.ram+", "+o.requirements.disk+", "+o.requirements.display+". Runs on "+o.platforms+"."},
+    {k:["feature","do","can","include"],t:"Features",h:o.features.join("; ")+"."},
+    {k:["use","how","start","begin","work"],t:"How to use",h:o.how_to.join(" ")},
+    {k:["version","history","update","new"],t:"Version history",h:o.versions.map(function(v){return "v"+v.v+": "+v.note}).join(" ")},
+    {k:["download","copy","thumbdrive","dvd","cdrom","disc","pack"],t:"Downloads",h:"This page offers Copy, .txt, .json, a single-file .html app, Python source, and a thumbdrive/CD-ROM .zip pack."},
+    {k:["what","about","describe"],t:"About",h:o.description}
+  ];
+  var best=null,bs=0;
+  sects.forEach(function(s){
+    var sc=0;toks.forEach(function(w){if(s.k.indexOf(w)>=0)sc+=2;if(s.h.toLowerCase().indexOf(w)>=0)sc+=1});
+    if(sc>bs){bs=sc;best=s}
+  });
+  var ans=best?("<b>"+best.t+":</b> "+esc(best.h)):"I can only answer from this app's file — try asking about its features, how to use it, system requirements, versions, or downloads.";
+  out.innerHTML='<div class="q">Q: '+esc(q)+'</div><div class="a">A: '+ans+'</div>';
+  inp.value="";
+}
+document.getElementById("aupause").onclick=auPauseToggle;
+document.getElementById("austop").onclick=auStop;
+/* ============ FINDER AI (pinned above A–Z; deterministic, data-grounded) ============ */
+var FSTOP=new Set("the,a,an,and,or,for,to,of,in,on,with,is,it,this,that,what,does,which,how,are,be,was,were,at,by,from,as,so,but,if,not,no,yes,up,out,about,into,over,after,than,then,there,their,them,they,me,my,i,you,your,we,our,do,does,want,need,needs,looking,look,find,finds,get,something,anything,some,any,please,like,just,really,very,would,could,should,can,will,have,has,show,tell,give,kind,thing,things,describe,app,apps,application,need,needs".split(","));
+function fKeywords(t){return String(t||"").toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){return w.length>=3&&!FSTOP.has(w)})}
+async function fAsk(){
+  var q=document.getElementById("fq").value.trim();if(!q)return;
+  var kws=fKeywords(q),box=document.getElementById("fresults");
+  if(!kws.length){box.innerHTML='<p class="note">One more word — what should the app do? 📱</p>';return}
+  var idx=await ensureIdx();
+  if(!idx.length){box.innerHTML='<p class="note">The archive index is still loading — a moment, then Find it. 📱</p>';return}
+  var hits=idx.map(function(r){var c=catByKey(r[1]);
+    var hay=(r[3]+" "+r[4]+" "+r[0]+" "+(c?c.name+" "+c.blurb:"")).toLowerCase();var s=0;
+    kws.forEach(function(k){if(r[0].toLowerCase()===k)s+=10;if(hay.indexOf(k)>=0)s+=k.length>5?3:2});
+    return{r:r,c:c,s:s}}).filter(function(x){return x.s>0})
+    .sort(function(a,b){return b.s-a.s}).slice(0,5);
+  if(!hits.length){box.innerHTML='<p class="note">Nothing matches "<b>'+esc(kws.join(" "))+'</b>" yet — try different words. 📱</p>';return}
+  box.innerHTML=hits.map(function(h){var r=h.r;
+    return '<div class="card"><div class="sku">'+esc(r[0])+'</div><h4>'+(h.c?h.c.icon+" ":"")+esc(r[3])+'</h4><div class="tag">'+esc(r[4])+'</div><a class="btn gold" style="display:inline-block;margin-top:8px;text-decoration:none" href="?app='+encodeURIComponent(r[0])+'">Take me there →</a></div>'}).join("");
+}
+document.getElementById("fgo").onclick=fAsk;
+document.getElementById("fq").addEventListener("keydown",function(e){if(e.key==="Enter")fAsk()});
+document.addEventListener("DOMContentLoaded",boot);
+</script>
+</body>
+</html>

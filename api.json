@@ -1,0 +1,189 @@
+{
+ "site": "The Signature App Archive",
+ "apps": 1500,
+ "goal": 1000000,
+ "categories": [
+  {
+   "key": "word",
+   "name": "Signature Wordsmith",
+   "icon": "\ud83d\udcdd",
+   "blurb": "Full word processor \u2014 write, format, paginate, print."
+  },
+  {
+   "key": "sheet",
+   "name": "Signature Ledger",
+   "icon": "\ud83d\udcca",
+   "blurb": "Real spreadsheet \u2014 formulas, functions, charts."
+  },
+  {
+   "key": "slides",
+   "name": "Signature Stagecraft",
+   "icon": "\ud83c\udfa4",
+   "blurb": "Presentation maker \u2014 slides, themes, present mode."
+  },
+  {
+   "key": "mail",
+   "name": "Signature Postbox",
+   "icon": "\u2709\ufe0f",
+   "blurb": "Email client \u2014 compose, folders, search, signatures."
+  },
+  {
+   "key": "calendar",
+   "name": "Signature Daybook",
+   "icon": "\ud83d\udcc5",
+   "blurb": "Calendar and scheduler \u2014 events, reminders, views."
+  },
+  {
+   "key": "notes",
+   "name": "Signature Jotter",
+   "icon": "\ud83d\uddd2\ufe0f",
+   "blurb": "Note-taker \u2014 quick capture, notebooks, tags."
+  },
+  {
+   "key": "accounting",
+   "name": "Signature Tally",
+   "icon": "\ud83e\uddee",
+   "blurb": "Small-business accounting \u2014 ledger, reports, tax-ready."
+  },
+  {
+   "key": "inventory",
+   "name": "Signature Stockroom",
+   "icon": "\ud83d\udce6",
+   "blurb": "Inventory manager \u2014 stock in/out, alerts, counts."
+  },
+  {
+   "key": "pos",
+   "name": "Signature Till",
+   "icon": "\ud83e\uddfe",
+   "blurb": "Point of sale \u2014 ring sales, receipts, end-of-day."
+  },
+  {
+   "key": "hr",
+   "name": "Signature Crewbook",
+   "icon": "\ud83d\udc65",
+   "blurb": "HR helper \u2014 people records, time off, reviews."
+  },
+  {
+   "key": "project",
+   "name": "Signature Milestone",
+   "icon": "\ud83d\uddc2\ufe0f",
+   "blurb": "Project manager \u2014 boards, tasks, deadlines."
+  },
+  {
+   "key": "chat",
+   "name": "Signature Chatter",
+   "icon": "\ud83d\udcac",
+   "blurb": "Team messenger \u2014 rooms, threads, file drops."
+  },
+  {
+   "key": "browser",
+   "name": "Signature Wayfarer",
+   "icon": "\ud83e\udded",
+   "blurb": "Web browser \u2014 tabs, bookmarks, start page."
+  },
+  {
+   "key": "music",
+   "name": "Signature Jukebox",
+   "icon": "\ud83c\udfb5",
+   "blurb": "Media player \u2014 playlists, tones, visual calm."
+  },
+  {
+   "key": "games",
+   "name": "Signature Arcade",
+   "icon": "\ud83c\udfae",
+   "blurb": "Game chest \u2014 tic-tac-toe, snake, memory match."
+  },
+  {
+   "key": "utils",
+   "name": "Signature Toolkit",
+   "icon": "\ud83e\uddf0",
+   "blurb": "Utility drawer \u2014 converter, passwords, timers."
+  },
+  {
+   "key": "photo",
+   "name": "Signature Darkroom",
+   "icon": "\ud83d\udcf7",
+   "blurb": "Photo editor \u2014 filters, crops, touch-ups."
+  },
+  {
+   "key": "draw",
+   "name": "Signature Canvas",
+   "icon": "\ud83c\udfa8",
+   "blurb": "Drawing pad \u2014 brushes, layers of fun, export."
+  },
+  {
+   "key": "pdf",
+   "name": "Signature Folio",
+   "icon": "\ud83d\udcc4",
+   "blurb": "Document viewer \u2014 read, annotate, organize."
+  },
+  {
+   "key": "video",
+   "name": "Signature Cutting Room",
+   "icon": "\ud83c\udfac",
+   "blurb": "Video editor \u2014 timeline, trims, titles, export plan."
+  },
+  {
+   "key": "code",
+   "name": "Signature Codepad",
+   "icon": "\u2328\ufe0f",
+   "blurb": "Code editor \u2014 write JavaScript, run it live."
+  },
+  {
+   "key": "db",
+   "name": "Signature Vault",
+   "icon": "\ud83d\uddc4\ufe0f",
+   "blurb": "Simple database \u2014 tables, records, queries."
+  },
+  {
+   "key": "crm",
+   "name": "Signature Rolodex",
+   "icon": "\ud83e\udd1d",
+   "blurb": "Customer keeper \u2014 contacts, history, follow-ups."
+  },
+  {
+   "key": "forms",
+   "name": "Signature Clipboard",
+   "icon": "\ud83d\udccb",
+   "blurb": "Form builder \u2014 surveys, signups, responses."
+  },
+  {
+   "key": "weather",
+   "name": "Signature Skywatch",
+   "icon": "\u26c5",
+   "blurb": "Weather desk \u2014 sample forecasts, planner (demo data)."
+  },
+  {
+   "key": "fitness",
+   "name": "Signature Stride",
+   "icon": "\ud83c\udfc3",
+   "blurb": "Fitness log \u2014 workouts, streaks, personal bests."
+  },
+  {
+   "key": "recipes",
+   "name": "Signature Cookbook",
+   "icon": "\ud83c\udf73",
+   "blurb": "Recipe box \u2014 cards, scalers, shopping lists."
+  },
+  {
+   "key": "language",
+   "name": "Signature Tongue",
+   "icon": "\ud83d\udde3\ufe0f",
+   "blurb": "Language trainer \u2014 flashcards, quizzes, streaks."
+  },
+  {
+   "key": "finance",
+   "name": "Signature Mint",
+   "icon": "\ud83d\udcb0",
+   "blurb": "Money planner \u2014 budgets, goals, calm charts."
+  },
+  {
+   "key": "backup",
+   "name": "Signature Safekeep",
+   "icon": "\ud83d\udcbe",
+   "blurb": "Backup buddy \u2014 manifests, packs, restore checks."
+  }
+ ],
+ "manifest": "data/manifest.json",
+ "index": "data/index.json.gz"
+}
