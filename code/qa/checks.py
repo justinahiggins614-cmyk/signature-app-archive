@@ -122,6 +122,13 @@ if m:
     check("static count matches manifest", ("%s Signature apps" % f"{n:,}" in txt) and
           ("30 app categories" in txt), txt[:90])
 check("no stale 1,500 count", "1,500 Signature apps" not in html)
+# stamped stats chips: initial raw-HTML content must carry the real count (never bare "...")
+sm = re.search(r'<div class="stats" id="stats"[^>]*>(.*?)<!-- STATS-STAMP-END -->', html, re.S)
+check("stamped stats chips present", bool(sm))
+if sm:
+    check("stamped stats count matches manifest",
+          ('<b>%s</b>' % f"{n:,}") in sm.group(1) and "<b>30</b>" in sm.group(1), sm.group(1)[:80])
+check("no bare ... stats boot", '<b>\u2026</b><span>loading</span>' not in html)
 ld_blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)
 check("no license field in JSON-LD", not any('"license"' in b for b in ld_blocks))
 

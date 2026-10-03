@@ -172,7 +172,7 @@ h2.cattitle{color:var(--gold)}
 <div class="kick" id="kicker">SITE 19 OF 27 &middot; THE JAH NETWORK</div>
 <h1>📱 The Signature App Archive</h1>
 <p class="sub">An archive of original <b>Signature versions</b> of every phone and PC app <b>category</b> — word processors, spreadsheets, email, calendars, accounting, inventory, point of sale, project boards, games, utilities, and every office, business, market, government and personal-life app class. Each one is an original Signature-line program by <b>Justin Addam Higgins</b> — inspired by its app class, copying no product, brand, or design. Each <b>works right here in your browser</b>, reads aloud, answers your questions, and downloads for your thumbdrive or CD-ROM. Marching to 1,000,000 apps.</p>
-<details class="statscoll" open><summary>Archive statistics</summary><div class="stats" id="stats"><div class="stat"><b>…</b><span>loading</span></div></div></details>
+<details class="statscoll" open><summary>Archive statistics</summary><div class="stats" id="stats" data-stamped="2026-10-03"><!-- STATS-STAMP-START --><div class="stat"><b>15,780</b><span>apps on file</span></div><div class="stat"><b>30</b><span>app categories</span></div><div class="stat"><b>1,000,000</b><span>march goal</span></div><!-- STATS-STAMP-END --></div></details>
 <div class="march"><div class="bar"><div class="fill" id="marchfill"></div></div><small id="marchtxt">Marching to 1,000,000 apps</small></div>
 <p class="staticcount" id="staticcount">15,780 Signature apps on file across 30 app categories, as of 2026-10-03. Live count above.</p>
 </header>
@@ -265,7 +265,7 @@ function readApp(o){auStop();AU.label=o.name;AU.q=auChunks(appSpeakText(o));AU.i
 
 /* ============ app ============ */
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
-async function gz(url){var r=await fetch(url);if(!r.ok)throw new Error("HTTP "+r.status+" "+url);return await new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).text()}
+async function gz(url,ms){var ctl=new AbortController(),t=setTimeout(function(){ctl.abort()},ms||20000);try{var r=await fetch(url,{signal:ctl.signal});if(!r.ok)throw new Error("HTTP "+r.status+" "+url);return await new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).text()}catch(e){if(e&&e.name==="AbortError")throw new Error("Timed out loading "+url);throw e}finally{clearTimeout(t)}}
 var A={manifest:null,idx:null,cats:[],cur:null};
 
 async function fetchJSON(url,ms){
@@ -494,7 +494,7 @@ function showApp(o){
     '<tr><th>Disk space</th><td>'+esc(o.requirements.disk)+'</td></tr>'+
     '<tr><th>Display</th><td>'+esc(o.requirements.display)+'</td></tr></table></div>'+
     '<div class="sect"><h3>🕘 Version history</h3><table class="spec">'+o.versions.map(function(v){return '<tr><th>v'+esc(v.v)+'</th><td>'+esc(v.note)+'</td></tr>'}).join("")+'</table></div>'+
-    (demo?'<div class="sect" id="demosect"><h3>▶️ '+esc(demo.title)+'</h3><div id="demobox"></div></div>':"")+
+    (demo?'<div class="sect" id="demosect"><h3>▶️ '+esc(demo.title)+'</h3><p class="dnote">📱 In-browser DEMO — this live section demonstrates the app class\u2019s core function right here in your browser. The downloads above are the complete programs: single-file app, Python source, and the thumbdrive / CD-ROM pack.</p><div id="demobox"></div></div>':"")+
     '<div class="mbtns" id="dlbtns">'+(demo?'<button class="btn gold" onclick="runDemo()">▶ Run Demo</button>':"")+'<button class="btn" onclick="readApp(A.cur)">🔊 Read aloud</button>'+
     '<button class="btn" onclick="copyApp()">📋 Copy</button>'+
     '<button class="btn" onclick="reportApp()">⚠ Report problem</button>'+
@@ -720,6 +720,172 @@ addEventListener("load",function(){setTimeout(function(){
     else if(S.last){var el=findRec(S.last);if(el)el.scrollIntoView({block:"center"})}
     restoreTabs()}
 },250)})})();
+</script>
+<style>
+/* ---- first-time user guide: spotlight tour + ? Guide panel (usability layer, theme untouched) ---- */
+#jah-guide-btn{position:fixed;bottom:14px;left:14px;z-index:99990;min-width:44px;min-height:44px;border-radius:22px;border:1px solid var(--gold,#c9a227);background:#0d1526;color:var(--gold,#c9a227);font-size:1em;font-weight:700;cursor:pointer;padding:10px 16px;opacity:.85}
+#jah-guide-btn:hover{opacity:1}
+.jah-tour-hi{position:fixed;z-index:100001;border:3px solid var(--gold,#c9a227);border-radius:12px;box-shadow:0 0 0 9999px rgba(2,4,10,.62);pointer-events:none;transition:all .25s}
+.jah-tour-card{position:fixed;z-index:100002;background:#0d1526;border:1px solid var(--gold,#c9a227);border-radius:12px;padding:16px 18px;max-width:min(92vw,380px);color:#d7e3ff;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+.jah-tour-card h3{margin:.1em 0 .4em;color:var(--gold,#c9a227);font-size:1.05em}
+.jah-tour-card p{font-size:.88em;margin:.35em 0;color:#d7e3ff}
+.jah-tour-card p b{color:var(--cy,#00f0ff)}
+.jah-tour-card .stepno{font-size:.75em;color:#9aa4b2}
+.jah-tour-btns{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.jah-tour-btns .btn{min-height:44px;flex:1;text-align:center}
+#jah-guide-panel{position:fixed;inset:0;z-index:100003;background:rgba(2,4,10,.72);display:none;align-items:center;justify-content:center;padding:16px}
+#jah-guide-panel.open{display:flex}
+.jah-guide-card{background:#0d1526;border:1px solid var(--gold,#c9a227);border-radius:14px;max-width:640px;width:100%;max-height:86vh;overflow-y:auto;padding:22px 24px;color:#d7e3ff}
+.jah-guide-card h2{color:var(--gold,#c9a227);margin-top:0}
+.jah-guide-card h3{color:var(--cy,#00f0ff);font-size:1em;margin:1.1em 0 .3em}
+.jah-guide-card p,.jah-guide-card li{font-size:.9em}
+.jah-guide-card ul{padding-left:20px;margin:.3em 0}
+.jah-guide-card .xrow{display:flex;justify-content:flex-end}
+.jah-guide-card a{color:#9fc2ff}
+</style>
+<button id="jah-guide-btn" aria-label="Open the first-time user guide" title="How to use this site">? Guide</button>
+<div id="jah-guide-panel" role="dialog" aria-modal="true" aria-label="How to use The Signature App Archive">
+  <div class="jah-guide-card">
+    <div class="xrow"><button class="btn small" id="jah-guide-close">✕ Close</button></div>
+    <h2>📱 How to use The Signature App Archive</h2>
+    <p>Every app here is an original Signature-line program. Here is what everything on this site does, in plain words.</p>
+    <h3>🔎 Search</h3>
+    <p>Type an app name, feature words, or an exact app ID like <b>JAH-APP-000001</b>. The category menu and the A–Z buttons narrow the results. If nothing matches, the page says so plainly — try different words.</p>
+    <h3>🧭 Finder AI</h3>
+    <p>Describe the app you need in plain words — for example, <i>something to track my shop inventory</i> — and tap <b>Find it</b>. It matches archived apps by meaning and shows why each one matched. It never invents apps.</p>
+    <h3>🗂️ App categories</h3>
+    <p>All 30 app categories, one card each — word processors, spreadsheets, email, games, and more. Tap a card to see that category's newest apps, then ← All apps to come back.</p>
+    <h3>✨ Fresh from the archive</h3>
+    <p>The newest apps added. Every card opens the app's full record page.</p>
+    <h3>📄 The app record page</h3>
+    <ul>
+      <li><b>About</b> — what the app is, its provenance, and that it runs offline.</li>
+      <li><b>App status</b> — a plain table: the browser demo is a DEMO of the app class; the downloads are the complete programs.</li>
+      <li><b>Features, How to use, System requirements, Version history</b> — the full file.</li>
+    </ul>
+    <h3>▶️ Live demo</h3>
+    <p>The demo runs the app class's core function right in your browser, on your device — no network calls. It demonstrates the class; the downloads are the full programs.</p>
+    <h3>⬇️ Downloads</h3>
+    <ul>
+      <li><b>Copy</b> — copies the full app text.</li>
+      <li><b>.txt / .json</b> — the app file as text or data.</li>
+      <li><b>Single-file app (.html)</b> — the whole app in one file; works offline, double-click to run.</li>
+      <li><b>Python source (.py)</b> — the app's core function as a Python program.</li>
+      <li><b>Thumbdrive / CD-ROM pack (.zip)</b> — everything above plus a manifest (each file's CRC32 check code). Copy it to a thumbdrive or burn it to a disc; nothing is uploaded, it is built in your browser.</li>
+    </ul>
+    <h3>🔊 Read aloud</h3>
+    <p>Reads the whole app record. The bottom bar shows your place; <b>Pause/Resume</b> and <b>Stop</b> control it.</p>
+    <h3>🤖 Ask the AI helper</h3>
+    <p>Answers only from the app's own file — features, how to use it, requirements, versions, downloads. It also says hello and handles small talk like a person.</p>
+    <h3>✅ Verify · ⚠ Report · ↗ Share/Open</h3>
+    <p><b>Verify</b> re-solves the app from its seed to prove the record is deterministic. <b>Report problem</b> copies a problem report you can send to the archive keeper. <b>Share</b> copies the app's link; <b>Open</b> opens it in a new tab.</p>
+    <h3>🔗 Machine links</h3>
+    <p>At the bottom of the home page: <a href="api.json">api.json</a>, the <a href="app.schema.json">app schema</a>, an <a href="app-record-example.json">example record</a>, <a href="health.json">archive health</a>, the <a href="sitemap.xml">sitemap</a>, and the <a href="docs/ARCHITECTURE.md">architecture notes</a>.</p>
+  </div>
+</div>
+<script>
+/* ============ first-time user guide: spotlight tour ============
+   localStorage key: jah-tour-seen-apps. Esc/arrows keyboard accessible,
+   touch-sized buttons, never traps the user (Skip always visible). */
+(function(){
+var KEY="jah-tour-seen-apps";
+function seen(){try{return !!localStorage.getItem(KEY)}catch(e){return true}}
+function mark(){try{localStorage.setItem(KEY,"1")}catch(e){}}
+var STEPS=[
+ {sel:"#q",t:"Search the archive",
+  what:"This is the search box.",does:"It finds apps by name, feature words, or an exact app ID like JAH-APP-000001.",
+  how:"Tap it, type a word, and matching apps appear below. The category menu and A\u2013Z buttons narrow results."},
+ {sel:"#fq",t:"Finder AI",
+  what:"The Finder bar answers plain words.",does:"Describe the app you need \u2014 e.g. something to track my shop inventory \u2014 and it matches archived apps by meaning. It never invents apps.",
+  how:"Type your need and tap Find it (or press Enter). Each match shows why it matched."},
+ {sel:"#catgrid",t:"App categories",
+  what:"All 30 app categories, one card each.",does:"Each card opens that category\u2019s newest apps.",
+  how:"Tap a card to browse it, then \u2190 All apps to come back."},
+ {sel:"#fresh",t:"Fresh from the archive",
+  what:"The newest apps added to the archive.",does:"Every card opens the app\u2019s full record page.",
+  how:"Tap any card. The record page carries the live demo, every download, read-aloud, and the AI helper."},
+ {sel:null,t:"Inside an app record",sample:true,
+  what:"Open any app to see its full record page.",does:"A live in-browser DEMO of the app class \u2014 plus the complete programs as downloads: copy, .txt, .json, the single-file app, Python source, and the thumbdrive / CD-ROM pack. Read-aloud reads the whole record; the AI helper answers from the app\u2019s file.",
+  how:"Tap \u201cSee a sample app\u201d to open one now, or Skip to finish."}
+];
+var i=0,hi=null,card=null,started=false;
+function el(s){return s?document.querySelector(s):null}
+function closeTour(markIt){if(markIt)mark();if(hi&&hi.parentNode)hi.parentNode.removeChild(hi);if(card&&card.parentNode)card.parentNode.removeChild(card);hi=null;card=null;started=false;document.removeEventListener("keydown",onKey)}
+function onKey(e){
+  if(e.key==="Escape"){closeTour(true)}
+  else if(e.key==="ArrowRight"){step(i+1)}
+  else if(e.key==="ArrowLeft"){step(i-1)}
+}
+function place(step){
+  var target=el(step.sel);
+  if(target&&target.scrollIntoView){try{target.scrollIntoView({block:"center"})}catch(e){}}
+  setTimeout(function(){
+    var r=target?target.getBoundingClientRect():null;
+    if(hi){hi.style.display=target?"block":"none";
+      if(target){hi.style.left=(r.left-8+window.scrollX)+"px";hi.style.top=(r.top-8+window.scrollY)+"px";hi.style.width=(r.width+16)+"px";hi.style.height=(r.height+16)+"px"}}
+    if(card){
+      var cw=Math.min(380,window.innerWidth-32),ch=card.offsetHeight||300;
+      var x=Math.max(16,Math.min(window.innerWidth-cw-16,window.innerWidth/2-cw/2));
+      var y;
+      if(r&&(r.bottom+16+ch<window.innerHeight))y=r.bottom+16;
+      else if(r&&r.top-16-ch>0)y=r.top-16-ch;
+      else y=Math.max(16,window.innerHeight-ch-16);
+      card.style.left=x+"px";card.style.top=y+"px";
+    }
+  },60);
+}
+function step(n){
+  if(n<0)n=0;
+  if(n>=STEPS.length){closeTour(true);return}
+  i=n;var s=STEPS[i];
+  card.querySelector(".stepno").textContent="Step "+(i+1)+" of "+STEPS.length;
+  card.querySelector("h3").textContent=s.t;
+  var ps=card.querySelectorAll("p");
+  ps[0].innerHTML="<b>WHAT:</b> "+s.what;
+  ps[1].innerHTML="<b>WHAT IT DOES:</b> "+s.does;
+  ps[2].innerHTML="<b>HOW:</b> "+s.how;
+  var bb=card.querySelector(".jah-tour-btns");
+  bb.innerHTML="";
+  function mk(label,fn,primary){var b=document.createElement("button");b.className="btn"+(primary?" gold":" ghost");b.style.minHeight="44px";b.textContent=label;b.onclick=fn;bb.appendChild(b);return b}
+  mk("Skip",function(){closeTour(true)});
+  if(i>0)mk("← Back",function(){step(i-1)});
+  if(s.sample){var sb=mk("See a sample app →",function(){closeTour(true);location.href="?app=JAH-APP-000001"},true)}
+  else mk(i===STEPS.length-1?"Finish":"Next →",function(){step(i+1)},true);
+  place(s);
+  var nb=bb.querySelectorAll(".btn");if(nb.length)nb[nb.length-1].focus();
+}
+function start(){
+  if(started)return;started=true;
+  hi=document.createElement("div");hi.className="jah-tour-hi";hi.setAttribute("aria-hidden","true");document.body.appendChild(hi);
+  card=document.createElement("div");card.className="jah-tour-card";card.setAttribute("role","dialog");card.setAttribute("aria-label","First-time user guide");
+  card.innerHTML='<div class="stepno"></div><h3></h3><p></p><p></p><p></p><div class="jah-tour-btns"></div>';
+  document.body.appendChild(card);
+  document.addEventListener("keydown",onKey);
+  var rp=function(){if(started)place(STEPS[i])};
+  window.addEventListener("resize",rp);window.addEventListener("scroll",rp,{passive:true});
+  step(0);
+}
+/* guide panel wiring */
+function wireGuide(){
+  var p=document.getElementById("jah-guide-panel"),b=document.getElementById("jah-guide-btn"),x=document.getElementById("jah-guide-close");
+  function open(){p.classList.add("open");if(x)x.focus()}
+  function shut(){p.classList.remove("open");if(b)b.focus()}
+  if(b)b.onclick=open;
+  if(x)x.onclick=shut;
+  p.addEventListener("click",function(e){if(e.target===p)shut()});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&p.classList.contains("open"))shut()});
+}
+/* auto-start the tour for first-time visitors (not on deep links) */
+document.addEventListener("DOMContentLoaded",function(){
+  wireGuide();
+  if(seen())return;
+  var qs=new URLSearchParams(location.search);
+  if(qs.get("app")||qs.get("cat"))return;
+  setTimeout(function(){if(!seen())start()},1200);
+});
+/* allow other scripts / QA to restart it */
+window.jahRestartTour=function(){try{localStorage.removeItem(KEY)}catch(e){}start()};
+})();
 </script>
 </body>
 </html>

@@ -195,6 +195,23 @@ def main():
         open(ip, "w", encoding="utf-8").write(html2)
     print("static count stamped:", stamp[:100])
 
+    # --- stamp the stats chips' initial content too (never boot as bare "...") ---
+    # JS overwrites them live on every load; this is the no-JS / first-paint text.
+    # Stable comment markers keep the replace robust against nested divs.
+    stats_inner = ('<div class="stat"><b>%s</b><span>apps on file</span></div>'
+                   '<div class="stat"><b>%d</b><span>app categories</span></div>'
+                   '<div class="stat"><b>1,000,000</b><span>march goal</span></div>'
+                   % (f"{len(feed_apps):,}", len(fams)))
+    html = open(ip, encoding="utf-8").read()
+    html3, n3 = re.subn(r'<!-- STATS-STAMP-START -->.*?<!-- STATS-STAMP-END -->',
+                        '<!-- STATS-STAMP-START -->' + stats_inner + '<!-- STATS-STAMP-END -->',
+                        html, flags=re.S, count=1)
+    if n3 and html3 != html:
+        if 'id="stats" data-stamped' not in html3:
+            html3 = html3.replace('id="stats"', 'id="stats" data-stamped="%s"' % TODAY, 1)
+        open(ip, "w", encoding="utf-8").write(html3)
+    print("stats chips stamped (%d): %s" % (n3, stats_inner[:90]))
+
 
 if __name__ == "__main__":
     main()
