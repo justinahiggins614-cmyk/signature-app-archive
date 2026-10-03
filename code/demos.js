@@ -87,9 +87,9 @@ DEMOS.slides = { title: "Live demo — build a tiny deck", render: function (el,
     o.innerHTML = '<div class="dpslide"><h2>' + esc(slides[cur].t) + "</h2><p>" + esc(slides[cur].b) + "</p><div class='dnote'>Click anywhere to exit · ←/→ to move</div></div>";
     var i = cur;
     function show() { o.querySelector(".dpslide").innerHTML = "<h2>" + esc(slides[i].t) + "</h2><p>" + esc(slides[i].b) + "</p><div class='dnote'>Click anywhere to exit · ←/→ to move</div>"; }
-    o.onclick = function () { document.body.removeChild(o); };
+    o.onclick = function () { document.body.removeChild(o); document.body.style.overflow=""; };
     o.onkeydown = function (e) { if (e.key === "ArrowRight") { i = (i + 1) % slides.length; show(); } if (e.key === "ArrowLeft") { i = (i - 1 + slides.length) % slides.length; show(); } };
-    o.tabIndex = 0; document.body.appendChild(o); o.focus(); note.textContent = "Presenting — click the big slide to exit.";
+    o.tabIndex = 0; document.body.appendChild(o); document.body.style.overflow="hidden"; o.focus(); note.textContent = "Presenting — click the big slide to exit.";
   }));
   draw();
 }};

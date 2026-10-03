@@ -9,6 +9,9 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"The Signature App Archive","url":"https://justinahiggins614-cmyk.github.io/signature-app-archive/","description":"Original Signature-line versions of every phone and PC app class. Each app runs in the browser, with read-aloud, AI helper, and downloads."}
 </script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Dataset","name":"The Signature App Archive","creator":{"@type":"Person","name":"Justin Addam Higgins"}}
+</script>
 <style>
 :root{--bg:#070b16;--bg2:#0a0f1e;--line:#2a3a5f;--txt:#d7e3ff;--dim:#9aa4b2;--gold:#c9a227;--cy:#00f0ff;--am:#e8a020}
 *{box-sizing:border-box}
@@ -24,6 +27,9 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:Arial,Helvetica,
 .hero h1{font-size:2em;margin:.2em 0;color:var(--gold);letter-spacing:.02em}
 .hero .sub{color:var(--dim);max-width:760px;margin:0 auto}
 .stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:18px 0}
+.statscoll{margin:0}
+.statscoll>summary{display:none}
+@media(max-width:767px){.statscoll>summary{display:list-item;cursor:pointer;color:var(--dim);font-size:.85em;text-align:center;margin:14px 0 0}}
 .stat{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 18px;min-width:130px}
 .stat b{display:block;font-size:1.5em;color:var(--cy)}
 .stat span{font-size:.8em;color:var(--dim)}
@@ -45,7 +51,7 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:Arial,Helvetica,
 .btn:hover{background:#1a3054}
 .btn.gold{border-color:var(--gold);color:var(--gold)}
 .btn.ghost{background:transparent}
-.az{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.az{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;position:sticky;top:0;z-index:40;background:#070b16;padding:8px 0}
 .az button{background:#0d1526;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:7px 11px;cursor:pointer}
 .az button.on{border-color:var(--gold);color:var(--gold)}
 .finderbar{display:flex;gap:10px;margin:16px 0 4px;flex-wrap:wrap}
@@ -128,13 +134,13 @@ h2.cattitle{color:var(--gold)}
 </style>
 </head>
 <body>
-<nav class="jahnet" aria-label="The JAH Network"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Spec Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">PC Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">3D Print Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Mad Scientist Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">Chip Maker and Archive</a><span class="cur">YOU ARE HERE: THE SIGNATURE APP ARCHIVE</span><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">Signature Music Studio</a></nav>
+<nav class="jahnet" aria-label="JAH Network Global Ecosystem" role="navigation"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Spec Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">PC Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">3D Print Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Mad Scientist Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">Chip Maker and Archive</a><span class="cur">YOU ARE HERE: THE SIGNATURE APP ARCHIVE</span><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">Signature Music Studio</a></nav>
 
 <div class="wrap">
 <header class="hero">
 <h1>📱 The Signature App Archive</h1>
 <p class="sub">Original Signature-line versions of <b>every phone and PC app</b> — word processors, spreadsheets, email, calendars, accounting, inventory, point of sale, project boards, games, utilities, and every office, business, market, government and personal-life app. Each one <b>works right here in your browser</b>, reads aloud, answers your questions, and downloads for your thumbdrive or CD-ROM. Marching to 1,000,000 apps.</p>
-<div class="stats" id="stats"><div class="stat"><b>…</b><span>loading</span></div></div>
+<details class="statscoll" open><summary>Archive statistics</summary><div class="stats" id="stats"><div class="stat"><b>…</b><span>loading</span></div></div></details>
 <div class="march"><div class="bar"><div class="fill" id="marchfill"></div></div><small id="marchtxt">Marching to 1,000,000 apps</small></div>
 <p class="staticcount">1,500 Signature apps on file across 30 app categories, as of 2026-10-02. Live count above.</p>
 </header>
@@ -159,7 +165,7 @@ h2.cattitle{color:var(--gold)}
 
 <footer><div class="wrap">
 <p><b style="color:var(--gold)">The Signature App Archive</b> — every app an original Signature-line program by <b>Justin Addam Higgins</b>. Inspired by each app class, copying no product, brand, or design. Demos run live in your browser; downloads pack the app for thumbdrive or CD-ROM.</p>
-<div class="sites">THE JAH NETWORK ·
+<nav aria-label="JAH Network sites" role="navigation"><div class="sites">THE JAH NETWORK ·
 <a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">AI Phone Book</a> ·
 <a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a> ·
 <a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">Dictionary</a> ·
@@ -180,7 +186,7 @@ h2.cattitle{color:var(--gold)}
 <a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">Mix Lab</a> ·
 <a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a> ·
 <a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">Chip Maker</a> ·
-<a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">Robot Matcher</a></div>
+<a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">Robot Matcher</a></div></nav>
 </div></footer>
 
 <div id="aubar"><span id="aulabel">Reading…</span><span class="prog" id="auprog"></span><button class="btn ghost" id="aupause">⏸ Pause</button><button class="btn ghost" id="austop">⏹ Stop</button></div>
@@ -226,6 +232,7 @@ async function boot(){
   try{A.manifest=await(await fetch("data/manifest.json")).json()}catch(e){}
   A.cats=SigApp.families();
   renderStats();renderCatGrid();renderCatFilter();renderAZ();
+  if(window.innerWidth<768){var sc=document.querySelector(".statscoll");if(sc)sc.removeAttribute("open");}
   var qs=new URLSearchParams(location.search);
   var app=qs.get("app"),cat=qs.get("cat");
   if(app){showAppById(app);return}
