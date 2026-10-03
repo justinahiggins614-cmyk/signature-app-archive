@@ -1,0 +1,65 @@
+{
+ "id": "JAH-APP-000001",
+ "family": "word",
+ "seed": 1,
+ "name": "Signature Wordsmith Lite Family",
+ "tagline": "The friendly one you'll actually open daily.",
+ "icon": "\ud83d\udcdd",
+ "demo": "editor",
+ "description": "Signature Wordsmith Lite Family was designed around real daily chores, not demos. It speaks your printer, your scanner, and your cloud drive without plugins, accounts, or upsells. It ships ready for Phone + PC, installs in seconds, and every file it creates stays yours.",
+ "features": [
+  "Mail-merge style template fields",
+  "Track-changes style revision marks",
+  "Print preview with margin control",
+  "Tables, images, and text wrapping",
+  "Outline and focus writing modes",
+  "Word count, reading time, readability score",
+  "One-click PDF and plain-text export",
+  "Keyboard shortcut cheat-sheet built in"
+ ],
+ "how_to": [
+  "Open Signature Wordsmith Lite Family \u2014 the first-run tour points at the three things you'll use most.",
+  "Start a new file from the Blank gallery and make it yours.",
+  "Use the toolbar (or keyboard shortcuts) \u2014 everything autosaves as you go.",
+  "Share or export with one click: CSV and plain-text formats.",
+  "Find anything later with the built-in search \u2014 your work is always one word away."
+ ],
+ "versions": [
+  {
+   "v": "1.0",
+   "note": "First Signature-line release \u2014 the complete core, stable and fast."
+  }
+ ],
+ "requirements": {
+  "os": [
+   "Windows 10/11",
+   "SignatureOS 12 or newer"
+  ],
+  "ram": "2 GB RAM",
+  "disk": "500 MB free space",
+  "display": "Touch-friendly on tablets"
+ },
+ "platforms": "Phone + PC",
+ "lineage": "An original Signature-line full word processor by Justin Addam Higgins \u2014 inspired by the app class, copying no product, brand, or design.",
+ "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-app-archive/?app=JAH-APP-000001",
+ "app_version": "1.0",
+ "category": "Signature Wordsmith",
+ "purpose": "The friendly one you'll actually open daily.",
+ "creation_mode": "SIGNATURE-GENERATED",
+ "content_hash": "24f85be634dd5271fe977c3782b5a3e2458a450ebf594cd4c53966f0cddd964a",
+ "provenance": {
+  "archive": "The Signature App Archive",
+  "engine": "Signature app engine (code/appgen.js)",
+  "engine_version": "d77f7ab561e56cea"
+ },
+ "privacy": "Your data stays on this device \u2014 downloads are built locally in your browser; nothing is uploaded.",
+ "app_status": {
+  "browser_demo": "WORKING",
+  "demo_mode": "LOCAL",
+  "demo_scope": "DEMO",
+  "offline_html": "AVAILABLE",
+  "python_companion": "AVAILABLE",
+  "thumbdrive_pack": "AVAILABLE",
+  "record": "DETERMINISTIC"
+ }
+}

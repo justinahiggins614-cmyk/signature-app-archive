@@ -9,7 +9,7 @@
 5. catalog/<cat>.html   - pre-rendered static HTML tables (ID, name, description)
                           for non-JS crawlers + catalog/index.html hub
 """
-import datetime, gzip, json, os, subprocess
+import datetime, gzip, json, os, re, subprocess
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = "https://justinahiggins614-cmyk.github.io/signature-app-archive/"
@@ -184,6 +184,16 @@ def main():
     print("sitemap URLs: %d (main %d + app batches %d files)" %
           (len(main_urls) + len(app_urls), len(main_urls), len(batch_files)))
     print("feed apps:", len(feed_apps), "| static catalog pages:", len(fams) + 1)
+
+    # --- re-stamp the static count line in index.html (never stale) ---
+    ip = os.path.join(ROOT, "index.html")
+    html = open(ip, encoding="utf-8").read()
+    stamp = ('<p class="staticcount" id="staticcount">%s Signature apps on file across %d '
+             'app categories, as of %s. Live count above.</p>' % (f"{len(feed_apps):,}", len(fams), TODAY))
+    html2 = re.sub(r'<p class="staticcount"[^>]*>.*?</p>', stamp, html, flags=re.S)
+    if html2 != html:
+        open(ip, "w", encoding="utf-8").write(html2)
+    print("static count stamped:", stamp[:100])
 
 
 if __name__ == "__main__":

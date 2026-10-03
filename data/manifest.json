@@ -150,5 +150,20 @@
   "language": 390,
   "finance": 390,
   "backup": 390
- }
+ },
+ "site": "The Signature App Archive",
+ "site_id": "SIGNATURE-APP-ARCHIVE",
+ "categories": 30,
+ "earliest_id": "JAH-APP-000001",
+ "latest_id": "JAH-APP-011700",
+ "chunk_size": 100,
+ "archive_version": "2026-10-03",
+ "goal": 1000000,
+ "base_url": "https://justinahiggins614-cmyk.github.io/signature-app-archive/",
+ "schema_version": "JAH-APP-RECORD/1.0",
+ "index_version": 1,
+ "app_engine_version": "d77f7ab561e56cea",
+ "index_sha256": "378ad6365edbf86176122e461e1dface4e5b859ce6f63d6e90eaea59030bb5a1",
+ "index_bytes": 109282,
+ "generated_at": "2026-10-03T15:48:25.050946+00:00"
 }

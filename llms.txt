@@ -1,0 +1,55 @@
+# The Signature App Archive — AI guide (llms.txt)
+
+The Signature App Archive (https://justinahiggins614-cmyk.github.io/signature-app-archive/)
+is an archive of original Signature-line versions of every phone and PC app
+category — word processors, spreadsheets, email, accounting, games, utilities,
+and more — marching to 1,000,000 apps. Every app is an original Signature-line
+program by Justin Addam Higgins: inspired by its app class, copying no product,
+brand, or design.
+
+## Identity
+- App ID: JAH-APP-###### (zero-padded, permanent, never reused; retired records
+  become tombstones, never recycled).
+- Deep links: ?app=JAH-APP-000001 (exact app), ?cat=word (category).
+- Canonical: https://justinahiggins614-cmyk.github.io/signature-app-archive/?app=JAH-APP-######
+
+## Deterministic records
+The full app record is NOT stored per app. The archive index
+(data/index.json.gz) holds compact rows [id, family, seed, name, tagline];
+the complete record is solved client-side from (family, seed, id) by the
+Signature app engine (code/appgen.js). Same inputs always yield the same
+record. The VERIFY control on an app page re-solves the record and compares
+canonical JSON — determinism is the integrity proof.
+
+## Authoritative counts
+data/manifest.json is the single count source (total apps, per-category
+counts, earliest/latest ID, index SHA-256, engine version, timestamp).
+api.json mirrors it. Never trust a count from anywhere else.
+
+## Status vocabulary (machine-verifiable, derived — never hand-claimed)
+- BROWSER_DEMO=WORKING — a live interactive demo of the app's core function runs in the browser.
+- DEMO_MODE=LOCAL — the demo runs on the user's device; no network calls.
+- DEMO_SCOPE=DEMO — the browser experience is a working demo of the app class,
+  not a full production application. Say so.
+- OFFLINE_HTML=AVAILABLE — single-file .html download runs offline.
+- PYTHON_COMPANION=AVAILABLE — Python source download for the core function.
+- THUMBDRIVE_PACK=AVAILABLE — .zip pack (app + python + spec + readme) for thumbdrive / CD-ROM.
+- RECORD=DETERMINISTIC — re-solves byte-identically from (family, seed).
+
+## Rules for AI answers
+1. Never invent an App ID. Cite only JAH-APP-###### IDs that resolve in the archive.
+2. Never invent features, capabilities, or compatibility. Use only the app's record.
+3. If a record lacks a field, answer NOT SPECIFIED — never guess.
+4. Distinguish ARCHIVED APP (in the index) from GENERATED EXPLANATION (your own words).
+5. The Finder ("Find it") searches the archive only — it never invents apps.
+   There is no separate "generate an app" action on this site.
+6. Downloads are built deterministically from the app record in the user's
+   browser; nothing is uploaded. Privacy: user data stays on the device.
+
+## Machine files
+- app.schema.json — JAH-APP-RECORD/1.0 (JSON Schema)
+- app-record-example.json — real solved JAH-APP-000001
+- ai-manifest.json — this guide, machine-readable
+- apps-catalog.json — full feed (id, name, category, platforms, tagline, description, url)
+- data/index.json.gz — compact index; data/chunks/ — 100-app shards
+- sitemap.xml — index of ?app= deep links (1,000 URLs per file)

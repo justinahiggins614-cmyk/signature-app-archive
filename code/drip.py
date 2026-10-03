@@ -33,6 +33,7 @@ def main():
 
     run([sys.executable, "code/seed.py", "--per-cat", str(PER_CAT)])
     run([sys.executable, "code/build_sitemap.py"])
+    run([sys.executable, "code/qa/checks.py"])
 
     size = dir_size(DATA)
     print("data dir: %.1f MB (guard 800 MB)" % (size / 1048576))

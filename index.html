@@ -169,12 +169,12 @@ h2.cattitle{color:var(--gold)}
 
 <div class="wrap">
 <header class="hero">
-<div class="kick">SITE 21 OF 25 &middot; THE JAH NETWORK</div>
+<div class="kick" id="kicker">SITE 21 OF 25 &middot; THE JAH NETWORK</div>
 <h1>📱 The Signature App Archive</h1>
 <p class="sub">An archive of original <b>Signature versions</b> of every phone and PC app <b>category</b> — word processors, spreadsheets, email, calendars, accounting, inventory, point of sale, project boards, games, utilities, and every office, business, market, government and personal-life app class. Each one is an original Signature-line program by <b>Justin Addam Higgins</b> — inspired by its app class, copying no product, brand, or design. Each <b>works right here in your browser</b>, reads aloud, answers your questions, and downloads for your thumbdrive or CD-ROM. Marching to 1,000,000 apps.</p>
 <details class="statscoll" open><summary>Archive statistics</summary><div class="stats" id="stats"><div class="stat"><b>…</b><span>loading</span></div></div></details>
 <div class="march"><div class="bar"><div class="fill" id="marchfill"></div></div><small id="marchtxt">Marching to 1,000,000 apps</small></div>
-<p class="staticcount">1,500 Signature apps on file across 30 app categories, as of 2026-10-02. Live count above.</p>
+<p class="staticcount" id="staticcount">11,700 Signature apps on file across 30 app categories, as of 2026-10-03. Live count above.</p>
 </header>
 
 <div id="home">
@@ -183,6 +183,7 @@ h2.cattitle{color:var(--gold)}
 <select id="fcat" aria-label="Category filter"><option value="">All categories</option></select>
 </div>
 <div class="finderbar"><input type="search" id="fq" maxlength="140" placeholder="Describe the app you need… e.g. something to track my shop inventory" aria-label="Describe the app you need"><button class="btn" id="fgo">Find it</button></div>
+<p class="note">Find searches the archive — it never invents apps.</p>
 <div id="fresults" class="fresults"></div>
 <div class="az" id="az"></div>
 <h2 style="color:var(--gold)">App categories</h2>
@@ -197,6 +198,7 @@ h2.cattitle{color:var(--gold)}
 
 <footer><div class="wrap">
 <p><b style="color:var(--gold)">The Signature App Archive</b> — every app an original Signature-line program by <b>Justin Addam Higgins</b>. Inspired by each app class, copying no product, brand, or design. Demos run live in your browser; downloads pack the app for thumbdrive or CD-ROM.</p>
+<p class="note">Machine-readable: <a href="api.json">api.json</a> · <a href="app.schema.json">app schema</a> · <a href="app-record-example.json">example record</a> · <a href="ai-manifest.json">ai-manifest.json</a> · <a href="llms.txt">llms.txt</a> · <a href="health.json">archive health</a> · <a href="sitemap.xml">sitemap</a> · <a href="docs/ARCHITECTURE.md">architecture</a></p>
 <nav aria-label="JAH Network sites" role="navigation"><div class="sites">THE JAH NETWORK ·
 <a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">AI Phone Book</a> ·
 <a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a> ·
@@ -260,10 +262,21 @@ var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){r
 async function gz(url){var r=await fetch(url);if(!r.ok)throw new Error("HTTP "+r.status+" "+url);return await new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).text()}
 var A={manifest:null,idx:null,cats:[],cur:null};
 
+async function fetchJSON(url,ms){
+  var ctl=new AbortController(),t=setTimeout(function(){ctl.abort()},ms||12000);
+  try{var r=await fetch(url,{signal:ctl.signal});if(!r.ok)throw new Error("HTTP "+r.status);return await r.json()}
+  finally{clearTimeout(t)}
+}
+function cacheManifest(m){try{localStorage.setItem("jah-app-manifest",JSON.stringify({count:m.count,cats:m.categories,at:m.generated_at||new Date().toISOString()}))}catch(e){}}
+function cachedManifest(){try{var c=JSON.parse(localStorage.getItem("jah-app-manifest")||"null");return(c&&c.count)?c:null}catch(e){return null}}
 async function boot(){
-  try{A.manifest=await(await fetch("data/manifest.json")).json()}catch(e){}
+  var cm=cachedManifest(),usedCached=false;
+  try{A.manifest=await fetchJSON("data/manifest.json",12000);cacheManifest(A.manifest)}
+  catch(e){try{A.manifest=await fetchJSON("data/manifest.json",12000);cacheManifest(A.manifest)}catch(e2){A.manifest=null}}
+  if(!A.manifest&&cm){A.manifest={count:cm.count,categories:cm.cats,generated_at:cm.at};usedCached=true}
   A.cats=SigApp.families();
-  renderStats();renderCatGrid();renderCatFilter();renderAZ();
+  renderStats(usedCached);renderCatGrid();renderCatFilter();renderAZ();
+  paintKicker();
   if(window.innerWidth<768){var sc=document.querySelector(".statscoll");if(sc)sc.removeAttribute("open");}
   var qs=new URLSearchParams(location.search);
   var app=qs.get("app"),cat=qs.get("cat");
@@ -272,13 +285,26 @@ async function boot(){
   document.getElementById("fresh").innerHTML='<div class="dload" role="status"><span class="spin" aria-hidden="true"></span>Loading apps…</div>';
   loadFresh();bindSearch();
 }
-function renderStats(){
-  var n=A.manifest?A.manifest.count:0,el=document.getElementById("stats");
-  el.innerHTML='<div class="stat"><b>'+n.toLocaleString()+'</b><span>apps on file</span></div>'+
+function renderStats(usedCached){
+  var el=document.getElementById("stats");
+  if(!A.manifest){
+    el.innerHTML='<div class="stat"><b>—</b><span>count unavailable</span></div>'+
+      '<div class="stat"><button class="btn small" onclick="location.reload()">Retry</button></div>';
+    document.getElementById("marchtxt").textContent="Archive count unavailable — check connection, then retry";
+    return;
+  }
+  var n=A.manifest.count;
+  var sub=usedCached?("last verified "+String(A.manifest.generated_at||"").slice(0,10)):"apps on file";
+  el.innerHTML='<div class="stat"><b>'+n.toLocaleString()+'</b><span>'+esc(sub)+'</span></div>'+
     '<div class="stat"><b>'+A.cats.length+'</b><span>app categories</span></div>'+
     '<div class="stat"><b>1,000,000</b><span>march goal</span></div>';
   document.getElementById("marchfill").style.width=Math.min(100,n/1000000*100)+"%";
   document.getElementById("marchtxt").textContent=n.toLocaleString()+" / 1,000,000 apps";
+}
+function paintKicker(){
+  fetch("JAH-NETWORK-MANIFEST.json").then(function(r){return r.json()}).then(function(m){
+    if(m&&m.site_count&&m.site_number){var k=document.getElementById("kicker");if(k)k.innerHTML="SITE "+m.site_number+" OF "+m.site_count+" &middot; THE JAH NETWORK"}
+  }).catch(function(){});
 }
 function renderCatGrid(){
   document.getElementById("catgrid").innerHTML=A.cats.map(function(c){
@@ -341,13 +367,20 @@ async function showCat(key){
     '<div class="cards">'+rows.map(cardHTML).join("")+'</div>';
 }
 function goHome(){show("home");history.replaceState(null,"","./");window.scrollTo(0,0)}
+function nfSearch(){var v=document.getElementById("nfq").value;goHome();setTimeout(function(){var q=document.getElementById("q");if(q){q.value=v;doSearch();var t=document.getElementById("freshtitle");if(t)t.scrollIntoView()}},60)}
 async function showAppById(id){
   show("appview");
   document.getElementById("appview").innerHTML='<div class="panel"><div class="dload" role="status"><span class="spin" aria-hidden="true"></span>Loading app…</div></div>';
   var idx=await ensureIdx();
   var row=null;
   for(var i=0;i<idx.length;i++)if(idx[i][0]===id){row=idx[i];break}
-  if(!row){goHome();return}
+  if(!row){
+    show("appview");window.scrollTo(0,0);
+    document.getElementById("appview").innerHTML='<div class="panel"><span class="backlink" onclick="goHome()">← All apps</span>'+
+      '<h2>App not found</h2><p class="note">No archived app has the ID <b>'+esc(id)+'</b>. App IDs are permanent — check the spelling, or use Find below to search the archive.</p>'+
+      '<div class="finderbar"><input type="search" id="nfq" placeholder="Search the archive…" aria-label="Search the archive"><button class="btn" onclick="nfSearch()">Find it</button></div></div>';
+    return;
+  }
   var o=SigApp.solve(row[1],row[2],row[0]);
   showApp(o);
 }
@@ -389,6 +422,28 @@ function recPanelHTML(o){
    '<span class="rp"><b>READ ALOUD</b> <button class="btn ghost small" onclick="readApp(A.cur)">read</button></span></div>';
 }
 function openApp(){if(A.cur)window.open("?app="+encodeURIComponent(A.cur.id),"_blank","noopener")}
+async function verifyApp(){
+  var o=A.cur,el=document.getElementById("verdict");
+  if(!o||!el)return;
+  el.textContent="re-solving…";
+  try{
+    var fresh=SigApp.solve(o.family,o.seed,o.id);
+    var same=JSON.stringify(fresh)===JSON.stringify(o);
+    var hash="unavailable here";
+    if(window.crypto&&crypto.subtle){
+      var buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(JSON.stringify(fresh)));
+      hash=Array.prototype.map.call(new Uint8Array(buf),function(x){return("0"+x.toString(16)).slice(-2)}).join("");
+    }
+    el.innerHTML=same?("✓ deterministic — SHA-256 <code>"+esc(hash.slice(0,20))+"…</code>"):("✗ record mismatch — please report this app");
+  }catch(e){el.textContent="verification failed: "+e.message}
+}
+function reportApp(){
+  var o=A.cur;if(!o)return;
+  var rep=["APP PROBLEM REPORT",o.id+" — "+o.name,"Category: "+o.family+" (seed "+o.seed+")",
+    "Date: "+new Date().toISOString(),"Describe the problem:"].join("\n");
+  try{var log=JSON.parse(localStorage.getItem("jah-app-reports")||"[]");log.push({id:o.id,at:new Date().toISOString()});localStorage.setItem("jah-app-reports",JSON.stringify(log))}catch(e){}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(rep).then(function(){audMsg("Report copied — send it to the archive keeper.")})}else{audMsg(rep)}
+}
 function scrollDls(){var d=document.getElementById("dlbtns");if(d)d.scrollIntoView({behavior:"smooth",block:"center"})}
 function shareApp(){
   if(!A.cur)return;
@@ -416,6 +471,15 @@ function showApp(o){
     '<div class="sect"><h3>📖 About this app</h3><p>'+esc(o.description)+'</p><p class="note">'+esc(o.lineage)+'</p>'+
     '<p class="note">⚙️ <b>Provenance:</b> generated by the Signature app engine — deterministic seed '+o.seed+', record '+esc(o.id)+'. The same seed always makes this exact app.</p>'+
     '<p class="note">📶 <b>Offline:</b> yes — the single-file app, Python source, and thumbdrive / CD-ROM pack all run without internet.</p></div>'+
+    '<div class="sect"><h3>✅ App status</h3><table class="spec">'+
+    '<tr><th>Browser demo</th><td>WORKING — a live interactive demo of this app\u2019s core function runs in the demo section below</td></tr>'+
+    '<tr><th>Demo mode</th><td>LOCAL — the demo runs on your device; no network calls</td></tr>'+
+    '<tr><th>Demo scope</th><td>DEMO — the browser experience is a working demo of the app class, not a full production application</td></tr>'+
+    '<tr><th>Offline single-file app</th><td>AVAILABLE — the .html download runs without internet</td></tr>'+
+    '<tr><th>Python companion</th><td>AVAILABLE — .py download of the core function</td></tr>'+
+    '<tr><th>Thumbdrive / CD-ROM pack</th><td>AVAILABLE — .zip pack for your own disc</td></tr>'+
+    '<tr><th>Record</th><td>DETERMINISTIC — the same seed always makes this exact app <button class="btn small ghost" onclick="verifyApp()">verify</button> <span id="verdict" class="note"></span></td></tr></table>'+
+    '<p class="note">🔒 Privacy: your data stays on this device — downloads are built locally in your browser; nothing is uploaded.</p></div>'+
     '<div class="sect"><h3>✨ Features</h3><ul>'+o.features.map(function(f){return '<li>'+esc(f)+'</li>'}).join("")+'</ul></div>'+
     '<div class="sect"><h3>🧭 How to use</h3><ol>'+o.how_to.map(function(f){return '<li>'+esc(f)+'</li>'}).join("")+'</ol></div>'+
     '<div class="sect"><h3>🖥️ System requirements</h3><table class="spec">'+
@@ -427,6 +491,7 @@ function showApp(o){
     (demo?'<div class="sect" id="demosect"><h3>▶️ '+esc(demo.title)+'</h3><div id="demobox"></div></div>':"")+
     '<div class="mbtns" id="dlbtns">'+(demo?'<button class="btn gold" onclick="runDemo()">▶ Run Demo</button>':"")+'<button class="btn" onclick="readApp(A.cur)">🔊 Read aloud</button>'+
     '<button class="btn" onclick="copyApp()">📋 Copy</button>'+
+    '<button class="btn" onclick="reportApp()">⚠ Report problem</button>'+
     '<button class="btn" onclick="dlApp(\'txt\')">⬇ .txt</button>'+
     '<button class="btn" onclick="dlApp(\'json\')">⬇ .json</button>'+
     '<button class="btn gold" onclick="dlAppHtml()">⬇ Single-file app (.html)</button>'+
@@ -514,13 +579,24 @@ async function dlAppZip(){
     "Then open index.html (this file) in any web browser — the app runs offline.",
     "","CONTENTS:","  index.html  — the app (works offline, double-click to run)","  app.py      — Python companion (CLI version of the core function)","  spec.txt    — full app description, features, how-to, requirements","  spec.json   — machine-readable app record",
     "","No installation needed. Your files stay on your own disc."].join("\n");
-  dlZip(o.id+"-pack.zip",[
+  dlZip(o.id+"-pack.zip",packFiles(o,html,py,readme));
+}
+function packFiles(o,html,py,readme){
+  var files=[
     {name:"index.html",data:html},
     {name:"app.py",data:py},
     {name:"spec.txt",data:appText(o)},
     {name:"spec.json",data:JSON.stringify(o,null,1)},
     {name:"README.txt",data:readme}
-  ]);
+  ];
+  var manifest={package:"THUMBDRIVE-CDROM-PACK",app_id:o.id,app_name:o.name,
+    app_version:o.versions[o.versions.length-1].v,schema:"JAH-APP-RECORD/1.0",
+    created:new Date().toISOString(),offline:true,
+    provenance:"The Signature App Archive — deterministic app engine (same seed always makes this exact app)",
+    files:files.map(function(f){var crc="";try{crc=("00000000"+crc32(f.data).toString(16)).slice(-8)}catch(e){}
+      return{name:f.name,bytes:f.data.length,crc32:crc}})};
+  files.push({name:"manifest.json",data:JSON.stringify(manifest,null,1)});
+  return files;
 }
 /* ============ grounded AI helper — answers only from the app's file ============ */
 var QA_STOP=new Set("the,a,an,and,or,for,to,of,in,on,with,is,it,this,that,what,does,which,how,are,be,was,were,at,by,from,as,so,but,if,not,no,yes,up,out,about,into,over,after,than,then,there,their,them,they,he,she,his,her,its,tell,me,my,you,your,do,can,please,give,show,have,has,had,will,would,should,could,much,many,big,small".split(","));
@@ -593,13 +669,13 @@ async function fAsk(){
   var idx=await ensureIdx();
   if(!idx.length){box.innerHTML='<p class="note">The archive index is still loading — a moment, then Find it. 📱</p>';return}
   var hits=idx.map(function(r){var c=catByKey(r[1]);
-    var hay=(r[3]+" "+r[4]+" "+r[0]+" "+(c?c.name+" "+c.blurb:"")).toLowerCase();var s=0;
-    kws.forEach(function(k){if(r[0].toLowerCase()===k)s+=10;if(hay.indexOf(k)>=0)s+=k.length>5?3:2});
-    return{r:r,c:c,s:s}}).filter(function(x){return x.s>0})
+    var hay=(r[3]+" "+r[4]+" "+r[0]+" "+(c?c.name+" "+c.blurb:"")).toLowerCase();var s=0;var why=[];
+    kws.forEach(function(k){if(r[0].toLowerCase()===k){s+=10;why.push("exact ID")}if(hay.indexOf(k)>=0){s+=k.length>5?3:2;why.push(k)}});
+    return{r:r,c:c,s:s,why:why}}).filter(function(x){return x.s>0})
     .sort(function(a,b){return b.s-a.s}).slice(0,5);
   if(!hits.length){box.innerHTML='<p class="note">Nothing matches "<b>'+esc(kws.join(" "))+'</b>" yet — try different words. 📱</p>';return}
   box.innerHTML=hits.map(function(h){var r=h.r;
-    return '<div class="card"><div class="sku">'+esc(r[0])+'</div><h4>'+(h.c?h.c.icon+" ":"")+esc(r[3])+'</h4><div class="tag">'+esc(r[4])+'</div><a class="btn gold" style="display:inline-block;margin-top:8px;text-decoration:none" href="?app='+encodeURIComponent(r[0])+'">Take me there →</a></div>'}).join("");
+    return '<div class="card"><div class="sku">'+esc(r[0])+'</div><h4>'+(h.c?h.c.icon+" ":"")+esc(r[3])+'</h4><div class="tag">'+esc(r[4])+'</div><div class="note">Matched: '+esc(h.why.slice(0,4).join(", "))+'</div><a class="btn gold" style="display:inline-block;margin-top:8px;text-decoration:none" href="?app='+encodeURIComponent(r[0])+'">Take me there →</a></div>'}).join("");
 }
 document.getElementById("fgo").onclick=fAsk;
 document.getElementById("fq").addEventListener("keydown",function(e){if(e.key==="Enter")fAsk()});

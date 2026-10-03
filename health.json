@@ -1,0 +1,70 @@
+{
+ "site": "The Signature App Archive",
+ "site_id": "SIGNATURE-APP-ARCHIVE",
+ "generated_at": "2026-10-03T15:52:27.269741+00:00",
+ "apps": 11700,
+ "categories": 30,
+ "per_category": {
+  "word": 390,
+  "sheet": 390,
+  "slides": 390,
+  "mail": 390,
+  "calendar": 390,
+  "notes": 390,
+  "accounting": 390,
+  "inventory": 390,
+  "pos": 390,
+  "hr": 390,
+  "project": 390,
+  "chat": 390,
+  "browser": 390,
+  "music": 390,
+  "games": 390,
+  "utils": 390,
+  "photo": 390,
+  "draw": 390,
+  "pdf": 390,
+  "video": 390,
+  "code": 390,
+  "db": 390,
+  "crm": 390,
+  "forms": 390,
+  "weather": 390,
+  "fitness": 390,
+  "recipes": 390,
+  "language": 390,
+  "finance": 390,
+  "backup": 390
+ },
+ "id_range": [
+  "JAH-APP-000001",
+  "JAH-APP-011700"
+ ],
+ "goal": 1000000,
+ "status": {
+  "browser_demo": "WORKING \u2014 every category maps to a live DEMOS renderer",
+  "demo_mode": "LOCAL \u2014 demos run on the user's device, no network calls",
+  "demo_scope": "DEMO \u2014 the browser experience is a working demo of the app class",
+  "offline_html": "AVAILABLE",
+  "python_companion": "AVAILABLE \u2014 25/25 demo types",
+  "thumbdrive_pack": "AVAILABLE \u2014 .zip includes manifest.json with CRC32 per file",
+  "record": "DETERMINISTIC \u2014 same (family, seed) always solves the same record"
+ },
+ "demo_coverage": {
+  "families": 30,
+  "renderers": 25,
+  "demo_types": 25
+ },
+ "checks": {
+  "qa_gates": "PASS",
+  "determinism": "PASS",
+  "sitemap_xml": "valid",
+  "sitemap_urls": 11700,
+  "sitemap_matches_manifest": true
+ },
+ "index_sha256": "378ad6365edbf86176122e461e1dface4e5b859ce6f63d6e90eaea59030bb5a1",
+ "app_engine_version": "d77f7ab561e56cea",
+ "schema_version": "JAH-APP-RECORD/1.0",
+ "manifest": "data/manifest.json",
+ "record_schema": "app.schema.json"
+}

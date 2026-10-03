@@ -90,6 +90,22 @@ def main():
     manifest["chunks"] = chunks
     manifest["count"] = base_index + len(new_rows)
     manifest["per_cat"] = {k: v - 1 for k, v in ns.items()}
+    # --- authoritative manifest: the single count source for the whole site ---
+    import hashlib, datetime
+    manifest["site"] = "The Signature App Archive"
+    manifest["site_id"] = "SIGNATURE-APP-ARCHIVE"
+    manifest["categories"] = len(fams)
+    manifest["earliest_id"] = "JAH-APP-000001"
+    manifest["latest_id"] = "JAH-APP-%06d" % manifest["count"]
+    manifest["chunk_size"] = CHUNK_SIZE
+    manifest["archive_version"] = datetime.date.today().isoformat()
+    manifest["goal"] = 1000000
+    manifest["base_url"] = "https://justinahiggins614-cmyk.github.io/signature-app-archive/"
+    manifest["schema_version"] = "JAH-APP-RECORD/1.0"
+    manifest["index_version"] = manifest.get("index_version", 0) + 1
+    ag_path = os.path.join(ROOT, "code", "appgen.js")
+    manifest["app_engine_version"] = hashlib.sha256(open(ag_path, "rb").read()).hexdigest()[:16]
+    manifest["generated_at"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
     json.dump(manifest, open(manifest_p, "w"), indent=1)
     json.dump(state, open(os.path.join(DATA, "state.json"), "w"), indent=1)
 
@@ -97,13 +113,29 @@ def main():
         for r in iter_rows(chunks):
             fh.write(json.dumps(r, separators=(",", ":")) + "\n")
 
+    idx_path = os.path.join(DATA, "index.json.gz")
+    manifest["index_sha256"] = hashlib.sha256(open(idx_path, "rb").read()).hexdigest()
+    manifest["index_bytes"] = os.path.getsize(idx_path)
+    json.dump(manifest, open(manifest_p, "w"), indent=1)
+
     api = {
         "site": "The Signature App Archive",
+        "site_id": "SIGNATURE-APP-ARCHIVE",
+        "api_version": "1.0",
         "apps": manifest["count"],
         "goal": 1000000,
         "categories": [{"key": f["key"], "name": f["name"], "icon": f["icon"], "blurb": f["blurb"]} for f in fams],
         "manifest": "data/manifest.json",
         "index": "data/index.json.gz",
+        "record_schema": "app.schema.json",
+        "ai_manifest": "ai-manifest.json",
+        "llms": "llms.txt",
+        "schema_version": manifest["schema_version"],
+        "index_sha256": manifest["index_sha256"],
+        "app_engine_version": manifest["app_engine_version"],
+        "generated_at": manifest["generated_at"],
+        "deep_links": {"app": "?app=JAH-APP-000001", "category": "?cat=word"},
+        "id_format": "JAH-APP-###### (zero-padded, never reused)",
     }
     json.dump(api, open(os.path.join(ROOT, "api.json"), "w"), indent=1)
     print("TOTAL apps:", manifest["count"])
