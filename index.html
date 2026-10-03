@@ -85,6 +85,15 @@ footer .sites a{color:#9fc2ff;text-decoration:none;margin:0 6px}
 .backlink{display:inline-block;margin:10px 0;color:var(--cy);cursor:pointer}
 h2.cattitle{color:var(--gold)}
 .note{font-size:.8em;color:var(--dim)}
+/* ---- batch-E 10-fix pass: kicker, status badges, record panel, AI card ---- */
+.kick{color:var(--gold);letter-spacing:.28em;font-size:.75em;margin:0 0 6px}
+.sbadge{display:inline-block;background:#0d1526;border:1px solid var(--gold);color:var(--gold);font-size:.72em;font-weight:700;letter-spacing:.08em;padding:3px 10px;border-radius:14px}
+.sbadge.sm{font-size:.62em;padding:2px 8px}
+.recpanel{display:flex;flex-wrap:wrap;gap:8px 18px;background:#0d1526;border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0;font-size:.8em;color:var(--dim);align-items:center}
+.recpanel .rp b{color:var(--gold);font-weight:700;margin-right:4px}
+.btn.small{padding:6px 12px;font-size:.85em;min-height:0}
+.aicard{background:#0d1526;border:1px solid var(--gold);border-radius:10px;padding:12px 14px;margin:0 0 12px;font-size:.88em}
+.aicard b{color:var(--gold)}
 /* ---- site-21 diagnostic: 44px tap targets + responsive cards on mobile ---- */
 @media(max-width:767px){
   .cards,.fresults{grid-template-columns:1fr}
@@ -152,6 +161,7 @@ h2.cattitle{color:var(--gold)}
 
 <div class="wrap">
 <header class="hero">
+<div class="kick">SITE 21 OF 25 &middot; THE JAH NETWORK</div>
 <h1>📱 The Signature App Archive</h1>
 <p class="sub">An archive of original <b>Signature versions</b> of every phone and PC app <b>category</b> — word processors, spreadsheets, email, calendars, accounting, inventory, point of sale, project boards, games, utilities, and every office, business, market, government and personal-life app class. Each one is an original Signature-line program by <b>Justin Addam Higgins</b> — inspired by its app class, copying no product, brand, or design. Each <b>works right here in your browser</b>, reads aloud, answers your questions, and downloads for your thumbdrive or CD-ROM. Marching to 1,000,000 apps.</p>
 <details class="statscoll" open><summary>Archive statistics</summary><div class="stats" id="stats"><div class="stat"><b>…</b><span>loading</span></div></div></details>
@@ -251,6 +261,7 @@ async function boot(){
   var app=qs.get("app"),cat=qs.get("cat");
   if(app){showAppById(app);return}
   if(cat&&SigApp.byKey(cat)){showCat(cat);return}
+  document.getElementById("fresh").innerHTML='<div class="dload" role="status"><span class="spin" aria-hidden="true"></span>Loading apps…</div>';
   loadFresh();bindSearch();
 }
 function renderStats(){
@@ -276,7 +287,7 @@ function renderAZ(){
 }
 async function ensureIdx(){
   if(A.idx)return A.idx;
-  try{var t=await gz("data/index.json.gz");A.idx=t.trim().split("\n").filter(Boolean).map(JSON.parse)}catch(e){A.idx=[]}
+  try{var t=await gz("data/index.json.gz");A.idx=t.trim().split("\n").filter(Boolean).map(JSON.parse);A.idxOk=true}catch(e){A.idx=[];A.idxOk=false}
   return A.idx;
 }
 function show(id){["home","catview","appview"].forEach(function(x){document.getElementById(x).style.display=x===id?"":"none"})}
@@ -288,7 +299,7 @@ async function loadFresh(){
 }
 function cardHTML(r){
   var c=catByKey(r[1]);
-  return '<div class="card" onclick="showAppById(\''+r[0]+'\')"><div class="sku">'+esc(r[0])+'</div><h4>'+(c?c.icon+" ":"")+esc(r[3])+'</h4><div class="tag">'+esc(r[4])+'</div></div>';
+  return '<div class="card" onclick="showAppById(\''+r[0]+'\')"><div class="sku">'+esc(r[0])+'</div><h4>'+(c?c.icon+" ":"")+esc(r[3])+'</h4><div class="tag">'+esc(r[4])+'</div><div style="margin-top:6px"><span class="sbadge sm">SIGNATURE ORIGINAL</span></div></div>';
 }
 var searchT;
 function bindSearch(){
@@ -305,13 +316,17 @@ async function doSearch(){
     return (!cat||r[1]===cat)&&(!L||r[3].toUpperCase().charAt(0)===L)&&
       (!q||r[0].toLowerCase().indexOf(q)>=0||r[3].toLowerCase().indexOf(q)>=0||r[4].toLowerCase().indexOf(q)>=0);
   }).slice(-60).reverse();
-  document.getElementById("fresh").innerHTML=rows.length?rows.map(cardHTML).join(""):'<p class="note">No apps match — try another search.</p>';
+  var freshEl=document.getElementById("fresh");
+  if(!A.idxOk){freshEl.innerHTML='<p class="note" role="alert">The archive index could not load — check your connection, then reload the page.</p>';}
+  else freshEl.innerHTML=rows.length?rows.map(cardHTML).join(""):'<p class="note">No apps match — try another search.</p>';
   document.getElementById("freshtitle").textContent=q||cat||L?"Search results":"Fresh from the archive";
 }
 async function showCat(key){
   var c=catByKey(key);if(!c)return;
   show("catview");history.replaceState(null,"","?cat="+key);window.scrollTo(0,0);
+  document.getElementById("catview").innerHTML='<span class="backlink" onclick="goHome()">← All apps</span><h2 class="cattitle">'+c.icon+' '+esc(c.name)+'</h2><div class="dload" role="status"><span class="spin" aria-hidden="true"></span>Loading apps…</div>';
   var idx=await ensureIdx();
+  if(!A.idxOk){document.getElementById("catview").innerHTML='<span class="backlink" onclick="goHome()">← All apps</span><h2 class="cattitle">'+c.icon+' '+esc(c.name)+'</h2><p class="note" role="alert">The archive index could not load — check your connection, then reload.</p>';return}
   var rows=idx.filter(function(r){return r[1]===key}).slice(-48).reverse();
   document.getElementById("catview").innerHTML='<span class="backlink" onclick="goHome()">← All apps</span>'+
     '<h2 class="cattitle">'+c.icon+' '+esc(c.name)+'</h2><p class="note">'+esc(c.blurb)+' — showing newest '+rows.length+'.</p>'+
@@ -319,6 +334,8 @@ async function showCat(key){
 }
 function goHome(){show("home");history.replaceState(null,"","./");window.scrollTo(0,0)}
 async function showAppById(id){
+  show("appview");
+  document.getElementById("appview").innerHTML='<div class="panel"><div class="dload" role="status"><span class="spin" aria-hidden="true"></span>Loading app…</div></div>';
   var idx=await ensureIdx();
   var row=null;
   for(var i=0;i<idx.length;i++)if(idx[i][0]===id){row=idx[i];break}
@@ -349,6 +366,34 @@ function renderDemo(){
   setTimeout(function(){try{DEMOS[o.demo].render(db,o)}catch(e){db.innerHTML='<p class="note">Demo failed to start: '+esc(e.message)+'</p>'}},40);
 }
 function runDemo(){var s=document.getElementById("demosect");if(s&&s.scrollIntoView)s.scrollIntoView();renderDemo();}
+/* ---- batch-E record panel: OPEN · SOURCE · ID · VERSION · SHARE · COPY · DOWNLOAD · READ ALOUD ---- */
+function recPanelHTML(o){
+  var v=o.versions[o.versions.length-1].v;
+  return '<div class="recpanel" aria-label="Record panel">'+
+   '<span class="rp"><b>STATUS</b> <span class="sbadge">SIGNATURE ORIGINAL</span></span>'+
+   '<span class="rp"><b>ID</b> '+esc(o.id)+'</span>'+
+   '<span class="rp"><b>VERSION</b> v'+esc(v)+'</span>'+
+   '<span class="rp"><b>SOURCE</b> The Signature App Archive · deterministic app engine</span>'+
+   '<span class="rp"><b>OPEN</b> <button class="btn ghost small" onclick="openApp()">open ↗</button></span>'+
+   '<span class="rp"><b>SHARE</b> <button class="btn ghost small" onclick="shareApp()">share</button></span>'+
+   '<span class="rp"><b>COPY</b> <button class="btn ghost small" onclick="copyApp()">copy</button></span>'+
+   '<span class="rp"><b>DOWNLOAD</b> <button class="btn ghost small" onclick="scrollDls()">files</button></span>'+
+   '<span class="rp"><b>READ ALOUD</b> <button class="btn ghost small" onclick="readApp(A.cur)">read</button></span></div>';
+}
+function openApp(){if(A.cur)window.open("?app="+encodeURIComponent(A.cur.id),"_blank","noopener")}
+function scrollDls(){var d=document.getElementById("dlbtns");if(d)d.scrollIntoView({behavior:"smooth",block:"center"})}
+function shareApp(){
+  if(!A.cur)return;
+  var url=location.origin+location.pathname+"?app="+encodeURIComponent(A.cur.id);
+  var data={title:A.cur.name+" — The Signature App Archive",text:A.cur.name+" ("+A.cur.id+")",url:url};
+  if(navigator.share){navigator.share(data).catch(function(){})}
+  else{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){audMsg("Link copied — share it anywhere.")})}else{audMsg(url)}}
+}
+function aiCardHTML(){
+  return '<div class="aicard" aria-label="AI identity card">🤖 <b>App Helper</b> — the AI that talks here.<br>'+
+   '<span class="note"><b>Duties:</b> answers your questions about this app from its own file only — what it does, how to use it, system requirements, versions, downloads. '+
+   '<b>Engine:</b> grounded on-page Q&amp;A engine with the shared JAHtalk conversational layer. It claims no canon JAH-AI ID.</span></div>';
+}
 function showApp(o){
   A.cur=o;
   show("appview");history.replaceState(null,"","?app="+o.id);window.scrollTo(0,0);
@@ -358,8 +403,11 @@ function showApp(o){
   var h='<span class="backlink" onclick="goHome()">← All apps</span>'+
     '<div class="panel"><div class="sku" style="font-size:.75em;color:var(--dim)">'+esc(o.id)+' · '+(c?esc(c.name):"App")+' · '+esc(o.platforms)+'</div>'+
     '<h2>'+o.icon+' '+esc(o.name)+'</h2><p class="note">'+esc(o.tagline)+'</p>'+
+    recPanelHTML(o)+
     appShot(o)+
-    '<div class="sect"><h3>📖 About this app</h3><p>'+esc(o.description)+'</p><p class="note">'+esc(o.lineage)+'</p><p class="note">📶 <b>Offline:</b> yes — the single-file app, Python source, and thumbdrive / CD-ROM pack all run without internet.</p></div>'+
+    '<div class="sect"><h3>📖 About this app</h3><p>'+esc(o.description)+'</p><p class="note">'+esc(o.lineage)+'</p>'+
+    '<p class="note">⚙️ <b>Provenance:</b> generated by the Signature app engine — deterministic seed '+o.seed+', record '+esc(o.id)+'. The same seed always makes this exact app.</p>'+
+    '<p class="note">📶 <b>Offline:</b> yes — the single-file app, Python source, and thumbdrive / CD-ROM pack all run without internet.</p></div>'+
     '<div class="sect"><h3>✨ Features</h3><ul>'+o.features.map(function(f){return '<li>'+esc(f)+'</li>'}).join("")+'</ul></div>'+
     '<div class="sect"><h3>🧭 How to use</h3><ol>'+o.how_to.map(function(f){return '<li>'+esc(f)+'</li>'}).join("")+'</ol></div>'+
     '<div class="sect"><h3>🖥️ System requirements</h3><table class="spec">'+
@@ -369,7 +417,7 @@ function showApp(o){
     '<tr><th>Display</th><td>'+esc(o.requirements.display)+'</td></tr></table></div>'+
     '<div class="sect"><h3>🕘 Version history</h3><table class="spec">'+o.versions.map(function(v){return '<tr><th>v'+esc(v.v)+'</th><td>'+esc(v.note)+'</td></tr>'}).join("")+'</table></div>'+
     (demo?'<div class="sect" id="demosect"><h3>▶️ '+esc(demo.title)+'</h3><div id="demobox"></div></div>':"")+
-    '<div class="mbtns">'+(demo?'<button class="btn gold" onclick="runDemo()">▶ Run Demo</button>':"")+'<button class="btn" onclick="readApp(A.cur)">🔊 Read aloud</button>'+
+    '<div class="mbtns" id="dlbtns">'+(demo?'<button class="btn gold" onclick="runDemo()">▶ Run Demo</button>':"")+'<button class="btn" onclick="readApp(A.cur)">🔊 Read aloud</button>'+
     '<button class="btn" onclick="copyApp()">📋 Copy</button>'+
     '<button class="btn" onclick="dlApp(\'txt\')">⬇ .txt</button>'+
     '<button class="btn" onclick="dlApp(\'json\')">⬇ .json</button>'+
@@ -377,7 +425,7 @@ function showApp(o){
     '<button class="btn gold" onclick="dlAppPy()">⬇ Python source (.py)</button>'+
     '<button class="btn gold" onclick="dlAppZip()">📦 Thumbdrive / CD-ROM pack (.zip)</button></div>'+
     '<div class="xlinks">🔗 <b>Around the network:</b> <a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">sibling software in the Signature Cyber Mega-Mall</a> · <a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">runs on systems in the PC System Depository</a></div>'+
-    '<div class="qa"><div class="q">❓ Ask the AI helper</div><div id="qaout"><p class="note">'+esc(qaGreet(o))+'</p></div>'+
+    '<div class="qa">'+aiCardHTML()+'<div class="q">❓ Ask the AI helper</div><div id="qaout"><p class="note">'+esc(qaGreet(o))+'</p></div>'+
     '<div class="qarow"><input id="qain" placeholder="e.g. What are the system requirements? How do I export?" aria-label="Ask about this app"><button class="btn" onclick="askQA()">Ask</button></div></div>'+
     '</div>';
   document.getElementById("appview").innerHTML=h;
