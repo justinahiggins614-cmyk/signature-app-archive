@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>The Signature App Archive — every app, Signature-made</title>
-<meta name="description" content="The Signature App Archive: original Signature-line versions of every phone and PC app — word processors, spreadsheets, email, accounting, games, utilities and more. Each app works right in your browser, with read-aloud, AI helper, downloads, and thumbdrive/CD-ROM packs. Marching to 1,000,000 apps.">
+<meta name="description" content="The Signature App Archive: an archive of original Signature versions of every phone and PC app category — word processors, spreadsheets, email, accounting, games, utilities and more. Each app is an original Signature-line program by Justin Addam Higgins that works right in your browser, with read-aloud, AI helper, downloads, and thumbdrive/CD-ROM packs. Marching to 1,000,000 apps.">
 <link rel="canonical" href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","name":"The Signature App Archive","url":"https://justinahiggins614-cmyk.github.io/signature-app-archive/","description":"Original Signature-line versions of every phone and PC app class. Each app runs in the browser, with read-aloud, AI helper, and downloads."}
+{"@context":"https://schema.org","@type":"WebSite","name":"The Signature App Archive","url":"https://justinahiggins614-cmyk.github.io/signature-app-archive/","description":"Archive of original Signature versions of every phone and PC app category. Each app is an original Signature-line program by Justin Addam Higgins that runs in the browser, with read-aloud, AI helper, and downloads."}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Dataset","name":"The Signature App Archive","creator":{"@type":"Person","name":"Justin Addam Higgins"}}
@@ -97,6 +97,8 @@ h2.cattitle{color:var(--gold)}
 .dload{display:flex;align-items:center;gap:10px;padding:18px;color:var(--dim);font-size:.9em}
 .dload .spin{display:inline-block;width:18px;height:18px;border:3px solid var(--line);border-top-color:var(--cy);border-radius:50%;animation:dspin 0.8s linear infinite}
 @keyframes dspin{to{transform:rotate(360deg)}}
+.shot{margin:12px 0}
+.shot svg{width:100%;height:auto;border-radius:10px;border:1px solid var(--line);display:block}
 /* ---- demo styles ---- */
 .drow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;align-items:center}
 .dbtn{background:#12233f;border:1px solid var(--cy);color:var(--cy);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.88em}
@@ -151,7 +153,7 @@ h2.cattitle{color:var(--gold)}
 <div class="wrap">
 <header class="hero">
 <h1>📱 The Signature App Archive</h1>
-<p class="sub">Original Signature-line versions of <b>every phone and PC app</b> — word processors, spreadsheets, email, calendars, accounting, inventory, point of sale, project boards, games, utilities, and every office, business, market, government and personal-life app. Each one <b>works right here in your browser</b>, reads aloud, answers your questions, and downloads for your thumbdrive or CD-ROM. Marching to 1,000,000 apps.</p>
+<p class="sub">An archive of original <b>Signature versions</b> of every phone and PC app <b>category</b> — word processors, spreadsheets, email, calendars, accounting, inventory, point of sale, project boards, games, utilities, and every office, business, market, government and personal-life app class. Each one is an original Signature-line program by <b>Justin Addam Higgins</b> — inspired by its app class, copying no product, brand, or design. Each <b>works right here in your browser</b>, reads aloud, answers your questions, and downloads for your thumbdrive or CD-ROM. Marching to 1,000,000 apps.</p>
 <details class="statscoll" open><summary>Archive statistics</summary><div class="stats" id="stats"><div class="stat"><b>…</b><span>loading</span></div></div></details>
 <div class="march"><div class="bar"><div class="fill" id="marchfill"></div></div><small id="marchtxt">Marching to 1,000,000 apps</small></div>
 <p class="staticcount">1,500 Signature apps on file across 30 app categories, as of 2026-10-02. Live count above.</p>
@@ -325,6 +327,28 @@ async function showAppById(id){
   showApp(o);
 }
 /* ============ app view ============ */
+function appShot(o){
+  var seed=0;for(var i=0;i<o.id.length;i++)seed=((seed*31)+o.id.charCodeAt(i))>>>0;
+  var cols=["#00f0ff","#c9a227","#7CFC00","#ff7ab8","#9d7bff"];
+  var ac=cols[seed%cols.length],bars="",i,hh;
+  for(i=0;i<8;i++){hh=20+((seed>>(i*3))%60);bars+='<rect x="'+(30+i*52)+'" y="'+(150-hh)+'" width="34" height="'+hh+'" rx="4" fill="'+ac+'" opacity="0.75"/>';}
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 220" role="img" aria-label="Preview illustration of '+esc(o.name)+'">'+
+    '<rect x="4" y="4" width="452" height="212" rx="12" fill="#0d1526" stroke="#2a3a5f"/>'+
+    '<rect x="4" y="4" width="452" height="34" rx="12" fill="#12233f"/>'+
+    '<circle cx="24" cy="21" r="6" fill="#ff5f57"/><circle cx="44" cy="21" r="6" fill="#febc2e"/><circle cx="64" cy="21" r="6" fill="#28c840"/>'+
+    '<text x="84" y="26" font-family="Arial,sans-serif" font-size="14" fill="#d7e3ff">'+esc(o.name)+'</text>'+
+    bars+
+    '<rect x="30" y="165" width="400" height="10" rx="5" fill="#1a2440"/>'+
+    '<rect x="30" y="165" width="'+(120+(seed%200))+'" height="10" rx="5" fill="'+ac+'"/></svg>';
+  return '<div class="shot">'+svg+'<div class="note">Preview illustration — the live demo below is the real app, running in your browser.</div></div>';
+}
+function renderDemo(){
+  var o=A.cur;if(!o||!DEMOS[o.demo])return;
+  var db=document.getElementById("demobox");if(!db)return;
+  db.innerHTML='<div class="dload" role="status"><span class="spin" aria-hidden="true"></span>Loading demo…</div>';
+  setTimeout(function(){try{DEMOS[o.demo].render(db,o)}catch(e){db.innerHTML='<p class="note">Demo failed to start: '+esc(e.message)+'</p>'}},40);
+}
+function runDemo(){var s=document.getElementById("demosect");if(s&&s.scrollIntoView)s.scrollIntoView();renderDemo();}
 function showApp(o){
   A.cur=o;
   show("appview");history.replaceState(null,"","?app="+o.id);window.scrollTo(0,0);
@@ -332,9 +356,10 @@ function showApp(o){
   setJsonLd(o,c);
   var demo=DEMOS[o.demo]||null;
   var h='<span class="backlink" onclick="goHome()">← All apps</span>'+
-    '<div class="panel"><div class="sku" style="font-size:.75em;color:var(--dim)">'+esc(o.id)+' · '+esc(o.platforms)+'</div>'+
+    '<div class="panel"><div class="sku" style="font-size:.75em;color:var(--dim)">'+esc(o.id)+' · '+(c?esc(c.name):"App")+' · '+esc(o.platforms)+'</div>'+
     '<h2>'+o.icon+' '+esc(o.name)+'</h2><p class="note">'+esc(o.tagline)+'</p>'+
-    '<div class="sect"><h3>📖 About this app</h3><p>'+esc(o.description)+'</p><p class="note">'+esc(o.lineage)+'</p></div>'+
+    appShot(o)+
+    '<div class="sect"><h3>📖 About this app</h3><p>'+esc(o.description)+'</p><p class="note">'+esc(o.lineage)+'</p><p class="note">📶 <b>Offline:</b> yes — the single-file app, Python source, and thumbdrive / CD-ROM pack all run without internet.</p></div>'+
     '<div class="sect"><h3>✨ Features</h3><ul>'+o.features.map(function(f){return '<li>'+esc(f)+'</li>'}).join("")+'</ul></div>'+
     '<div class="sect"><h3>🧭 How to use</h3><ol>'+o.how_to.map(function(f){return '<li>'+esc(f)+'</li>'}).join("")+'</ol></div>'+
     '<div class="sect"><h3>🖥️ System requirements</h3><table class="spec">'+
@@ -343,8 +368,8 @@ function showApp(o){
     '<tr><th>Disk space</th><td>'+esc(o.requirements.disk)+'</td></tr>'+
     '<tr><th>Display</th><td>'+esc(o.requirements.display)+'</td></tr></table></div>'+
     '<div class="sect"><h3>🕘 Version history</h3><table class="spec">'+o.versions.map(function(v){return '<tr><th>v'+esc(v.v)+'</th><td>'+esc(v.note)+'</td></tr>'}).join("")+'</table></div>'+
-    (demo?'<div class="sect"><h3>▶️ '+esc(demo.title)+'</h3><div id="demobox"></div></div>':"")+
-    '<div class="mbtns"><button class="btn" onclick="readApp(A.cur)">🔊 Read aloud</button>'+
+    (demo?'<div class="sect" id="demosect"><h3>▶️ '+esc(demo.title)+'</h3><div id="demobox"></div></div>':"")+
+    '<div class="mbtns">'+(demo?'<button class="btn gold" onclick="runDemo()">▶ Run Demo</button>':"")+'<button class="btn" onclick="readApp(A.cur)">🔊 Read aloud</button>'+
     '<button class="btn" onclick="copyApp()">📋 Copy</button>'+
     '<button class="btn" onclick="dlApp(\'txt\')">⬇ .txt</button>'+
     '<button class="btn" onclick="dlApp(\'json\')">⬇ .json</button>'+
@@ -356,9 +381,7 @@ function showApp(o){
     '<div class="qarow"><input id="qain" placeholder="e.g. What are the system requirements? How do I export?" aria-label="Ask about this app"><button class="btn" onclick="askQA()">Ask</button></div></div>'+
     '</div>';
   document.getElementById("appview").innerHTML=h;
-  if(demo){var db=document.getElementById("demobox");
-    db.innerHTML='<div class="dload" role="status"><span class="spin" aria-hidden="true"></span>Loading demo…</div>';
-    setTimeout(function(){try{DEMOS[o.demo].render(db,o)}catch(e){db.innerHTML='<p class="note">Demo failed to start: '+esc(e.message)+'</p>'}},40)}
+  if(demo)renderDemo();
   var qi=document.getElementById("qain");if(qi)qi.addEventListener("keydown",function(e){if(e.key==="Enter")askQA()});
 }
 function setJsonLd(o,c){
