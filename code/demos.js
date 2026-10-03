@@ -7,14 +7,32 @@ function rnd(seed) { var a = seed * 2654435761 % 2147483647; return function () 
 function dl(name, text, mime) { var b = new Blob([text], { type: mime || "text/plain" }); var a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 900); }
 function btn(label, fn) { var b = document.createElement("button"); b.className = "dbtn"; b.textContent = label; b.onclick = fn; return b; }
 function store(k, v) { try { if (v === undefined) return JSON.parse(localStorage.getItem("sigapp_" + k) || "null"); localStorage.setItem("sigapp_" + k, JSON.stringify(v)); } catch (e) { return null; } }
-/* --- minimal stored (uncompressed) ZIP writer + CRC32 --- */
-function crc32(s) { var t = crc32.t || (crc32.t = (function () { var c, n, k, t = []; for (n = 0; n < 256; n++) { c = n; for (k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c; } return t; })()); var c = 0xFFFFFFFF; for (var i = 0; i < s.length; i++) c = t[(c ^ s.charCodeAt(i)) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+/* --- minimal stored (uncompressed) ZIP writer + CRC32 ---
+ * CRC is always computed over the UTF-8 *bytes* that are actually stored,
+ * so archives validate cleanly even when records contain emoji / non-ASCII. */
+function crc32table() { var c, n, k, t = []; for (n = 0; n < 256; n++) { c = n; for (k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c; } return t; }
+function crc32bytes(a) { var t = crc32bytes.t || (crc32bytes.t = crc32table()); var c = 0xFFFFFFFF; for (var i = 0; i < a.length; i++) c = t[(c ^ a[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+function utf8bytes(s) {
+  var o = [], i = 0;
+  while (i < s.length) {
+    var c = s.charCodeAt(i++);
+    if (c < 128) { o.push(c); }
+    else if (c < 2048) { o.push(192 | (c >> 6), 128 | (c & 63)); }
+    else if (c >= 0xD800 && c <= 0xDBFF && i < s.length) {
+      var l = s.charCodeAt(i);
+      if (l >= 0xDC00 && l <= 0xDFFF) { i++; var cp = 0x10000 + ((c - 0xD800) << 10) + (l - 0xDC00); o.push(240 | (cp >> 18), 128 | ((cp >> 12) & 63), 128 | ((cp >> 6) & 63), 128 | (cp & 63)); }
+      else { o.push(224 | (c >> 12), 128 | ((c >> 6) & 63), 128 | (c & 63)); }
+    }
+    else { o.push(224 | (c >> 12), 128 | ((c >> 6) & 63), 128 | (c & 63)); }
+  }
+  return o;
+}
+function crc32(s) { return crc32bytes(utf8bytes(String(s))); }
 function zipFiles(files) {
-  var enc = function (s) { var o = []; for (var i = 0; i < s.length; i++) { var c = s.charCodeAt(i); if (c < 128) o.push(c); else if (c < 2048) o.push(192 | (c >> 6), 128 | (c & 63)); else o.push(224 | (c >> 12), 128 | ((c >> 6) & 63), 128 | (c & 63)); } return o; };
   var w = function (n, bytes) { for (var i = 0; i < bytes; i++) out.push((n >> (8 * i)) & 255); };
   var out = [], central = [], off = 0;
   files.forEach(function (f) {
-    var data = enc(f.data), crc = crc32(f.data), nl = enc(f.name);
+    var data = utf8bytes(f.data), crc = crc32bytes(data), nl = utf8bytes(f.name);
     var lh = out.length;
     w(0x04034b50, 4); w(20, 2); w(0, 2); w(0, 2); w(0, 2); w(0, 2); w(crc, 4); w(data.length, 4); w(data.length, 4); w(nl.length, 2); w(0, 2);
     nl.forEach(function (b) { out.push(b); }); data.forEach(function (b) { out.push(b); });
@@ -429,5 +447,5 @@ DEMOS.backup = { title: "Live demo — pack a real backup", render: function (el
 }};
 
 root.DEMOS = DEMOS;
-root.dlFile = dl; root.dlZip = dlZip; root.zipFiles = zipFiles; root.crc32 = crc32;
+root.dlFile = dl; root.dlZip = dlZip; root.zipFiles = zipFiles; root.crc32 = crc32; root.crc32bytes = crc32bytes; root.utf8bytes = utf8bytes;
 })(typeof self !== "undefined" ? self : this);

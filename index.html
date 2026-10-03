@@ -326,9 +326,14 @@ function renderAZ(){
   el.querySelectorAll("button").forEach(function(b){b.onclick=function(){el.querySelectorAll("button").forEach(function(x){x.classList.remove("on")});b.classList.add("on");doSearch()}});
 }
 async function ensureIdx(){
-  if(A.idx)return A.idx;
-  try{var t=await gz("data/index.json.gz");A.idx=t.trim().split("\n").filter(Boolean).map(JSON.parse);A.idxOk=true}catch(e){A.idx=[];A.idxOk=false}
-  return A.idx;
+  if(A.idxOk&&A.idx)return A.idx;
+  if(A.idxPromise)return A.idxPromise;
+  A.idxPromise=gz("data/index.json.gz").then(function(t){
+    A.idx=t.trim().split("\n").filter(Boolean).map(JSON.parse);A.idxOk=true;A.idxPromise=null;return A.idx;
+  },function(){
+    if(!A.idx)A.idx=[];A.idxOk=false;A.idxPromise=null;return A.idx;
+  });
+  return A.idxPromise;
 }
 function show(id){["home","catview","appview"].forEach(function(x){document.getElementById(x).style.display=x===id?"":"none"})}
 function catByKey(k){for(var i=0;i<A.cats.length;i++)if(A.cats[i].key===k)return A.cats[i];return null}
@@ -599,8 +604,8 @@ function packFiles(o,html,py,readme){
     app_version:o.versions[o.versions.length-1].v,schema:"JAH-APP-RECORD/1.0",
     created:new Date().toISOString(),offline:true,
     provenance:"The Signature App Archive — deterministic app engine (same seed always makes this exact app)",
-    files:files.map(function(f){var crc="";try{crc=("00000000"+crc32(f.data).toString(16)).slice(-8)}catch(e){}
-      return{name:f.name,bytes:f.data.length,crc32:crc}})};
+    files:files.map(function(f){var b=[],crc="";try{b=utf8bytes(f.data);crc=("00000000"+crc32bytes(b).toString(16)).slice(-8)}catch(e){}
+      return{name:f.name,bytes:b.length,crc32:crc}})};
   files.push({name:"manifest.json",data:JSON.stringify(manifest,null,1)});
   return files;
 }
