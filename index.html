@@ -44,10 +44,10 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:Arial,Helvetica,
 .fcard h3{margin:.4em 0;font-size:1.02em;color:var(--txt)}
 .fcard p{font-size:.82em;color:var(--dim);margin:0}
 .fcard .go{color:var(--cy);font-size:.82em;margin-top:8px;display:block}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;align-items:center}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;align-items:center;position:sticky;top:0;z-index:60;background:var(--bg);padding:10px 0}
 .toolbar input[type=search]{flex:1;min-width:200px;padding:11px 14px;border-radius:10px;border:1px solid var(--line);background:#060b1c;color:var(--txt)}
 .toolbar select{padding:11px;border-radius:10px;border:1px solid var(--line);background:#060b1c;color:var(--txt)}
-.btn{background:#12233f;border:1px solid var(--cy);color:var(--cy);border-radius:10px;padding:10px 18px;cursor:pointer;font-size:.92em}
+.btn{background:#12233f;border:1px solid var(--cy);color:var(--cy);border-radius:10px;padding:10px 18px;cursor:pointer;font-size:.92em;min-height:44px}
 .btn:hover{background:#1a3054}
 .btn.gold{border-color:var(--gold);color:var(--gold)}
 .btn.ghost{background:transparent}
@@ -85,6 +85,18 @@ footer .sites a{color:#9fc2ff;text-decoration:none;margin:0 6px}
 .backlink{display:inline-block;margin:10px 0;color:var(--cy);cursor:pointer}
 h2.cattitle{color:var(--gold)}
 .note{font-size:.8em;color:var(--dim)}
+/* ---- site-21 diagnostic: 44px tap targets + responsive cards on mobile ---- */
+@media(max-width:767px){
+  .cards,.fresults{grid-template-columns:1fr}
+  .card{padding:16px}
+  .az button{min-height:44px;min-width:44px;padding:10px 12px}
+  .dbtn{min-height:44px}
+  .mbtns .btn{flex:1 1 44%;text-align:center}
+  .qarow .btn{min-height:44px}
+}
+.dload{display:flex;align-items:center;gap:10px;padding:18px;color:var(--dim);font-size:.9em}
+.dload .spin{display:inline-block;width:18px;height:18px;border:3px solid var(--line);border-top-color:var(--cy);border-radius:50%;animation:dspin 0.8s linear infinite}
+@keyframes dspin{to{transform:rotate(360deg)}}
 /* ---- demo styles ---- */
 .drow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;align-items:center}
 .dbtn{background:#12233f;border:1px solid var(--cy);color:var(--cy);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.88em}
@@ -344,15 +356,20 @@ function showApp(o){
     '<div class="qarow"><input id="qain" placeholder="e.g. What are the system requirements? How do I export?" aria-label="Ask about this app"><button class="btn" onclick="askQA()">Ask</button></div></div>'+
     '</div>';
   document.getElementById("appview").innerHTML=h;
-  if(demo){try{DEMOS[o.demo].render(document.getElementById("demobox"),o)}catch(e){document.getElementById("demobox").innerHTML='<p class="note">Demo failed to start: '+esc(e.message)+'</p>'}}
+  if(demo){var db=document.getElementById("demobox");
+    db.innerHTML='<div class="dload" role="status"><span class="spin" aria-hidden="true"></span>Loading demo…</div>';
+    setTimeout(function(){try{DEMOS[o.demo].render(db,o)}catch(e){db.innerHTML='<p class="note">Demo failed to start: '+esc(e.message)+'</p>'}},40)}
   var qi=document.getElementById("qain");if(qi)qi.addEventListener("keydown",function(e){if(e.key==="Enter")askQA()});
 }
 function setJsonLd(o,c){
   document.getElementById("appjsonld").textContent=JSON.stringify({
     "@context":"https://schema.org","@type":"SoftwareApplication",
+    "identifier":o.id,
     "name":o.name,"applicationCategory":c?c.name:"App",
     "operatingSystem":o.requirements.os.join(", "),
     "description":o.description,"softwareVersion":o.versions[o.versions.length-1].v,
+    "creator":{"@type":"Person","name":"Justin Addam Higgins"},
+    "author":{"@type":"Person","name":"Justin Addam Higgins"},
     "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
     "url":"https://justinahiggins614-cmyk.github.io/signature-app-archive/?app="+o.id
   });
@@ -375,6 +392,7 @@ function copyApp(){
 }
 function dlApp(kind){
   var o=A.cur,blob;
+  audMsg("Preparing your "+kind+" download…");
   if(kind==="json")blob=new Blob([JSON.stringify(o,null,1)],{type:"application/json"});
   else blob=new Blob([appText(o)],{type:"text/plain"});
   var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=o.id+"."+kind;document.body.appendChild(a);a.click();
@@ -400,6 +418,7 @@ async function dlAppHtml(){
 }
 async function dlAppPy(){
   var o=A.cur;
+  audMsg("Building your Python source…");
   var tmpl={};
   try{tmpl=await(await fetch("code/pytmpl.json")).json()}catch(e){}
   var src=(tmpl[o.demo]||tmpl["editor"]||"# companion").replace("{name}",o.name).replace("{id}",o.id).replace("{file}",o.id+".py");
