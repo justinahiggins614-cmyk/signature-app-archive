@@ -833,11 +833,11 @@ addEventListener("load",function(){setTimeout(function(){
 var KEY="jah-tour-seen-apps";
 function seen(){try{return !!localStorage.getItem(KEY)}catch(e){return true}}
 function mark(){try{localStorage.setItem(KEY,"1")}catch(e){}}
-function openWelcome(){var w=document.getElementById("jah-welcome-wrap");if(!w)return;w.classList.add("open");var b=document.getElementById("jah-guide-ok");if(b)b.focus()}
+function openWelcome(){var w=document.getElementById("jah-welcome-wrap");if(!w)return;w.classList.add("open");var b=document.getElementById("jah-guide-ok");if(b)b.focus({preventScroll:true})}
 function closeWelcome(){var w=document.getElementById("jah-welcome-wrap");if(w)w.classList.remove("open");mark()}
 function wireGuide(){
   var p=document.getElementById("jah-guide-panel"),b=document.getElementById("jah-guide-btn"),x=document.getElementById("jah-guide-close");
-  function open(){p.classList.add("open");if(x)x.focus()}
+  function open(){p.classList.add("open");if(x)x.focus({preventScroll:true})}
   function shut(){p.classList.remove("open");if(b)b.focus()}
   if(b)b.onclick=open;
   if(x)x.onclick=shut;
