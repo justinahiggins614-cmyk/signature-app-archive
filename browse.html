@@ -174,6 +174,10 @@ details.letter>summary{padding:10px 12px;cursor:pointer;color:var(--cy)}
 .applist{list-style:none;margin:0;padding:4px 12px 12px}
 .applist li{padding:8px 0;border-bottom:1px solid #1a2440;font-size:.92em}
 .applist li:last-child{border-bottom:0}
+/* deterministic device-screen covers (js/covers.js) */
+.applist li .covthumb{display:inline-block;width:56px;flex:0 0 56px;border-radius:8px;overflow:hidden;background:#0d1526;border:1px solid #1a2440;vertical-align:middle}
+.applist li .covthumb svg{display:block;width:100%;height:auto}
+.covph{display:flex;align-items:center;justify-content:center;min-height:56px;color:#00f0ff;font-size:1.2em}
 .applist a{color:#9fc2ff;text-decoration:none}
 .applist a:hover{text-decoration:underline}
 .applist .tagl{color:var(--dim);font-size:.82em;display:block}
@@ -192,7 +196,7 @@ details.letter>summary{padding:10px 12px;cursor:pointer;color:var(--cy)}
 </style>
 </head>
 <body>
-<nav class="jahnet" aria-label="JAH Network Global Ecosystem" role="navigation"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/signature-math/">1 Signature Math</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">2 Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">3 The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">4 JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">5 Wiki Leaks</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">6 Signature Llama: The Fully Cyber Utilizable AI</a><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">7 The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">8 Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">9 Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">10 The Signature PC System Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">11 The Signature Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">12 The Signature Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">13 The Signature Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">14 The Signature AI Mad Scientist Creation Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">15 The Signature Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">16 The Signature AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">17 AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">18 The Signature Computer Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">19 The Signature App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">20 The Signature AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">21 The Signature Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">22 Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">23 Signature Music Studio</a><a href="https://justinahiggins614-cmyk.github.io/signature-fixit/">24 The Signature Mr Fix-It</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">25 The Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">26 The Signature Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">27 The Signature 3D Print Mega Mall</a></nav>
+<nav class="jahnet" aria-label="JAH Network Global Ecosystem" role="navigation"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/signature-math/">1 Signature Math</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">2 Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">3 The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">4 JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">5 Wiki Leaks</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">6 Signature Llama: The Fully Cyber Utilizable AI</a><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">7 The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">8 Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">9 Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">10 The Signature PC System Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">11 The Signature Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">12 The Signature Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">13 The Signature Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">14 The Signature AI Mad Scientist Creation Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">15 The Signature Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">16 The Signature AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">17 AI Olympics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">18 The Signature Computer Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">20 The Signature AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">21 The Signature Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">22 Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">23 Signature Music Studio</a><a href="https://justinahiggins614-cmyk.github.io/signature-fixit/">24 The Signature Mr Fix-It</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">25 The Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">26 The Signature Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">27 The Signature 3D Print Mega Mall</a><span class="here">19 The Signature App Archive — YOU ARE HERE</span></nav>
 <div class="wrap">
 <header class="browsehero">
 <div class="kick">SITE 19 OF 27 &middot; THE JAH NETWORK</div>
@@ -370,6 +374,7 @@ document.getElementById("jah-askai-q").addEventListener("keydown",function(e){if
 <p><b style="color:var(--gold)">The Signature App Archive</b> &mdash; every app an original Signature-line program by <b>Justin Addam Higgins</b>. Demos run live in your browser; downloads pack the app for thumbdrive or CD-ROM.</p>
 <p class="note">Machine-readable: <a href="api.json">api.json</a> &middot; <a href="apps-catalog.json">apps-catalog.json</a> &middot; <a href="sitemap.xml">sitemap</a></p>
 </div></footer>
+<script src="js/covers.js"></script>
 <script>
 "use strict";
 var COUNT=24960, CATS=30;
@@ -408,10 +413,11 @@ function setLoading(on){
 }
 function appRow(r){
   var id=r[0],name=r[3],tag=r[4];
-  return '<li><a href="./?app='+esc(id)+'"><b>'+esc(name)+'</b></a>'+
+  var cov=(window.SigAppCover?SigAppCover.thumb({id:id,name:name,tag:tag}):"");
+  return '<li><div style="display:flex;gap:10px;align-items:center">'+cov+'<div style="min-width:0;flex:1"><a href="./?app='+esc(id)+'"><b>'+esc(name)+'</b></a>'+
     '<span class="badge demo">&#9654; LIVE DEMO</span>'+
     '<span class="badge dl">&#11015; DOWNLOAD</span>'+
-    '<span class="tagl">'+esc(id)+" &middot; "+esc(tag)+'</span></li>';
+    '<span class="tagl">'+esc(id)+" &middot; "+esc(tag)+'</span></div></div></li>';
 }
 function renderCategory(det){
   if(det.dataset.built==="1")return;det.dataset.built="1";
@@ -429,6 +435,7 @@ function renderCategory(det){
     html+='</ul></details>';
   }
   box.innerHTML=html;
+  if(window.SigAppCover)SigAppCover.lazy(box);
   caz.innerHTML=Ls.map(function(L){return '<button data-l="'+L+'">'+L+'</button>'}).join("");
   var btns=caz.querySelectorAll("button");
   for(var b=0;b<btns.length;b++){btns[b].onclick=function(){var l=this.dataset.l;var d=det.querySelector('details.letter[data-l="'+l+'"]');if(d){d.open=true;d.scrollIntoView({behavior:"smooth",block:"start"})}}}
@@ -479,6 +486,7 @@ $("bq").addEventListener("input",function(){
       if(hits.length)h+='<p class="note">'+hits.length+(hits.length===60?"+":"")+" matching apps:</p>"+'<ul class="applist" style="background:var(--bg2);border:1px solid var(--line);border-radius:10px">'+hits.map(appRow).join("")+"</ul>";
       if(!h)h='<p class="loadmsg">No apps match &ldquo;'+esc(q)+'&rdquo;. Try a category name like "word", "mail", or "game".</p>';
       $("sres").dataset.loading="";$("sres").innerHTML=h;
+      if(window.SigAppCover)SigAppCover.lazy($("sres"));
     });
   },300);
 });
