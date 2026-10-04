@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>try{if(localStorage.getItem("jah-theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Browse every app A&ndash;Z &mdash; The Signature App Archive</title>
+<meta name="description" content="Browse the full catalog of The Signature App Archive: 18,840 Signature apps across 30 categories, A&ndash;Z. Every app runs a live demo right in your browser and downloads for your thumbdrive or CD-ROM.">
+<link rel="canonical" href="https://justinahiggins614-cmyk.github.io/signature-app-archive/browse.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Browse every app A&ndash;Z &mdash; The Signature App Archive">
+<meta property="og:description" content="The full A&ndash;Z app catalog of The Signature App Archive: 18,840 original Signature-line apps. Every app runs live in your browser and downloads for thumbdrive or CD-ROM.">
+<meta property="og:url" content="https://justinahiggins614-cmyk.github.io/signature-app-archive/browse.html">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"CollectionPage","name":"Browse every app A&ndash;Z","isPartOf":{"@type":"WebSite","name":"The Signature App Archive"},"description":"Full A&ndash;Z catalog of original Signature-line apps by Justin Addam Higgins."}
+</script>
+<style>
+:root{--bg:#070b16;--bg2:#0a0f1e;--line:#2a3a5f;--txt:#d7e3ff;--dim:#9aa4b2;--gold:#c9a227;--cy:#00f0ff;--am:#e8a020}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
+.jahnet{background:#0a0f1e;color:#9aa4b2;font-size:.72em;padding:7px 10px;text-align:center;line-height:2.1;letter-spacing:.02em;border-bottom:1px solid #2a3a5f}
+.jahnet-t{color:#c9a227;font-weight:700;letter-spacing:.25em;margin-right:10px}
+.jahnet a{color:#9fc2ff;text-decoration:none;margin:0 6px;white-space:nowrap}
+.jahnet a:hover{text-decoration:underline}
+.jahnet .cur{color:#c9a227;font-weight:700;margin:0 6px}
+.jahnet .bld{color:#6b7488;font-size:.9em}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.hero{padding:38px 0 22px;text-align:center;background:radial-gradient(700px 300px at 50% -40px,#12233f55,transparent)}
+.hero h1{font-size:2em;margin:.2em 0;color:var(--gold);letter-spacing:.02em}
+.hero .sub{color:var(--dim);max-width:760px;margin:0 auto}
+.stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:18px 0}
+.statscoll{margin:0}
+.statscoll>summary{display:none}
+@media(max-width:767px){.statscoll>summary{display:list-item;cursor:pointer;color:var(--dim);font-size:.85em;text-align:center;margin:14px 0 0}}
+.stat{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 18px;min-width:130px}
+.stat b{display:block;font-size:1.5em;color:var(--cy)}
+.stat span{font-size:.8em;color:var(--dim)}
+.march{max-width:560px;margin:6px auto 0}
+.march .bar{height:10px;background:#111a30;border-radius:6px;overflow:hidden}
+.march .fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--am))}
+.march small{color:var(--dim)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin:22px 0}
+.fcard{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:16px;cursor:pointer;transition:.15s}
+.fcard:hover{border-color:var(--cy);transform:translateY(-2px)}
+.fcard .ic{font-size:1.8em}
+.fcard h3{margin:.4em 0;font-size:1.02em;color:var(--txt)}
+.fcard p{font-size:.82em;color:var(--dim);margin:0}
+.fcard .go{color:var(--cy);font-size:.82em;margin-top:8px;display:block}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;align-items:center;position:sticky;top:0;z-index:60;background:var(--bg);padding:10px 0}
+.toolbar input[type=search]{flex:1;min-width:200px;padding:11px 14px;border-radius:10px;border:1px solid var(--line);background:#060b1c;color:var(--txt)}
+.toolbar select{padding:11px;border-radius:10px;border:1px solid var(--line);background:#060b1c;color:var(--txt)}
+.btn{background:#12233f;border:1px solid var(--cy);color:var(--cy);border-radius:10px;padding:10px 18px;cursor:pointer;font-size:.92em;min-height:44px}
+.btn:hover{background:#1a3054}
+.btn.gold{border-color:var(--gold);color:var(--gold)}
+.btn.ghost{background:transparent}
+.az{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;position:sticky;top:0;z-index:40;background:#070b16;padding:8px 0}
+.az button{background:#0d1526;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:7px 11px;cursor:pointer}
+.az button.on{border-color:var(--gold);color:var(--gold)}
+.finderbar{display:flex;gap:10px;margin:16px 0 4px;flex-wrap:wrap}
+.finderbar input[type=search]{flex:1;min-width:200px;padding:11px 14px;border-radius:10px;border:1px solid var(--line);background:#060b1c;color:var(--txt);font-size:.95em}
+.fresults{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:13px;cursor:pointer}
+.card:hover{border-color:var(--cy)}
+.card h4{margin:.2em 0;font-size:.95em}
+.card .sku{font-size:.72em;color:var(--dim)}
+.card .tag{font-size:.8em;color:var(--dim)}
+.panel{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:18px;margin:16px 0}
+.panel h2{margin-top:0;color:var(--gold)}
+.sect{margin:16px 0}
+.sect h3{color:var(--cy);font-size:1em;margin:.4em 0;border-bottom:1px solid var(--line);padding-bottom:6px}
+table.spec{width:100%;border-collapse:collapse;font-size:.88em}
+table.spec td,table.spec th{border-bottom:1px solid #1a2440;padding:7px 8px;text-align:left}
+table.spec th{color:var(--dim);font-weight:400}
+.mbtns{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.qa{background:#0d1526;border:1px solid var(--line);border-radius:10px;padding:14px;margin-top:14px}
+.qa .q{font-weight:700;color:var(--gold)}
+.qa .a{margin-top:6px;font-size:.9em}
+.qarow{display:flex;gap:8px;margin-top:10px}
+.qarow input{flex:1;padding:10px;border-radius:8px;border:1px solid var(--line);background:#060b1c;color:var(--txt)}
+footer{border-top:1px solid var(--line);margin-top:30px;padding:20px 0 40px;color:var(--dim);font-size:.82em}
+footer .sites{line-height:2.2}
+footer .sites a{color:#9fc2ff;text-decoration:none;margin:0 6px}
+#aubar{position:fixed;bottom:0;left:0;right:0;background:#0a0f22;border-top:1px solid var(--cy);padding:10px 16px;display:none;align-items:center;gap:12px;z-index:9999}
+#aubar .prog{flex:1;font-size:.85em;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.staticcount{color:var(--dim);font-size:.85em;text-align:center}
+.backlink{display:inline-block;margin:10px 0;color:var(--cy);cursor:pointer}
+h2.cattitle{color:var(--gold)}
+.note{font-size:.8em;color:var(--dim)}
+/* ---- batch-E 10-fix pass: kicker, status badges, record panel, AI card ---- */
+.kick{color:var(--gold);letter-spacing:.28em;font-size:.75em;margin:0 0 6px}
+.sbadge{display:inline-block;background:#0d1526;border:1px solid var(--gold);color:var(--gold);font-size:.72em;font-weight:700;letter-spacing:.08em;padding:3px 10px;border-radius:14px}
+.sbadge.sm{font-size:.62em;padding:2px 8px}
+.recpanel{display:flex;flex-wrap:wrap;gap:8px 18px;background:#0d1526;border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0;font-size:.8em;color:var(--dim);align-items:center}
+.recpanel .rp b{color:var(--gold);font-weight:700;margin-right:4px}
+.btn.small{padding:6px 12px;font-size:.85em;min-height:0}
+.aicard{background:#0d1526;border:1px solid var(--gold);border-radius:10px;padding:12px 14px;margin:0 0 12px;font-size:.88em}
+.aicard b{color:var(--gold)}
+/* ---- site-21 diagnostic: 44px tap targets + responsive cards on mobile ---- */
+@media(max-width:767px){
+  .cards,.fresults{grid-template-columns:1fr}
+  .card{padding:16px}
+  .az button{min-height:44px;min-width:44px;padding:10px 12px}
+  .dbtn{min-height:44px}
+  .mbtns .btn{flex:1 1 44%;text-align:center}
+  .qarow .btn{min-height:44px}
+}
+.dload{display:flex;align-items:center;gap:10px;padding:18px;color:var(--dim);font-size:.9em}
+.dload .spin{display:inline-block;width:18px;height:18px;border:3px solid var(--line);border-top-color:var(--cy);border-radius:50%;animation:dspin 0.8s linear infinite}
+@keyframes dspin{to{transform:rotate(360deg)}}
+.shot{margin:12px 0}
+.shot svg{width:100%;height:auto;border-radius:10px;border:1px solid var(--line);display:block}
+/* ---- demo styles ---- */
+.drow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;align-items:center}
+.dbtn{background:#12233f;border:1px solid var(--cy);color:var(--cy);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.88em}
+.dbtn:hover{background:#1a3054}
+.dnote{font-size:.82em;color:var(--dim);margin:8px 0}
+.dgrid{border-collapse:collapse;margin:8px 0;max-width:100%;overflow-x:auto;display:block}
+.dgrid td,.dgrid th{border:1px solid var(--line);padding:4px 6px;font-size:.85em}
+.dgrid input{background:#060b1c;border:0;color:var(--txt);width:74px;padding:4px}
+.dgrid tr.dlow td{background:#3a1414}
+.dedit{min-height:160px;border:1px solid var(--line);border-radius:8px;padding:12px;background:#060b1c}
+.dslide{background:#0d1526;border:1px solid var(--line);border-radius:10px;padding:26px;min-height:150px;text-align:center}
+.dslidetitle{font-size:1.4em;color:var(--gold);margin-bottom:10px}
+.dpresent{position:fixed;inset:0;background:#04060d;z-index:10000;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.dpslide{text-align:center;max-width:80%}
+.dpslide h2{color:var(--gold);font-size:2.2em}
+.dmsg{padding:8px;border-bottom:1px solid #1a2440;cursor:pointer;font-size:.9em}
+.dmsgopen{padding:10px}
+.dsearch{padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:#060b1c;color:var(--txt);min-width:200px}
+.dkanban{display:flex;gap:10px;flex-wrap:wrap}
+.dkcol{flex:1;min-width:180px;background:#0d1526;border:1px solid var(--line);border-radius:8px;padding:10px}
+.dktask{background:#060b1c;border:1px solid var(--line);border-radius:6px;padding:8px;margin:8px 0;font-size:.85em}
+.dchatlog{max-height:220px;overflow-y:auto;border:1px solid var(--line);border-radius:8px;padding:10px;background:#060b1c;margin-bottom:8px}
+.dchat{margin:6px 0;font-size:.9em}
+.dframe{width:100%;height:280px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.dttt{display:grid;grid-template-columns:repeat(3,64px);gap:6px;margin:10px 0}
+.dttt button{width:64px;height:64px;font-size:1.6em;background:#0d1526;border:1px solid var(--line);color:var(--cy);border-radius:8px;cursor:pointer}
+.dmem{display:grid;grid-template-columns:repeat(4,64px);gap:6px;margin:10px 0}
+.dmem button{width:64px;height:64px;font-size:1.5em;background:#0d1526;border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.dsnake{border:1px solid var(--line);border-radius:8px;background:#060b1c}
+.dpaint{border:1px solid var(--line);border-radius:8px;touch-action:none;max-width:100%}
+.ddoc{background:#0d1526;border:1px solid var(--line);border-radius:8px;padding:14px;white-space:pre-wrap;font-size:.9em;min-height:120px}
+.dtl{display:flex;gap:4px;margin:10px 0;flex-wrap:wrap}
+.dclip{background:#12233f;border:1px solid var(--cy);border-radius:6px;padding:8px;font-size:.8em;color:var(--cy)}
+.dcode{width:100%;height:130px;background:#060b1c;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:10px;font-family:monospace}
+.dconsole{background:#060b1c;border:1px solid var(--line);border-radius:8px;padding:10px;font-family:monospace;font-size:.85em;min-height:44px;white-space:pre-wrap}
+.dsky{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.dcard2{background:#0d1526;border:1px solid var(--line);border-radius:8px;padding:10px;min-width:86px;text-align:center;font-size:.85em}
+.dfc{margin:10px 0}
+.dfccard{background:#0d1526;border:1px solid var(--gold);border-radius:10px;padding:30px;text-align:center;font-size:1.5em;max-width:340px}
+.dcards{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.dperson{background:#0d1526;border:1px solid var(--line);border-radius:8px;padding:10px;min-width:170px;font-size:.88em}
+.drec ul{margin:6px 0}
+.ddot{color:var(--gold)}
+.dsafety{background:#2a1a0a;border:1px solid var(--am);border-radius:10px;padding:12px 16px;font-size:.88em;color:#f0d9a8;margin:12px 0}
+.xlinks{background:#0d1526;border:1px dashed var(--line);border-radius:10px;padding:12px 16px;margin:14px 0;font-size:.88em}
+.xlinks a{color:#9fc2ff}
+</style>
+<style>
+.baz{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
+.baz button{background:#0d1526;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:10px 13px;cursor:pointer;min-width:44px;min-height:44px}
+.baz button.on{border-color:var(--gold);color:var(--gold)}
+details.cat{background:var(--bg2);border:1px solid var(--line);border-radius:12px;margin:12px 0}
+details.cat>summary{padding:14px 16px;cursor:pointer;list-style:none;font-size:1.02em}
+details.cat>summary::-webkit-details-marker{display:none}
+details.cat>summary b{color:var(--gold)}
+details.cat>summary .cc{color:var(--dim);font-size:.85em}
+details.cat .cbody{padding:0 16px 16px}
+.caz{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}
+.caz button{background:#0a0f22;border:1px solid var(--line);color:var(--cy);border-radius:8px;padding:8px 11px;cursor:pointer;min-width:44px;min-height:44px;font-size:.85em}
+details.letter{background:#0a0f22;border:1px solid var(--line);border-radius:10px;margin:8px 0}
+details.letter>summary{padding:10px 12px;cursor:pointer;color:var(--cy)}
+.applist{list-style:none;margin:0;padding:4px 12px 12px}
+.applist li{padding:8px 0;border-bottom:1px solid #1a2440;font-size:.92em}
+.applist li:last-child{border-bottom:0}
+.applist a{color:#9fc2ff;text-decoration:none}
+.applist a:hover{text-decoration:underline}
+.applist .tagl{color:var(--dim);font-size:.82em;display:block}
+.badge{display:inline-block;font-size:.66em;font-weight:700;letter-spacing:.05em;padding:2px 8px;border-radius:12px;margin-left:8px;vertical-align:middle}
+.badge.demo{border:1px solid var(--cy);color:var(--cy)}
+.badge.dl{border:1px solid var(--gold);color:var(--gold)}
+.srch{position:sticky;top:0;z-index:60;background:var(--bg);padding:10px 0}
+.srch input[type=search]{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:#060b1c;color:var(--txt);font-size:1em;min-height:48px}
+.sres{margin:10px 0}
+.loadmsg{padding:14px;color:var(--dim);font-size:.9em;text-align:center}
+.browsehero{padding:34px 0 18px;text-align:center;background:radial-gradient(700px 300px at 50% -40px,#12233f55,transparent)}
+.browsehero h1{font-size:1.8em;margin:.2em 0;color:var(--gold)}
+.browsehero .sub{color:var(--dim);max-width:760px;margin:0 auto}
+.howto{max-width:760px;margin:14px auto;color:var(--dim);font-size:.9em}
+.bkbtn{display:inline-block;margin:12px 0}
+</style>
+</head>
+<body>
+<nav class="jahnet" aria-label="JAH Network Global Ecosystem" role="navigation"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/signature-math/">1 Signature Math</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">2 Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">3 The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">4 JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">5 Wiki Leaks</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">6 Signature Llama: The Fully Cyber Utilizable AI</a><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">7 The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">8 Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">9 Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">10 The Signature PC System Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">11 The Signature Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">12 The Signature Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">13 The Signature Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">14 The Signature AI Mad Scientist Creation Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">15 The Signature Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">16 The Signature AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">17 AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">18 The Signature Computer Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">19 The Signature App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">20 The Signature AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">21 The Signature Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">22 Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">23 Signature Music Studio</a><a href="https://justinahiggins614-cmyk.github.io/signature-fixit/">24 The Signature Mr Fix-It</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">25 The Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">26 The Signature Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">27 The Signature 3D Print Depository</a></nav>
+<div class="wrap">
+<header class="browsehero">
+<div class="kick">SITE 19 OF 27 &middot; THE JAH NETWORK</div>
+<h1>&#128241; Browse every app, A&ndash;Z</h1>
+<p class="sub">The full catalog of <b>The Signature App Archive</b> &mdash; every original Signature-line app by <b>Justin Addam Higgins</b>. Pick a category, open a letter, and tap any app for its full page.</p>
+<div class="stats" id="stats"><!-- STATS-STAMP-START --><div class="stat"><b>18,840</b><span>apps on file</span></div><div class="stat"><b>30</b><span>app categories</span></div><div class="stat"><b>1,000,000</b><span>march goal</span></div><!-- STATS-STAMP-END --></div>
+<p class="staticcount" id="staticcount">18,840 Signature apps on file across 30 app categories, as of 2026-10-04.</p>
+</header>
+<div class="howto">
+<p><b style="color:var(--gold)">How it works:</b> every app page runs a <b style="color:var(--cy)">&#9654; live demo right in your browser</b> and offers <b style="color:var(--gold)">&#11015; downloads</b> &mdash; the single-file app, the Python source, and the thumbdrive / CD-ROM pack. The catalog loads category by category, so this page stays fast on phones.</p>
+</div>
+<div class="srch">
+<input type="search" id="bq" placeholder="Search all apps &mdash; name, tagline, or JAH-APP-&hellip;" aria-label="Search all apps" autocomplete="off">
+</div>
+<div class="sres" id="sres" aria-live="polite"></div>
+<div class="baz" id="baz" aria-label="Browse by first letter"></div>
+<div id="cats">
+<details class="cat" data-cat="word"><summary>📝 <b>Signature Wordsmith</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Full word processor — write, format, paginate, print. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="sheet"><summary>📊 <b>Signature Ledger</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Real spreadsheet — formulas, functions, charts. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="slides"><summary>🎤 <b>Signature Stagecraft</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Presentation maker — slides, themes, present mode. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="mail"><summary>✉️ <b>Signature Postbox</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Email client — compose, folders, search, signatures. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="calendar"><summary>📅 <b>Signature Daybook</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Calendar and scheduler — events, reminders, views. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="notes"><summary>🗒️ <b>Signature Jotter</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Note-taker — quick capture, notebooks, tags. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="accounting"><summary>🧮 <b>Signature Tally</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Small-business accounting — ledger, reports, tax-ready. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="inventory"><summary>📦 <b>Signature Stockroom</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Inventory manager — stock in/out, alerts, counts. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="pos"><summary>🧾 <b>Signature Till</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Point of sale — ring sales, receipts, end-of-day. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="hr"><summary>👥 <b>Signature Crewbook</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">HR helper — people records, time off, reviews. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="project"><summary>🗂️ <b>Signature Milestone</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Project manager — boards, tasks, deadlines. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="chat"><summary>💬 <b>Signature Chatter</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Team messenger — rooms, threads, file drops. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="browser"><summary>🧭 <b>Signature Wayfarer</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Web browser — tabs, bookmarks, start page. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="music"><summary>🎵 <b>Signature Jukebox</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Media player — playlists, tones, visual calm. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="games"><summary>🎮 <b>Signature Arcade</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Game chest — tic-tac-toe, snake, memory match. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="utils"><summary>🧰 <b>Signature Toolkit</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Utility drawer — converter, passwords, timers. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="photo"><summary>📷 <b>Signature Darkroom</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Photo editor — filters, crops, touch-ups. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="draw"><summary>🎨 <b>Signature Canvas</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Drawing pad — brushes, layers of fun, export. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="pdf"><summary>📄 <b>Signature Folio</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Document viewer — read, annotate, organize. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="video"><summary>🎬 <b>Signature Cutting Room</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Video editor — timeline, trims, titles, export plan. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="code"><summary>⌨️ <b>Signature Codepad</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Code editor — write JavaScript, run it live. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="db"><summary>🗄️ <b>Signature Vault</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Simple database — tables, records, queries. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="crm"><summary>🤝 <b>Signature Rolodex</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Customer keeper — contacts, history, follow-ups. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="forms"><summary>📋 <b>Signature Clipboard</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Form builder — surveys, signups, responses. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="weather"><summary>⛅ <b>Signature Skywatch</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Weather desk — sample forecasts, planner (demo data). Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="fitness"><summary>🏃 <b>Signature Stride</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Fitness log — workouts, streaks, personal bests. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="recipes"><summary>🍳 <b>Signature Cookbook</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Recipe box — cards, scalers, shopping lists. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="language"><summary>🗣️ <b>Signature Tongue</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Language trainer — flashcards, quizzes, streaks. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="finance"><summary>💰 <b>Signature Mint</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Money planner — budgets, goals, calm charts. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+<details class="cat" data-cat="backup"><summary>💾 <b>Signature Safekeep</b> — <span class="cc">628 apps</span></summary><div class="cbody"><p class="note">Backup buddy — manifests, packs, restore checks. Open the letters below to browse every app.</p><div class="caz" aria-label="A to Z letters"></div><div class="cletters"></div></div></details>
+</div>
+<p><a class="btn ghost bkbtn" href="./">&#8592; Back to the archive home</a></p>
+</div>
+<footer style="border-top:1px solid var(--line);margin-top:30px;padding:20px 0 40px;color:var(--dim);font-size:.82em"><div class="wrap">
+<p><b style="color:var(--gold)">The Signature App Archive</b> &mdash; every app an original Signature-line program by <b>Justin Addam Higgins</b>. Demos run live in your browser; downloads pack the app for thumbdrive or CD-ROM.</p>
+<p class="note">Machine-readable: <a href="api.json">api.json</a> &middot; <a href="apps-catalog.json">apps-catalog.json</a> &middot; <a href="sitemap.xml">sitemap</a></p>
+</div></footer>
+<script>
+"use strict";
+var COUNT=18840, CATS=30;
+/* compact index rows: [id, cat_key, seq, title, blurb] — loaded once, lazily */
+var ROWS=null, BYCAT={}, BYID={}, FAMS={"word": {"name": "Signature Wordsmith", "icon": "\ud83d\udcdd"}, "sheet": {"name": "Signature Ledger", "icon": "\ud83d\udcca"}, "slides": {"name": "Signature Stagecraft", "icon": "\ud83c\udfa4"}, "mail": {"name": "Signature Postbox", "icon": "\u2709\ufe0f"}, "calendar": {"name": "Signature Daybook", "icon": "\ud83d\udcc5"}, "notes": {"name": "Signature Jotter", "icon": "\ud83d\uddd2\ufe0f"}, "accounting": {"name": "Signature Tally", "icon": "\ud83e\uddee"}, "inventory": {"name": "Signature Stockroom", "icon": "\ud83d\udce6"}, "pos": {"name": "Signature Till", "icon": "\ud83e\uddfe"}, "hr": {"name": "Signature Crewbook", "icon": "\ud83d\udc65"}, "project": {"name": "Signature Milestone", "icon": "\ud83d\uddc2\ufe0f"}, "chat": {"name": "Signature Chatter", "icon": "\ud83d\udcac"}, "browser": {"name": "Signature Wayfarer", "icon": "\ud83e\udded"}, "music": {"name": "Signature Jukebox", "icon": "\ud83c\udfb5"}, "games": {"name": "Signature Arcade", "icon": "\ud83c\udfae"}, "utils": {"name": "Signature Toolkit", "icon": "\ud83e\uddf0"}, "photo": {"name": "Signature Darkroom", "icon": "\ud83d\udcf7"}, "draw": {"name": "Signature Canvas", "icon": "\ud83c\udfa8"}, "pdf": {"name": "Signature Folio", "icon": "\ud83d\udcc4"}, "video": {"name": "Signature Cutting Room", "icon": "\ud83c\udfac"}, "code": {"name": "Signature Codepad", "icon": "\u2328\ufe0f"}, "db": {"name": "Signature Vault", "icon": "\ud83d\uddc4\ufe0f"}, "crm": {"name": "Signature Rolodex", "icon": "\ud83e\udd1d"}, "forms": {"name": "Signature Clipboard", "icon": "\ud83d\udccb"}, "weather": {"name": "Signature Skywatch", "icon": "\u26c5"}, "fitness": {"name": "Signature Stride", "icon": "\ud83c\udfc3"}, "recipes": {"name": "Signature Cookbook", "icon": "\ud83c\udf73"}, "language": {"name": "Signature Tongue", "icon": "\ud83d\udde3\ufe0f"}, "finance": {"name": "Signature Mint", "icon": "\ud83d\udcb0"}, "backup": {"name": "Signature Safekeep", "icon": "\ud83d\udcbe"}};
+var $=function(i){return document.getElementById(i)};
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function stripSig(n){return n.indexOf("Signature ")===0?n.slice(10):n}
+function firstLetter(n){var s=stripSig(n);return (s.charAt(0)||"#").toUpperCase()}
+function loadIndex(cb){
+  if(ROWS){cb(ROWS);return}
+  setLoading(true);
+  fetch("data/index.json.gz").then(function(r){if(!r.ok)throw new Error("fetch "+r.status);return r.arrayBuffer()})
+  .then(function(ab){
+    if(typeof DecompressionStream==="function"){
+      var ds=new DecompressionStream("gzip");
+      var w=ds.writable.getWriter();w.write(ab);w.close();
+      return new Response(ds.readable).text();
+    }
+    throw new Error("gzip not supported");
+  })
+  .then(function(txt){
+    var lines=txt.split("\n"),rows=[];
+    for(var i=0;i<lines.length;i++){var l=lines[i].trim();if(!l)continue;rows.push(JSON.parse(l))}
+    ROWS=rows;BYCAT={};BYID={};
+    for(var j=0;j<rows.length;j++){var r=rows[j];BYID[r[0]]=r;(BYCAT[r[1]]=BYCAT[r[1]]||[]).push(r)}
+    setLoading(false);cb(rows);
+  }).catch(function(e){setLoading(false);
+    $("sres").innerHTML='<p class="loadmsg">The catalog could not load ('+esc(e.message)+'). Check your connection and try again.</p>'});
+}
+function setLoading(on){
+  var els=document.querySelectorAll("details.cat .cbody .loadmsg");
+  for(var i=0;i<els.length;i++)els[i].style.display=on?"block":"none";
+  if(on)$("sres").innerHTML='<p class="loadmsg"><span class="spin" style="display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--cy);border-radius:50%"></span> Loading the catalog&hellip;</p>';
+  else if($("sres").dataset.loading==="1"){$("sres").innerHTML="";$("sres").dataset.loading="";}
+}
+function appRow(r){
+  var id=r[0],name=r[3],tag=r[4];
+  return '<li><a href="./?app='+esc(id)+'"><b>'+esc(name)+'</b></a>'+
+    '<span class="badge demo">&#9654; LIVE DEMO</span>'+
+    '<span class="badge dl">&#11015; DOWNLOAD</span>'+
+    '<span class="tagl">'+esc(id)+" &middot; "+esc(tag)+'</span></li>';
+}
+function renderCategory(det){
+  if(det.dataset.built==="1")return;det.dataset.built="1";
+  var key=det.dataset.cat;
+  var rows=BYCAT[key]||[];
+  var byL={};
+  for(var i=0;i<rows.length;i++){var L=firstLetter(rows[i][3]);(byL[L]=byL[L]||[]).push(rows[i])}
+  var Ls=Object.keys(byL).sort();
+  var caz=det.querySelector(".caz"),box=det.querySelector(".cletters");
+  var html="";
+  for(var j=0;j<Ls.length;j++){var L=Ls[j];
+    html+='<details class="letter" data-l="'+L+'"><summary>'+L+' &mdash; '+byL[L].length+' apps</summary><ul class="applist">';
+    var rr=byL[L].sort(function(a,b){return a[3]<b[3]?-1:1});
+    for(var k=0;k<rr.length;k++)html+=appRow(rr[k]);
+    html+='</ul></details>';
+  }
+  box.innerHTML=html;
+  caz.innerHTML=Ls.map(function(L){return '<button data-l="'+L+'">'+L+'</button>'}).join("");
+  var btns=caz.querySelectorAll("button");
+  for(var b=0;b<btns.length;b++){btns[b].onclick=function(){var l=this.dataset.l;var d=det.querySelector('details.letter[data-l="'+l+'"]');if(d){d.open=true;d.scrollIntoView({behavior:"smooth",block:"start"})}}}
+}
+document.querySelectorAll("details.cat").forEach(function(det){
+  det.addEventListener("toggle",function(){if(det.open)loadIndex(function(){renderCategory(det)})});
+});
+/* A-Z bar: jump to a letter across every category */
+(function(){
+  var bar=$("baz"),letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+  letters.forEach(function(L){
+    var b=document.createElement("button");b.textContent=L;
+    b.onclick=function(){
+      var all=document.querySelectorAll("details.cat");
+      loadIndex(function(){
+        for(var i=0;i<all.length;i++){var d=all[i];d.open=true;renderCategory(d)}
+        var first=null;
+        document.querySelectorAll("details.letter").forEach(function(dl){
+          if(dl.dataset.l===L){dl.open=true;if(!first)first=dl}
+        });
+        if(first)first.scrollIntoView({behavior:"smooth",block:"start"});
+        else $("sres").innerHTML='<p class="loadmsg">No apps start with &ldquo;'+L+'&rdquo; yet &mdash; new apps join every two hours.</p>';
+      });
+    };
+    bar.appendChild(b);
+  });
+})();
+/* search across everything */
+var qt=null;
+$("bq").addEventListener("input",function(){
+  var q=this.value.trim().toLowerCase();
+  clearTimeout(qt);
+  if(q.length<2){$("sres").innerHTML="";return}
+  qt=setTimeout(function(){
+    $("sres").dataset.loading="1";setLoading(true);
+    loadIndex(function(){
+      var hits=[],exact=null;
+      for(var i=0;i<ROWS.length;i++){var r=ROWS[i];
+        if(r[0].toLowerCase()===q||r[0].toLowerCase()===("jah-app-"+q)){exact=r;break}
+      }
+      for(var j=0;j<ROWS.length&&hits.length<60;j++){var rr=ROWS[j];
+        var nm=rr[3].toLowerCase(),bl=rr[4].toLowerCase();
+        if(rr===exact)continue;
+        if(nm.indexOf(q)>-1||bl.indexOf(q)>-1||rr[0].toLowerCase().indexOf(q)>-1)hits.push(rr);
+      }
+      var h="";
+      if(exact)h+='<p class="note">Exact ID match:</p><ul class="applist">'+appRow(exact)+"</ul>";
+      if(hits.length)h+='<p class="note">'+hits.length+(hits.length===60?"+":"")+" matching apps:</p>"+'<ul class="applist" style="background:var(--bg2);border:1px solid var(--line);border-radius:10px">'+hits.map(appRow).join("")+"</ul>";
+      if(!h)h='<p class="loadmsg">No apps match &ldquo;'+esc(q)+'&rdquo;. Try a category name like "word", "mail", or "game".</p>';
+      $("sres").dataset.loading="";$("sres").innerHTML=h;
+    });
+  },300);
+});
+</script>
+</body>
+</html>

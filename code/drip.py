@@ -33,6 +33,7 @@ def main():
 
     run([sys.executable, "code/seed.py", "--per-cat", str(PER_CAT)])
     run([sys.executable, "code/build_sitemap.py"])
+    run([sys.executable, "code/build_browse.py"])  # AFTER index rebuild: fresh count, never one run behind
     run([sys.executable, "code/qa/checks.py"])
 
     size = dir_size(DATA)

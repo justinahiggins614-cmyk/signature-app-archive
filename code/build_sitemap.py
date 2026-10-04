@@ -98,7 +98,7 @@ def main():
         by_cat.setdefault(cat, []).append(feed_apps[-1])
 
     # --- sitemap-main.xml ---
-    main_urls = [BASE] + [BASE + "?cat=" + f["key"] for f in fams]
+    main_urls = [BASE, BASE + "browse.html"] + [BASE + "?cat=" + f["key"] for f in fams]
     open(os.path.join(ROOT, "sitemap-main.xml"), "w").write(urlset(main_urls))
 
     # --- sitemap-apps-N.xml batches ---
