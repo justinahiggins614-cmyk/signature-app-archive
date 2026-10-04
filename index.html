@@ -722,23 +722,22 @@ function restoreTabs(){var bar=document.querySelector('[role="tablist"],.tabs');
 addEventListener("load",function(){setTimeout(function(){
   if(deep){PARAMS.forEach(function(p){if(q.get(p)){S.last=p+":"+q.get(p);wr(S)}});return}
   if(!location.hash){
-    if(typeof S.y==="number"&&S.y>0){window.scrollTo(0,S.y)}
-    else if(S.last){var el=findRec(S.last);if(el)el.scrollIntoView({block:"center"})}
     restoreTabs()}
 },250)})})();
 </script>
 <style>
-/* ---- first-time user guide: spotlight tour + ? Guide panel (usability layer, theme untouched) ---- */
+/* ---- first-time user guide: centered welcome overlay + ? Guide panel (usability layer, theme untouched) ---- */
 #jah-guide-btn{position:fixed;bottom:14px;left:14px;z-index:99990;min-width:44px;min-height:44px;border-radius:22px;border:1px solid var(--gold,#c9a227);background:#0d1526;color:var(--gold,#c9a227);font-size:1em;font-weight:700;cursor:pointer;padding:10px 16px;opacity:.85}
 #jah-guide-btn:hover{opacity:1}
-.jah-tour-hi{position:fixed;z-index:100001;border:3px solid var(--gold,#c9a227);border-radius:12px;box-shadow:0 0 0 9999px rgba(2,4,10,.62);pointer-events:none;transition:all .25s}
-.jah-tour-card{position:fixed;z-index:100002;background:#0d1526;border:1px solid var(--gold,#c9a227);border-radius:12px;padding:16px 18px;max-width:min(92vw,380px);color:#d7e3ff;box-shadow:0 8px 40px rgba(0,0,0,.6)}
-.jah-tour-card h3{margin:.1em 0 .4em;color:var(--gold,#c9a227);font-size:1.05em}
-.jah-tour-card p{font-size:.88em;margin:.35em 0;color:#d7e3ff}
-.jah-tour-card p b{color:var(--cy,#00f0ff)}
-.jah-tour-card .stepno{font-size:.75em;color:#9aa4b2}
-.jah-tour-btns{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-.jah-tour-btns .btn{min-height:44px;flex:1;text-align:center}
+#jah-welcome-wrap{position:fixed;inset:0;z-index:100004;background:rgba(2,4,10,.82);display:none;align-items:center;justify-content:center;padding:16px}
+#jah-welcome-wrap.open{display:flex}
+#jah-welcome{background:#0d1526;border:2px solid var(--gold,#c9a227);border-radius:14px;max-width:560px;width:100%;max-height:86vh;overflow-y:auto;padding:22px 24px;color:#d7e3ff;box-shadow:0 0 40px rgba(201,162,39,.25)}
+#jah-welcome h2{color:var(--gold,#c9a227);margin:0 0 8px;font-size:1.25em}
+#jah-welcome p,#jah-welcome li{font-size:.95em;line-height:1.6}
+#jah-welcome ol{margin:8px 0;padding-left:22px}
+#jah-welcome ol li{margin:10px 0}
+#jah-welcome b{color:var(--cy,#00f0ff)}
+#jah-guide-ok{display:block;width:100%;min-height:54px;margin-top:16px;border-radius:10px;border:2px solid var(--gold,#c9a227);background:linear-gradient(180deg,#1a2745,#0d1526);color:var(--gold,#c9a227);font-size:1.05em;font-weight:700;cursor:pointer;font-family:inherit}
 #jah-guide-panel{position:fixed;inset:0;z-index:100003;background:rgba(2,4,10,.72);display:none;align-items:center;justify-content:center;padding:16px}
 #jah-guide-panel.open{display:flex}
 .jah-guide-card{background:#0d1526;border:1px solid var(--gold,#c9a227);border-radius:14px;max-width:640px;width:100%;max-height:86vh;overflow-y:auto;padding:22px 24px;color:#d7e3ff}
@@ -789,89 +788,29 @@ addEventListener("load",function(){setTimeout(function(){
     <p>At the bottom of the home page: <a href="api.json">api.json</a>, the <a href="app.schema.json">app schema</a>, an <a href="app-record-example.json">example record</a>, <a href="health.json">archive health</a>, the <a href="sitemap.xml">sitemap</a>, and the <a href="docs/ARCHITECTURE.md">architecture notes</a>.</p>
   </div>
 </div>
+<div id="jah-welcome-wrap">
+  <div id="jah-welcome" role="dialog" aria-modal="true" aria-labelledby="jah-welcome-title">
+    <h2 id="jah-welcome-title">Welcome to The Signature App Archive &#x1F4F1;</h2>
+    <p>Every app here is an original Signature-line program &#x2014; all 30 app categories from word processors to games. Here&#x2019;s how to use the archive:</p>
+    <ol>
+      <li><b>Search</b> &#x2014; type an app name or feature words; the category menu and A&#x2013;Z buttons narrow results. An exact ID like <b>JAH-APP-000001</b> works too.</li>
+      <li><b>Finder AI</b> &#x2014; describe the app you need in plain words (for example, <i>something to track my shop inventory</i>) and tap <b>Find it</b>. It matches archived apps by meaning and never invents apps.</li>
+      <li><b>Open any app</b> for its full record: a live in-browser demo, every download (single-file app, Python source, thumbdrive/CD-ROM pack), read-aloud, and an AI helper that answers from the app&#x2019;s own file.</li>
+      <li><b>Browse the 30 category cards</b> &#x2014; tap one for that category&#x2019;s newest apps, then &#x2190; All apps to come back.</li>
+    </ol>
+    <button id="jah-guide-ok" type="button">OK &#x2014; got it</button>
+  </div>
+</div>
 <script>
-/* ============ first-time user guide: spotlight tour ============
-   localStorage key: jah-tour-seen-apps. Esc/arrows keyboard accessible,
-   touch-sized buttons, never traps the user (Skip always visible). */
+/* ============ first-time user guide: centered welcome overlay ============
+   localStorage key: jah-tour-seen-apps. No scrolling, no spotlight — the page
+   stays put; the overlay teaches. The ? Guide button re-opens the full guide. */
 (function(){
 var KEY="jah-tour-seen-apps";
 function seen(){try{return !!localStorage.getItem(KEY)}catch(e){return true}}
 function mark(){try{localStorage.setItem(KEY,"1")}catch(e){}}
-var STEPS=[
- {sel:"#q",t:"Search the archive",
-  what:"This is the search box.",does:"It finds apps by name, feature words, or an exact app ID like JAH-APP-000001.",
-  how:"Tap it, type a word, and matching apps appear below. The category menu and A\u2013Z buttons narrow results."},
- {sel:"#fq",t:"Finder AI",
-  what:"The Finder bar answers plain words.",does:"Describe the app you need \u2014 e.g. something to track my shop inventory \u2014 and it matches archived apps by meaning. It never invents apps.",
-  how:"Type your need and tap Find it (or press Enter). Each match shows why it matched."},
- {sel:"#catgrid",t:"App categories",
-  what:"All 30 app categories, one card each.",does:"Each card opens that category\u2019s newest apps.",
-  how:"Tap a card to browse it, then \u2190 All apps to come back."},
- {sel:"#fresh",t:"Fresh from the archive",
-  what:"The newest apps added to the archive.",does:"Every card opens the app\u2019s full record page.",
-  how:"Tap any card. The record page carries the live demo, every download, read-aloud, and the AI helper."},
- {sel:null,t:"Inside an app record",sample:true,
-  what:"Open any app to see its full record page.",does:"A live in-browser DEMO of the app class \u2014 plus the complete programs as downloads: copy, .txt, .json, the single-file app, Python source, and the thumbdrive / CD-ROM pack. Read-aloud reads the whole record; the AI helper answers from the app\u2019s file.",
-  how:"Tap \u201cSee a sample app\u201d to open one now, or Skip to finish."}
-];
-var i=0,hi=null,card=null,started=false;
-function el(s){return s?document.querySelector(s):null}
-function closeTour(markIt){if(markIt)mark();if(hi&&hi.parentNode)hi.parentNode.removeChild(hi);if(card&&card.parentNode)card.parentNode.removeChild(card);hi=null;card=null;started=false;document.removeEventListener("keydown",onKey)}
-function onKey(e){
-  if(e.key==="Escape"){closeTour(true)}
-  else if(e.key==="ArrowRight"){step(i+1)}
-  else if(e.key==="ArrowLeft"){step(i-1)}
-}
-function place(step){
-  var target=el(step.sel);
-  if(target&&target.scrollIntoView){try{target.scrollIntoView({block:"center"})}catch(e){}}
-  setTimeout(function(){
-    var r=target?target.getBoundingClientRect():null;
-    if(hi){hi.style.display=target?"block":"none";
-      if(target){hi.style.left=(r.left-8+window.scrollX)+"px";hi.style.top=(r.top-8+window.scrollY)+"px";hi.style.width=(r.width+16)+"px";hi.style.height=(r.height+16)+"px"}}
-    if(card){
-      var cw=Math.min(380,window.innerWidth-32),ch=card.offsetHeight||300;
-      var x=Math.max(16,Math.min(window.innerWidth-cw-16,window.innerWidth/2-cw/2));
-      var y;
-      if(r&&(r.bottom+16+ch<window.innerHeight))y=r.bottom+16;
-      else if(r&&r.top-16-ch>0)y=r.top-16-ch;
-      else y=Math.max(16,window.innerHeight-ch-16);
-      card.style.left=x+"px";card.style.top=y+"px";
-    }
-  },60);
-}
-function step(n){
-  if(n<0)n=0;
-  if(n>=STEPS.length){closeTour(true);return}
-  i=n;var s=STEPS[i];
-  card.querySelector(".stepno").textContent="Step "+(i+1)+" of "+STEPS.length;
-  card.querySelector("h3").textContent=s.t;
-  var ps=card.querySelectorAll("p");
-  ps[0].innerHTML="<b>WHAT:</b> "+s.what;
-  ps[1].innerHTML="<b>WHAT IT DOES:</b> "+s.does;
-  ps[2].innerHTML="<b>HOW:</b> "+s.how;
-  var bb=card.querySelector(".jah-tour-btns");
-  bb.innerHTML="";
-  function mk(label,fn,primary){var b=document.createElement("button");b.className="btn"+(primary?" gold":" ghost");b.style.minHeight="44px";b.textContent=label;b.onclick=fn;bb.appendChild(b);return b}
-  mk("Skip",function(){closeTour(true)});
-  if(i>0)mk("← Back",function(){step(i-1)});
-  if(s.sample){var sb=mk("See a sample app →",function(){closeTour(true);location.href="?app=JAH-APP-000001"},true)}
-  else mk(i===STEPS.length-1?"Finish":"Next →",function(){step(i+1)},true);
-  place(s);
-  var nb=bb.querySelectorAll(".btn");if(nb.length)nb[nb.length-1].focus();
-}
-function start(){
-  if(started)return;started=true;
-  hi=document.createElement("div");hi.className="jah-tour-hi";hi.setAttribute("aria-hidden","true");document.body.appendChild(hi);
-  card=document.createElement("div");card.className="jah-tour-card";card.setAttribute("role","dialog");card.setAttribute("aria-label","First-time user guide");
-  card.innerHTML='<div class="stepno"></div><h3></h3><p></p><p></p><p></p><div class="jah-tour-btns"></div>';
-  document.body.appendChild(card);
-  document.addEventListener("keydown",onKey);
-  var rp=function(){if(started)place(STEPS[i])};
-  window.addEventListener("resize",rp);window.addEventListener("scroll",rp,{passive:true});
-  step(0);
-}
-/* guide panel wiring */
+function openWelcome(){var w=document.getElementById("jah-welcome-wrap");if(!w)return;w.classList.add("open");var b=document.getElementById("jah-guide-ok");if(b)b.focus()}
+function closeWelcome(){var w=document.getElementById("jah-welcome-wrap");if(w)w.classList.remove("open");mark()}
 function wireGuide(){
   var p=document.getElementById("jah-guide-panel"),b=document.getElementById("jah-guide-btn"),x=document.getElementById("jah-guide-close");
   function open(){p.classList.add("open");if(x)x.focus()}
@@ -881,16 +820,19 @@ function wireGuide(){
   p.addEventListener("click",function(e){if(e.target===p)shut()});
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&p.classList.contains("open"))shut()});
 }
-/* auto-start the tour for first-time visitors (not on deep links) */
+var ok=document.getElementById("jah-guide-ok");
+if(ok)ok.onclick=closeWelcome;
+var ww=document.getElementById("jah-welcome-wrap");
+if(ww)ww.addEventListener("click",function(e){if(e.target===ww)closeWelcome()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"){var w=document.getElementById("jah-welcome-wrap");if(w&&w.classList.contains("open"))closeWelcome()}});
+/* first visit: show the welcome overlay once (not on deep links) */
 document.addEventListener("DOMContentLoaded",function(){
   wireGuide();
   if(seen())return;
   var qs=new URLSearchParams(location.search);
   if(qs.get("app")||qs.get("cat"))return;
-  setTimeout(function(){if(!seen())start()},1200);
+  setTimeout(function(){if(!seen())openWelcome()},1200);
 });
-/* allow other scripts / QA to restart it */
-window.jahRestartTour=function(){try{localStorage.removeItem(KEY)}catch(e){}start()};
 })();
 </script>
 </body>
