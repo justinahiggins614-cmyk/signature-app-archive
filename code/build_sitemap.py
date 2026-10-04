@@ -17,6 +17,28 @@ TODAY = datetime.date.today().isoformat()
 BATCH = 1000
 CREATOR = "Justin Addam Higgins"
 
+# --- NAV/TAB-BAR for catalog pages (JAH sweep 2026-10-04): the JAH Network nav sits
+#     at the bottom of every page, directly above the footer; the pill tab bar matches
+#     the front door with the archive tab active. Rebuilt on every drip run. ---
+NAV_HTML = '<nav class="jahnet" aria-label="JAH Network Global Ecosystem" role="navigation"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/signature-math/">1 Signature Math</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">2 Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">3 The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">4 JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">5 JAH-N Wiki Leaks</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">6 Signature Llama: The Fully Cyber Utilizable AI</a><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">7 The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">8 Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">9 Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">10 The Signature PC System Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">11 The Signature Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">12 The Signature Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">13 The Signature Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">14 The Signature AI Mad Scientist Creation Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">15 The Signature Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">16 The Signature AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">17 AI Olympics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">18 The Signature Computer Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">20 The Signature AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">21 The Signature Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">22 Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">23 Signature Music Studio</a><a href="https://justinahiggins614-cmyk.github.io/signature-fixit/">24 The Signature Mr Fix-It</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">25 The Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">26 The Signature Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">27 The Signature 3D Print Mega Mall</a><span class="here">19 The Signature App Archive — YOU ARE HERE</span></nav>'
+JAHNET_CSS = (".jahnet{background:#0a0f1e;color:#9aa4b2;font-size:.72em;padding:7px 10px;"
+              "text-align:center;line-height:2.1;letter-spacing:.02em;border-top:1px solid #2a3a5f;"
+              "margin-top:24px}.jahnet-t{color:#c9a227;font-weight:700;letter-spacing:.25em;"
+              "margin-right:10px}.jahnet a{color:#9fc2ff;text-decoration:none;margin:0 6px;"
+              "white-space:nowrap}.jahnet a:hover{text-decoration:underline}")
+JTABBAR_CSS = (".jtabbar{display:flex;gap:8px;overflow-x:auto;padding:10px 0;"
+               "-webkit-overflow-scrolling:touch;scrollbar-width:thin;"
+               "border-bottom:1px solid rgba(128,128,128,.25)}"
+               ".jtabbar a.jtab{flex:0 0 auto;text-decoration:none;"
+               "border:1px solid rgba(160,160,160,.45);border-radius:999px;padding:9px 16px;"
+               "font-size:.92em;color:#d7e3ff;background:rgba(127,127,127,.08);white-space:nowrap;"
+               "font-family:Arial,sans-serif}.jtabbar a.jtab.on{background:#f5c518;"
+               "border-color:#f5c518;color:#191919;font-weight:700}")
+TABBAR_CATALOG = ('<nav class="jtabbar" aria-label="Site sections">'
+                  '<a class="jtab" href="../index.html">\U0001f3e0 Front Door</a>'
+                  '<a class="jtab on" href="../browse.html">\U0001f4da 1 Million Archive</a>'
+                  "</nav>")
+
 
 def esc(u):
     return u.replace("&", "&amp;")
@@ -154,15 +176,15 @@ def main():
                 "max-width:1000px;margin:0 auto;padding:20px;line-height:1.55}"
                 "h1{color:#c9a227}a{color:#9fc2ff}table{border-collapse:collapse;width:100%%}"
                 "td,th{border:1px solid #2a3a5f;padding:6px 8px;text-align:left;vertical-align:top}"
-                "th{color:#9aa4b2}</style></head><body>"
+                "th{color:#9aa4b2}CATCSS</style></head><body>"
                 "<p><a href=\"%s\">← The Signature App Archive</a> · <a href=\"%scatalog/\">All categories</a></p>"
                 "<h1>%s %s — %d apps</h1>"
                 "<p>Static catalog table for crawlers and readers. Every app also has a full page at its link.</p>"
-                "<table><tr><th>App ID</th><th>Name</th><th>Description</th></tr>%s</table>"
-                "<p>Original Signature-line apps by %s.</p></body></html>"
+                "CATBAR<table><tr><th>App ID</th><th>Name</th><th>Description</th></tr>%s</table>"
+                "<p>Original Signature-line apps by %s.</p>CATNAV</body></html>"
                 % (hesc(f["name"]), hesc(f["name"]), BASE, key, BASE, BASE,
                    hesc(f["icon"]), hesc(f["name"]), len(rows), "".join(trs), hesc(CREATOR)))
-        open(os.path.join(cdir, key + ".html"), "w").write(html)
+        open(os.path.join(cdir, key + ".html"), "w").write(html.replace("CATCSS", JAHNET_CSS + JTABBAR_CSS).replace("CATBAR", TABBAR_CATALOG).replace("CATNAV", NAV_HTML))
 
     lis = "".join("<li><a href=\"%scatalog/%s.html\">%s %s</a> — %d apps</li>\n"
                   % (BASE, f["key"], hesc(f["icon"]), hesc(f["name"]), len(by_cat.get(f["key"], [])))
@@ -173,13 +195,13 @@ def main():
            "<link rel=\"canonical\" href=\"%scatalog/\">"
            "<style>body{font-family:Arial,sans-serif;background:#070b16;color:#d7e3ff;"
            "max-width:800px;margin:0 auto;padding:20px;line-height:1.8}"
-           "h1{color:#c9a227}a{color:#9fc2ff}</style></head><body>"
+           "h1{color:#c9a227}a{color:#9fc2ff}CATCSS</style></head><body>"
            "<p><a href=\"%s\">← The Signature App Archive</a></p>"
            "<h1>Static app catalog — %d apps, %d categories</h1>"
            "<p>Pre-rendered tables for crawlers; each row links to the app's full page.</p>"
-           "<ul>%s</ul></body></html>"
+           "CATBAR<ul>%s</ul>CATNAV</body></html>"
            % (BASE, BASE, len(feed_apps), len(fams), lis))
-    open(os.path.join(cdir, "index.html"), "w").write(hub)
+    open(os.path.join(cdir, "index.html"), "w").write(hub.replace("CATCSS", JAHNET_CSS + JTABBAR_CSS).replace("CATBAR", TABBAR_CATALOG).replace("CATNAV", NAV_HTML))
 
     print("sitemap URLs: %d (main %d + app batches %d files)" %
           (len(main_urls) + len(app_urls), len(main_urls), len(batch_files)))

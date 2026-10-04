@@ -248,7 +248,6 @@ details.letter>summary{padding:10px 12px;cursor:pointer;color:var(--cy)}
 </style>
 </head>
 <body>
-%NAV%
 <div class="wrap">
 <header class="browsehero">
 <div class="kick">SITE 19 OF 27 &middot; THE JAH NETWORK</div>
@@ -274,6 +273,7 @@ CAT_DETAILS
 </div>
 <p><a class="btn ghost bkbtn" href="./">&#8592; Back to the archive home</a></p>
 </div>
+%NAV%
 <footer style="border-top:1px solid var(--line);margin-top:30px;padding:20px 0 40px;color:var(--dim);font-size:.82em"><div class="wrap">
 <p><b style="color:var(--gold)">The Signature App Archive</b> &mdash; every app an original Signature-line program by <b>Justin Addam Higgins</b>. Demos run live in your browser; downloads pack the app for thumbdrive or CD-ROM.</p>
 <p class="note">Machine-readable: <a href="api.json">api.json</a> &middot; <a href="apps-catalog.json">apps-catalog.json</a> &middot; <a href="sitemap.xml">sitemap</a></p>
