@@ -228,6 +228,10 @@ details.letter>summary{padding:10px 12px;cursor:pointer;color:var(--cy)}
 .applist li:last-child{border-bottom:0}
 .applist a{color:#9fc2ff;text-decoration:none}
 .applist a:hover{text-decoration:underline}
+/* deterministic device-screen covers (js/covers.js) */
+.applist li .covthumb{display:inline-block;width:56px;flex:0 0 56px;border-radius:8px;overflow:hidden;background:#0d1526;border:1px solid #1a2440;vertical-align:middle}
+.applist li .covthumb svg{display:block;width:100%;height:auto}
+.covph{display:flex;align-items:center;justify-content:center;min-height:56px;color:#00f0ff;font-size:1.2em}
 .applist .tagl{color:var(--dim);font-size:.82em;display:block}
 .badge{display:inline-block;font-size:.66em;font-weight:700;letter-spacing:.05em;padding:2px 8px;border-radius:12px;margin-left:8px;vertical-align:middle}
 .badge.demo{border:1px solid var(--cy);color:var(--cy)}
@@ -274,6 +278,7 @@ CAT_DETAILS
 <p><b style="color:var(--gold)">The Signature App Archive</b> &mdash; every app an original Signature-line program by <b>Justin Addam Higgins</b>. Demos run live in your browser; downloads pack the app for thumbdrive or CD-ROM.</p>
 <p class="note">Machine-readable: <a href="api.json">api.json</a> &middot; <a href="apps-catalog.json">apps-catalog.json</a> &middot; <a href="sitemap.xml">sitemap</a></p>
 </div></footer>
+<script src="js/covers.js"></script>
 <script>
 "use strict";
 var COUNT=STAMP_COUNT_RAW, CATS=STAMP_CATS_RAW;
@@ -312,10 +317,11 @@ function setLoading(on){
 }
 function appRow(r){
   var id=r[0],name=r[3],tag=r[4];
-  return '<li><a href="./?app='+esc(id)+'"><b>'+esc(name)+'</b></a>'+
+  var cov=(window.SigAppCover?SigAppCover.thumb({id:id,name:name,tag:tag}):"");
+  return '<li><div style="display:flex;gap:10px;align-items:center">'+cov+'<div style="min-width:0;flex:1"><a href="./?app='+esc(id)+'"><b>'+esc(name)+'</b></a>'+
     '<span class="badge demo">&#9654; LIVE DEMO</span>'+
     '<span class="badge dl">&#11015; DOWNLOAD</span>'+
-    '<span class="tagl">'+esc(id)+" &middot; "+esc(tag)+'</span></li>';
+    '<span class="tagl">'+esc(id)+" &middot; "+esc(tag)+'</span></div></div></li>';
 }
 function renderCategory(det){
   if(det.dataset.built==="1")return;det.dataset.built="1";
@@ -333,6 +339,7 @@ function renderCategory(det){
     html+='</ul></details>';
   }
   box.innerHTML=html;
+  if(window.SigAppCover)SigAppCover.lazy(box);
   caz.innerHTML=Ls.map(function(L){return '<button data-l="'+L+'">'+L+'</button>'}).join("");
   var btns=caz.querySelectorAll("button");
   for(var b=0;b<btns.length;b++){btns[b].onclick=function(){var l=this.dataset.l;var d=det.querySelector('details.letter[data-l="'+l+'"]');if(d){d.open=true;d.scrollIntoView({behavior:"smooth",block:"start"})}}}
@@ -383,6 +390,7 @@ $("bq").addEventListener("input",function(){
       if(hits.length)h+='<p class="note">'+hits.length+(hits.length===60?"+":"")+" matching apps:</p>"+'<ul class="applist" style="background:var(--bg2);border:1px solid var(--line);border-radius:10px">'+hits.map(appRow).join("")+"</ul>";
       if(!h)h='<p class="loadmsg">No apps match &ldquo;'+esc(q)+'&rdquo;. Try a category name like "word", "mail", or "game".</p>';
       $("sres").dataset.loading="";$("sres").innerHTML=h;
+      if(window.SigAppCover)SigAppCover.lazy($("sres"));
     });
   },300);
 });
