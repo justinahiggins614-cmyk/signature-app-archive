@@ -1,7 +1,9 @@
 <!doctype html>
 <html lang="en">
 <head>
-<script>try{if(localStorage.getItem("jah-theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script>
+<script src="js/signin.js"></script>
+<script>window.PS=(function(){var s=(typeof JAHProfile!=='undefined')?JAHProfile.store:null;var l=null;try{l=localStorage}catch(_e){}return{get:function(k){try{return s?s.get(k):(l?l.getItem(k):null)}catch(e){return null}},set:function(k,v){try{if(s)s.set(k,v);else if(l)l.setItem(k,v)}catch(e){}},remove:function(k){try{if(s)s.remove(k);else if(l)l.removeItem(k)}catch(e){}},keys:function(){try{return s?s.keys():[]}catch(e){return[]}}}})();</script>
+<script>try{if(PS.get("jah-theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>The Signature App Archive — every app, Signature-made</title>
@@ -293,8 +295,8 @@ async function fetchJSON(url,ms){
   try{var r=await fetch(url,{signal:ctl.signal});if(!r.ok)throw new Error("HTTP "+r.status);return await r.json()}
   finally{clearTimeout(t)}
 }
-function cacheManifest(m){try{localStorage.setItem("jah-app-manifest",JSON.stringify({count:m.count,cats:m.categories,at:m.generated_at||new Date().toISOString()}))}catch(e){}}
-function cachedManifest(){try{var c=JSON.parse(localStorage.getItem("jah-app-manifest")||"null");return(c&&c.count)?c:null}catch(e){return null}}
+function cacheManifest(m){try{PS.set("jah-app-manifest",JSON.stringify({count:m.count,cats:m.categories,at:m.generated_at||new Date().toISOString()}))}catch(e){}}
+function cachedManifest(){try{var c=JSON.parse(PS.get("jah-app-manifest")||"null");return(c&&c.count)?c:null}catch(e){return null}}
 async function boot(){
   var cm=cachedManifest(),usedCached=false;
   try{A.manifest=await fetchJSON("data/manifest.json",12000);cacheManifest(A.manifest)}
@@ -480,7 +482,7 @@ function reportApp(){
   var o=A.cur;if(!o)return;
   var rep=["APP PROBLEM REPORT",o.id+" — "+o.name,"Category: "+o.family+" (seed "+o.seed+")",
     "Date: "+new Date().toISOString(),"Describe the problem:"].join("\n");
-  try{var log=JSON.parse(localStorage.getItem("jah-app-reports")||"[]");log.push({id:o.id,at:new Date().toISOString()});localStorage.setItem("jah-app-reports",JSON.stringify(log))}catch(e){}
+  try{var log=JSON.parse(PS.get("jah-app-reports")||"[]");log.push({id:o.id,at:new Date().toISOString()});PS.set("jah-app-reports",JSON.stringify(log))}catch(e){}
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(rep).then(function(){audMsg("Report copied — send it to the archive keeper.")})}else{audMsg(rep)}
 }
 function scrollDls(){var d=document.getElementById("dlbtns");if(d)d.scrollIntoView({behavior:"smooth",block:"center"})}
@@ -592,7 +594,17 @@ async function appShell(o){
     "<p>"+o.description.replace(/</g,"&lt;")+"</p><div id='demobox'></div>"+
     "<p style='color:#9aa4b2;font-size:.8em'>"+o.id+" · original Signature-line app by Justin Addam Higgins · from The Signature App Archive</p>"+
     "<script>"+ag+"\n"+dm+"\nvar APP="+JSON.stringify(o)+";try{var d=DEMOS[APP.demo];if(d)d.render(document.getElementById('demobox'),APP);}catch(e){document.getElementById('demobox').innerHTML='<p>Demo failed: '+e.message+'</p>'}<\/script>"+
-    "</body></html>";
+    "<script>
+(function () {
+  var mount = document.querySelector('header .booksearch') ||
+              document.querySelector('nav.jtabbar') ||
+              document.querySelector('header nav') ||
+              document.querySelector('header') ||
+              document.body;
+  if (window.JAHProfile && JAHProfile.ui) JAHProfile.ui.renderButton(mount);
+})();
+</script>
+</body></html>";
 }
 async function dlAppHtml(){
   audMsg("Building your single-file app…");
@@ -666,7 +678,7 @@ function qaIsSmallTalk(q){
 }
 function qaAnswerHtml(o,q,best){
   var JT=qaTalk(),prof=qaProfile(o),html;
-  function qareply(){return JT.chatFor(prof,'app:'+o.id).reply(q);}
+  function qareply(){var _ck=(typeof JAHProfile!=='undefined')?JAHProfile.chatKey('app:'+o.id):('app:'+o.id);return JT.chatFor(prof,_ck).reply(q);}
   if(JT&&qaIsSmallTalk(q)){html=esc(JT.guard(qareply(),prof));}
   else if(best){html="<b>"+esc(best.t)+":</b> "+esc(JT?JT.guard(best.h,prof):best.h);}
   else if(JT){html=esc(JT.guard(qareply(),prof));}
@@ -730,11 +742,11 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
 <button id="jah-theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">&#127769;</button>
 <script>
 /* dark-mode toggle: opt-in, default look unchanged */
-(function(){var b=document.getElementById("jah-theme-toggle");function paint(){b.innerHTML=document.documentElement.getAttribute("data-theme")==="dark"?"&#9728;&#65039;":"&#127769;"}b.addEventListener("click",function(){var dark=document.documentElement.getAttribute("data-theme")==="dark";try{if(dark){document.documentElement.removeAttribute("data-theme");localStorage.setItem("jah-theme","light")}else{document.documentElement.setAttribute("data-theme","dark");localStorage.setItem("jah-theme","dark")}}catch(e){}paint()});paint()})();
+(function(){var b=document.getElementById("jah-theme-toggle");function paint(){b.innerHTML=document.documentElement.getAttribute("data-theme")==="dark"?"&#9728;&#65039;":"&#127769;"}b.addEventListener("click",function(){var dark=document.documentElement.getAttribute("data-theme")==="dark";try{if(dark){document.documentElement.removeAttribute("data-theme");PS.set("jah-theme","light")}else{document.documentElement.setAttribute("data-theme","dark");PS.set("jah-theme","dark")}}catch(e){}paint()});paint()})();
 /* session restore: scroll + tabs + last-opened record, localStorage only */
 (function(){var KEY="jah-sr:"+location.pathname,PARAMS=["app"];
-function rd(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){return{}}}
-function wr(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+function rd(){try{return JSON.parse(PS.get(KEY)||"{}")}catch(e){return{}}}
+function wr(o){try{PS.set(KEY,JSON.stringify(o))}catch(e){}}
 var S=rd(),q=new URLSearchParams(location.search);
 var deep=PARAMS.some(function(p){return q.has(p)});
 var t;addEventListener("scroll",function(){clearTimeout(t);t=setTimeout(function(){S.y=window.scrollY;wr(S)},300)},{passive:true});
@@ -835,8 +847,8 @@ addEventListener("load",function(){setTimeout(function(){
    stays put; the overlay teaches. The ? Guide button re-opens the full guide. */
 (function(){
 var KEY="jah-tour-seen-apps";
-function seen(){try{return !!localStorage.getItem(KEY)}catch(e){return true}}
-function mark(){try{localStorage.setItem(KEY,"1")}catch(e){}}
+function seen(){try{return !!PS.get(KEY)}catch(e){return true}}
+function mark(){try{PS.set(KEY,"1")}catch(e){}}
 function openWelcome(){var w=document.getElementById("jah-welcome-wrap");if(!w)return;w.classList.add("open");var b=document.getElementById("jah-guide-ok");if(b)b.focus({preventScroll:true})}
 function closeWelcome(){var w=document.getElementById("jah-welcome-wrap");if(w)w.classList.remove("open");mark()}
 function wireGuide(){
