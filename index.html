@@ -666,9 +666,10 @@ function qaIsSmallTalk(q){
 }
 function qaAnswerHtml(o,q,best){
   var JT=qaTalk(),prof=qaProfile(o),html;
-  if(JT&&qaIsSmallTalk(q)){html=esc(JT.guard(JT.reply(prof,q),prof));}
+  function qareply(){return JT.chatFor(prof,'app:'+o.id).reply(q);}
+  if(JT&&qaIsSmallTalk(q)){html=esc(JT.guard(qareply(),prof));}
   else if(best){html="<b>"+esc(best.t)+":</b> "+esc(JT?JT.guard(best.h,prof):best.h);}
-  else if(JT){html=esc(JT.guard(JT.reply(prof,q),prof));}
+  else if(JT){html=esc(JT.guard(qareply(),prof));}
   else{html="I can only answer from this app's file — try asking about its features, how to use it, system requirements, versions, or downloads.";}
   return '<div class="q">Q: '+esc(q)+'</div><div class="a">A: '+html+'</div>';
 }
