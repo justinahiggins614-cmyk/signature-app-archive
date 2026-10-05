@@ -34,7 +34,7 @@ def pull_index_html():
     nav = re.search(r'<nav class="jahnet".*?</nav>', html, re.S).group(0)
     style = re.search(r'<style>.*?</style>', html, re.S).group(0)
     themescript = re.search(
-        r'<script>try\{if\(localStorage\.getItem\("jah-theme"\).*?</script>', html, re.S).group(0)
+        r'<script>try\{if\((?:localStorage\.getItem|PS\.get)\("jah-theme"\).*?</script>', html, re.S).group(0)
     return nav, style, themescript
 
 
