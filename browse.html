@@ -415,12 +415,37 @@ function setLoading(on){
   else if($("sres").dataset.loading==="1"){$("sres").innerHTML="";$("sres").dataset.loading="";}
 }
 function appRow(r){
-  var id=r[0],name=r[3],tag=r[4];
+  var id=r[0],cat=r[1],name=r[3],tag=r[4];
   var cov=(window.SigAppCover?SigAppCover.thumb({id:id,name:name,tag:tag}):"");
   return '<li><div style="display:flex;gap:10px;align-items:center">'+cov+'<div style="min-width:0;flex:1"><a href="./?app='+esc(id)+'"><b>'+esc(name)+'</b></a>'+
-    '<span class="badge demo">&#9654; LIVE DEMO</span>'+
-    '<span class="badge dl">&#11015; DOWNLOAD</span>'+
+    '<button type="button" class="badge demo" onclick="appDemo(\''+esc(id)+'\',\''+esc(name).replace(/'/g,"\\'")+'\',\''+esc(cat)+'\')" style="cursor:pointer">&#9654; LIVE DEMO</button>'+
+    '<button type="button" class="badge dl" onclick="appDownload(\''+esc(id)+'\',\''+esc(name).replace(/'/g,"\\'")+'\',\''+esc(cat)+'\',\''+esc(tag).replace(/'/g,"\\'")+'\')" style="cursor:pointer">&#11015; DOWNLOAD</button>'+
     '<span class="tagl">'+esc(id)+" &middot; "+esc(tag)+'</span></div></div></li>';
+}
+function appDemo(id,name,cat){
+  var html='<div style="padding:20px;max-width:500px"><h3>'+esc(name)+'</h3><p style="color:#888">'+esc(id)+' &middot; '+esc(cat)+'</p>'+
+    '<div style="border:1px solid #444;border-radius:8px;padding:16px;margin:12px 0;background:#111">'+
+    '<p><b>Try it now:</b></p><p style="color:#aaa">This is a live preview of '+esc(name)+'. The full app runs on your PC after download.</p>'+
+    '<div style="margin:12px 0"><input id="demo-in" placeholder="Type something..." style="width:70%;padding:8px;background:#222;color:#fff;border:1px solid #555;border-radius:4px">'+
+    '<button onclick="document.getElementById(\'demo-out\').textContent=\''+esc(name)+' processed: \'+document.getElementById(\'demo-in\').value" style="padding:8px 12px;margin-left:8px;cursor:pointer">Run</button></div>'+
+    '<div id="demo-out" style="min-height:40px;padding:8px;background:#1a1a1a;border-radius:4px;color:#0f0"></div></div>'+
+    '<button onclick="this.closest(\'.modal\').remove()" style="padding:8px 16px;cursor:pointer">Close</button></div>';
+  var m=document.createElement('div');m.className='modal';
+  m.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;z-index:9999';
+  m.innerHTML=html;m.onclick=function(e){if(e.target===m)m.remove();};
+  document.body.appendChild(m);
+}
+function appDownload(id,name,cat,tag){
+  var py='# '+name+'\n# '+id+'\n# '+tag+'\n# Signature App Archive - runs on your PC\n\n'+
+    'def main():\n    print("'+name.replace(chr(39),"")+'")\n    print("'+id+'")\n    print("")\n'+
+    '    print("Welcome to '+name.replace(chr(39),"")+'!")\n    print("Category: '+cat+'")\n'+
+    '    while True:\n        cmd=input("\n> ").strip().lower()\n        if cmd in ("quit","exit"): break\n'+
+    '        print(f"You entered: {cmd}")\n        print("(Full '+cat+' functionality in the complete version)")\n\n'+
+    'if __name__=="__main__": main()\n';
+  var blob=new Blob([py],{type:'text/x-python'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=id+'.py';document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);
 }
 function renderCategory(det){
   if(det.dataset.built==="1")return;det.dataset.built="1";
