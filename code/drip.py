@@ -9,7 +9,7 @@ import json, os, subprocess, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
 GUARD = 800 * 1024 * 1024
-PER_CAT = 34  # 30 categories x 34 = 1,020 apps/run
+PER_CAT = 34  # 31 categories x 34 = 1,054 apps/run
 
 def run(cmd, **kw):
     r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, **kw)

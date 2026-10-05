@@ -320,9 +320,13 @@
   "app-c00317.json.gz",
   "app-c00318.json.gz",
   "app-c00319.json.gz",
-  "app-c00320.json.gz"
+  "app-c00320.json.gz",
+  "app-c00321.json.gz",
+  "app-c00322.json.gz",
+  "app-c00323.json.gz",
+  "app-c00324.json.gz"
  ],
- "count": 32100,
+ "count": 32440,
  "per_cat": {
   "word": 1070,
   "sheet": 1070,
@@ -353,21 +357,22 @@
   "recipes": 1070,
   "language": 1070,
   "finance": 1070,
-  "backup": 1070
+  "backup": 1070,
+  "ai": 340
  },
  "site": "The Signature App Archive",
  "site_id": "SIGNATURE-APP-ARCHIVE",
- "categories": 30,
+ "categories": 1,
  "earliest_id": "JAH-APP-000001",
- "latest_id": "JAH-APP-032100",
+ "latest_id": "JAH-APP-032440",
  "chunk_size": 100,
  "archive_version": "2026-10-05",
  "goal": 1000000,
  "base_url": "https://justinahiggins614-cmyk.github.io/signature-app-archive/",
  "schema_version": "JAH-APP-RECORD/1.0",
- "index_version": 21,
- "app_engine_version": "d77f7ab561e56cea",
- "index_sha256": "6fc38be8694259b06888dced26ea896ae02a15614b280b1f3b305df954d0c263",
- "index_bytes": 298372,
- "generated_at": "2026-10-05T04:14:19.537496+00:00"
+ "index_version": 22,
+ "app_engine_version": "802a3589548a5cca",
+ "index_sha256": "f0f6d677b0c35c85903a2042cc38020bb6fe9702849c8aef0f5ba03801d1d294",
+ "index_bytes": 301633,
+ "generated_at": "2026-10-05T06:00:22.684807+00:00"
 }

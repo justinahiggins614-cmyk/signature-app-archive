@@ -446,6 +446,133 @@ DEMOS.backup = { title: "Live demo — pack a real backup", render: function (el
   }));
 }};
 
+
+/* ---------- 26. aichat (AI chat companion) ---------- */
+DEMOS.aichat = { title: "Live demo — talk to the AI", render: function (el, app) {
+  el.innerHTML = '<div class="dchatlog"></div><div class="drow"><input class="dsearch" id="daichat_in" placeholder="Ask the AI anything\u2026"></div><div class="dnote">A Signature demo brain \u2014 keyword answers, everything stays on your device.</div>';
+  var log = el.querySelector(".dchatlog");
+  function say(who, t) { log.innerHTML += '<div class="dchat ' + who + '"><b>' + who + ":</b> " + esc(t) + "</div>"; log.scrollTop = 1e6; }
+  function reply(q) {
+    var s = q.toLowerCase();
+    if (/^(hi|hello|hey|yo)\b/.test(s)) return "Hello! I'm the demo brain inside " + app.name + ". Ask me for a joke, some advice, or what I can do.";
+    if (/your name|who are you/.test(s)) return "I'm " + app.name + " (" + app.id + "), an original Signature-line AI app by Justin Addam Higgins.";
+    if (/joke/.test(s)) return ["Why do programmers prefer dark mode? Because light attracts bugs.", "I told my computer I needed a break \u2014 now it won't stop sending me KitKat ads.", "There are only 10 kinds of people: those who understand binary and those who don't."][Math.floor(Math.random() * 3)];
+    if (/advice|tip/.test(s)) return "Here's a thought: " + ["small steps beat big plans.", "write it down before you forget it.", "done is better than perfect."][Math.floor(Math.random() * 3)];
+    if (/what can you do|help|feature/.test(s)) return "I chat, keep this session's history, and the full app adds " + app.features.slice(0, 2).join(" and ") + ".";
+    if (/weather/.test(s)) return "I can't see the sky from in here, but the demo forecast says: 100% chance of productivity.";
+    if (/thank/.test(s)) return "You're welcome! Anything else on your mind?";
+    if (/bye/.test(s)) return "Goodbye! Our chat stays right here in the demo.";
+    var words = s.split(/\s+/).filter(function (w) { return w.length > 3; });
+    if (words.length) return "Interesting \u2014 tell me more about \u201c" + words[0] + "\u201d. In the full app I'd remember this across sessions.";
+    return "Noted! Try asking for a joke, some advice, or what I can do.";
+  }
+  say("ai", "Hi, I'm the AI inside " + app.name + ". This demo really talks \u2014 say hello!");
+  el.querySelector("#daichat_in").addEventListener("keydown", function (e) { if (e.key === "Enter" && this.value.trim()) { var q = this.value.trim(); say("you", q); this.value = ""; setTimeout(function () { say("ai", reply(q)); }, 450); } });
+}};
+/* ---------- 27. aiimage (AI image studio) ---------- */
+DEMOS.aiimage = { title: "Live demo — AI image studio", render: function (el, app) {
+  el.innerHTML = '<div class="drow"><input class="dsearch" id="daiimg_seed" value="7" style="width:90px" aria-label="Seed"><button class="dbtn" id="daiimg_go">Generate</button><button class="dbtn" id="daiimg_dl">Download PNG</button></div><canvas class="dpaint" id="daiimg_cv" width="360" height="240"></canvas><div class="dnote">Seeded generative art \u2014 same seed always paints the same picture.</div>';
+  var cv = el.querySelector("#daiimg_cv"), ctx = cv.getContext("2d");
+  function paint(seed) {
+    var r = rnd(seed), W = cv.width, H = cv.height, i;
+    var g = ctx.createLinearGradient(0, 0, W, H);
+    g.addColorStop(0, "hsl(" + Math.floor(r() * 360) + ",60%,12%)"); g.addColorStop(1, "hsl(" + Math.floor(r() * 360) + ",60%,24%)");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    for (i = 0; i < 26; i++) { ctx.beginPath(); ctx.strokeStyle = "hsla(" + Math.floor(r() * 360) + ",80%,60%," + (0.25 + r() * 0.5).toFixed(2) + ")"; ctx.lineWidth = 1 + r() * 3; var x = r() * W, y = r() * H, rad = 10 + r() * 70, a0 = r() * 6.28; ctx.arc(x, y, rad, a0, a0 + 2 + r() * 4); ctx.stroke(); }
+    for (i = 0; i < 6; i++) { ctx.fillStyle = "hsla(" + Math.floor(r() * 360) + ",90%,65%,0.85)"; ctx.beginPath(); ctx.arc(r() * W, r() * H, 3 + r() * 9, 0, 6.29); ctx.fill(); }
+  }
+  function go() { paint(parseInt(el.querySelector("#daiimg_seed").value, 10) || 1); }
+  el.querySelector("#daiimg_go").onclick = go;
+  el.querySelector("#daiimg_dl").onclick = function () { var a = document.createElement("a"); a.download = app.id + "-art.png"; a.href = cv.toDataURL("image/png"); document.body.appendChild(a); a.click(); a.remove(); };
+  go();
+}};
+/* ---------- 28. aivoice (AI voice studio) ---------- */
+DEMOS.aivoice = { title: "Live demo — AI voice studio", render: function (el, app) {
+  var ok = ("speechSynthesis" in window);
+  el.innerHTML = '<div class="drow"><input class="dsearch" id="daivoice_t" value="Hello from ' + esc(app.name) + '"></div><div class="drow"><button class="dbtn" id="daivoice_go">Speak</button><button class="dbtn" id="daivoice_stop">Stop</button></div><div class="dnote">' + (ok ? "Uses your device's own voices \u2014 nothing is recorded or sent anywhere." : "Speech isn't available in this browser \u2014 the full app bundles its own voices.") + '</div>';
+  el.querySelector("#daivoice_go").onclick = function () { if (!ok) return; speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(el.querySelector("#daivoice_t").value)); };
+  el.querySelector("#daivoice_stop").onclick = function () { if (ok) speechSynthesis.cancel(); };
+}};
+/* ---------- 29. aimusic (AI composer) ---------- */
+DEMOS.aimusic = { title: "Live demo — AI composer", render: function (el, app) {
+  el.innerHTML = '<div class="drow"><input class="dsearch" id="daimus_seed" value="42" style="width:90px" aria-label="Seed"><button class="dbtn" id="daimus_go">Compose &amp; Play</button><button class="dbtn" id="daimus_dl">Download tune</button></div><div class="dcode" id="daimus_notes">Press Compose.</div><div class="dnote">Seeded melody \u2014 same seed, same song.</div>';
+  var scale = [261.63, 293.66, 329.63, 392.0, 440.0, 523.25, 587.33, 659.25], names = ["C", "D", "E", "G", "A", "C5", "D5", "E5"];
+  var AC = window.AudioContext || window.webkitAudioContext, tune = [];
+  function compose(seed) { var r = rnd(seed), out = [], n = 8 + Math.floor(r() * 8), i; for (i = 0; i < n; i++) { var k = Math.floor(r() * scale.length); out.push({ f: scale[k], n: names[k], d: 0.22 + r() * 0.25 }); } return out; }
+  el.querySelector("#daimus_go").onclick = function () {
+    tune = compose(parseInt(el.querySelector("#daimus_seed").value, 10) || 1);
+    el.querySelector("#daimus_notes").textContent = "Now playing: " + tune.map(function (t) { return t.n; }).join(" ");
+    if (!AC) return; var ac = new AC(), t0 = ac.currentTime;
+    tune.forEach(function (t) { var o = ac.createOscillator(), g = ac.createGain(); o.type = "triangle"; o.frequency.value = t.f; g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.4, t0 + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, t0 + t.d); o.connect(g); g.connect(ac.destination); o.start(t0); o.stop(t0 + t.d + 0.05); t0 += t.d; });
+  };
+  el.querySelector("#daimus_dl").onclick = function () { if (!tune.length) return; dl(app.id + "-tune.txt", "AI COMPOSITION \u2014 " + app.name + " (" + app.id + ")\nSeed: " + el.querySelector("#daimus_seed").value + "\n" + tune.map(function (t) { return t.n + "  " + t.f.toFixed(2) + "Hz  " + t.d.toFixed(2) + "s"; }).join("\n"), "text/plain"); };
+}};
+/* ---------- 30. aiwriter (AI writing partner) ---------- */
+DEMOS.aiwriter = { title: "Live demo — AI writing partner", render: function (el, app) {
+  el.innerHTML = '<div class="drow"><select class="dsearch" id="daiw_kind"><option value="story">Story opening</option><option value="poem">Poem</option><option value="email">Polite email</option></select><input class="dsearch" id="daiw_topic" value="a lighthouse" aria-label="Topic"></div><div class="drow"><button class="dbtn" id="daiw_go">Write</button><button class="dbtn" id="daiw_dl">Download text</button></div><div class="ddoc" id="daiw_out">Give me a topic and press Write.</div>';
+  var last = "";
+  function write(kind, topic) {
+    var T = topic.trim() || "something wonderful";
+    if (kind === "poem") return "Ode to " + T + "\n\nOh " + T + ", quiet and bright,\nYou turn the ordinary into light.\nMorning finds you, soft and true \u2014\nThe day is better for knowing you.";
+    if (kind === "email") return "Subject: A quick note about " + T + "\n\nHello,\n\nI hope you're well. I'm writing about " + T + " \u2014 I'd love your thoughts when you have a moment.\n\nWarm regards";
+    return ["The morning it happened, " + T + " was quieter than usual \u2014 too quiet, the way the air goes still before a storm.", "Nobody believed the stories about " + T + " until the day the lights went out across the whole town.", "It began, as these things do, with " + T + " and a strange letter that arrived with no stamp."][Math.floor(Math.random() * 3)] + "\n\nWhat happened next, nobody could have predicted \u2014 least of all the one holding the letter.";
+  }
+  el.querySelector("#daiw_go").onclick = function () { last = write(el.querySelector("#daiw_kind").value, el.querySelector("#daiw_topic").value); el.querySelector("#daiw_out").textContent = last; };
+  el.querySelector("#daiw_dl").onclick = function () { if (last) dl(app.id + "-writing.txt", last + "\n\n\u2014 written with " + app.name + " (" + app.id + ")", "text/plain"); };
+}};
+/* ---------- 31. aicode (AI code helper) ---------- */
+DEMOS.aicode = { title: "Live demo — AI code helper", render: function (el, app) {
+  var SNIPS = {
+    "python: read a file": "with open('data.txt') as f:\n    for line in f:\n        print(line.rstrip())",
+    "python: fetch JSON": "import json, urllib.request\nwith urllib.request.urlopen('https://example.com/api') as r:\n    print(json.load(r))",
+    "python: CSV to list": "import csv\nrows = list(csv.reader(open('in.csv')))\nprint(len(rows), 'rows')",
+    "js: fetch JSON": "fetch('https://example.com/api')\n  .then(r => r.json())\n  .then(d => console.log(d));",
+    "js: countdown timer": "let s = 10;\nconst t = setInterval(() => {\n  console.log(s);\n  if (--s < 0) clearInterval(t);\n}, 1000);",
+    "html: hello button": "<button onclick=\"greet()\">Say hi</button>\n<script>\nfunction greet(){ alert('Hello!'); }\n<\/script>"
+  };
+  var keys = Object.keys(SNIPS);
+  el.innerHTML = '<div class="drow"><select class="dsearch" id="daicode_k">' + keys.map(function (k) { return '<option>' + esc(k) + '</option>'; }).join("") + '</select></div><div class="drow"><button class="dbtn" id="daicode_go">Generate</button><button class="dbtn" id="daicode_copy">Copy</button><button class="dbtn" id="daicode_dl">Download</button></div><pre class="dcode" id="daicode_out">Pick a task and press Generate.</pre><div class="dnote">Real, runnable snippets \u2014 the full app explains each line.</div>';
+  function cur() { return SNIPS[el.querySelector("#daicode_k").value]; }
+  el.querySelector("#daicode_go").onclick = function () { el.querySelector("#daicode_out").textContent = cur(); };
+  el.querySelector("#daicode_copy").onclick = function () { var t = cur(); if (navigator.clipboard) navigator.clipboard.writeText(t); };
+  el.querySelector("#daicode_dl").onclick = function () { dl(app.id + "-snippet.txt", cur() + "\n\n// generated by " + app.name + " (" + app.id + ")", "text/plain"); };
+}};
+/* ---------- 32. aitranslate (AI translator) ---------- */
+DEMOS.aitranslate = { title: "Live demo — AI translator", render: function (el, app) {
+  var D = {
+    es: { hello: "hola", "thank you": "gracias", please: "por favor", yes: "s\u00ed", no: "no", water: "agua", food: "comida", friend: "amigo", love: "amor", "good morning": "buenos d\u00edas", goodbye: "adi\u00f3s", cat: "gato", dog: "perro", house: "casa", book: "libro", computer: "computadora", music: "m\u00fasica", happy: "feliz", day: "d\u00eda", night: "noche" },
+    fr: { hello: "bonjour", "thank you": "merci", please: "s'il vous pla\u00eet", yes: "oui", no: "non", water: "eau", food: "nourriture", friend: "ami", love: "amour", "good morning": "bonjour", goodbye: "au revoir", cat: "chat", dog: "chien", house: "maison", book: "livre", computer: "ordinateur", music: "musique", happy: "heureux", day: "jour", night: "nuit" },
+    de: { hello: "hallo", "thank you": "danke", please: "bitte", yes: "ja", no: "nein", water: "Wasser", food: "Essen", friend: "Freund", love: "Liebe", "good morning": "guten Morgen", goodbye: "tsch\u00fcss", cat: "Katze", dog: "Hund", house: "Haus", book: "Buch", computer: "Computer", music: "Musik", happy: "gl\u00fccklich", day: "Tag", night: "Nacht" }
+  };
+  var NAMES = { es: "Spanish", fr: "French", de: "German" };
+  el.innerHTML = '<div class="drow"><input class="dsearch" id="daitr_in" value="hello friend, thank you"></div><div class="drow">' + Object.keys(D).map(function (k) { return '<button class="dbtn" data-l="' + k + '">\u2192 ' + NAMES[k] + '</button>'; }).join("") + '</div><div class="ddoc" id="daitr_out">Type English, pick a language.</div><div class="dnote">Demo dictionary of everyday words \u2014 the full app covers whole phrases.</div>';
+  function tr(lang) {
+    var d = D[lang], words = el.querySelector("#daitr_in").value.toLowerCase().split(/([a-z' ]+)/g);
+    var out = el.querySelector("#daitr_in").value.toLowerCase().split(/\b/).map(function (w) { var t = w.trim(); if (!t) return w; return (d[t] !== undefined ? d[t] : t + " [?]"); }).join("");
+    el.querySelector("#daitr_out").textContent = NAMES[lang] + ": " + out;
+  }
+  Array.prototype.forEach.call(el.querySelectorAll("[data-l]"), function (b) { b.onclick = function () { tr(b.getAttribute("data-l")); }; });
+}};
+/* ---------- 33. aivision (AI vision lab) ---------- */
+DEMOS.aivision = { title: "Live demo — AI vision lab", render: function (el, app) {
+  el.innerHTML = '<div class="drow"><button class="dbtn" id="daivis_gen">New test image</button><button class="dbtn" id="daivis_gray">Grayscale</button><button class="dbtn" id="daivis_inv">Invert</button><button class="dbtn" id="daivis_pix">Pixelate</button><button class="dbtn" id="daivis_analyze">Analyze</button></div><canvas class="dpaint" id="daivis_cv" width="300" height="200"></canvas><div class="dcode" id="daivis_out">Generate an image, then filter or analyze it.</div><div class="dnote">Demo vision: real pixel math on a generated test image.</div>';
+  var cv = el.querySelector("#daivis_cv"), ctx = cv.getContext("2d"), seed = 5;
+  function gen() { seed += 7; var r = rnd(seed), i; ctx.fillStyle = "#0a0f1e"; ctx.fillRect(0, 0, 300, 200);
+    for (i = 0; i < 12; i++) { ctx.fillStyle = "hsl(" + Math.floor(r() * 360) + ",70%," + (30 + Math.floor(r() * 40)) + "%)"; ctx.fillRect(r() * 260, r() * 160, 20 + r() * 60, 20 + r() * 60); } }
+  function each(fn) { var d = ctx.getImageData(0, 0, 300, 200), p = d.data, i; for (i = 0; i < p.length; i += 4) fn(p, i); ctx.putImageData(d, 0, 0); }
+  el.querySelector("#daivis_gen").onclick = gen;
+  el.querySelector("#daivis_gray").onclick = function () { each(function (p, i) { var v = 0.3 * p[i] + 0.6 * p[i + 1] + 0.1 * p[i + 2]; p[i] = p[i + 1] = p[i + 2] = v; }); };
+  el.querySelector("#daivis_inv").onclick = function () { each(function (p, i) { p[i] = 255 - p[i]; p[i + 1] = 255 - p[i + 1]; p[i + 2] = 255 - p[i + 2]; }); };
+  el.querySelector("#daivis_pix").onclick = function () { var s = 10, x, y; for (y = 0; y < 200; y += s) for (x = 0; x < 300; x += s) { var d = ctx.getImageData(x, y, 1, 1).data; ctx.fillStyle = "rgb(" + d[0] + "," + d[1] + "," + d[2] + ")"; ctx.fillRect(x, y, s, s); } };
+  el.querySelector("#daivis_analyze").onclick = function () { var d = ctx.getImageData(0, 0, 300, 200).data, i, rS = 0, gS = 0, bS = 0, n = d.length / 4, edges = 0;
+    for (i = 0; i < d.length; i += 4) { rS += d[i]; gS += d[i + 1]; bS += d[i + 2]; }
+    for (i = 4; i < d.length; i += 4) { if (Math.abs(d[i] - d[i - 4]) > 60) edges++; }
+    var dom = rS > gS && rS > bS ? "red" : (gS > bS ? "green" : "blue");
+    el.querySelector("#daivis_out").textContent = "Analysis (" + app.id + " demo): dominant hue " + dom + ", mean brightness " + Math.round((rS + gS + bS) / n / 3) + "/255, edge pixels " + edges + " of " + n + ". Honest demo math \u2014 the full app trains on real photos.";
+  };
+  gen();
+}};
+
 root.DEMOS = DEMOS;
 root.dlFile = dl; root.dlZip = dlZip; root.zipFiles = zipFiles; root.crc32 = crc32; root.crc32bytes = crc32bytes; root.utf8bytes = utf8bytes;
 })(typeof self !== "undefined" ? self : this);

@@ -4,13 +4,16 @@
 1. manifest.count == index rows == chunk rows == api.json apps == apps-catalog count
 2. sitemap ?app= URL count == manifest.count; all sitemap XML valid
 3. IDs unique, contiguous JAH-APP-000001..NNNNNN, zero-padded 6
-4. every row's category is one of the 30 families; every family has >=1 app
-5. every family's demo key exists in the DEMOS registry (code/demos.js)
+4. every row's category is one of the families; every family has >=1 app
+5. every family's demo key(s) exist in the DEMOS registry (code/demos.js)
 6. every demo key has a Python template (code/pytmpl.json)
 7. chunk files are valid gzip with valid JSONL rows
 8. api.json + data/manifest.json parse and carry the required authority fields
 9. index.html static count line matches the manifest (no stale hard-coded count)
 10. no license field in JSON-LD blocks
+11. every inline <script> block in index.html: no unescaped </script inside the
+    block (the 2026-10-05 Profiles-v2 leak: a literal </script inside a JS string
+    closed the block early and spilled code as page text) and node --check clean
 """
 import gzip, json, os, re, subprocess, sys
 import xml.etree.ElementTree as ET
@@ -36,7 +39,8 @@ def node_json(args):
 
 fams = node_json(["code/appgen.js", "families"])
 fam_keys = [f["key"] for f in fams]
-check("30 families", len(fams) == 30, "got %d" % len(fams))
+NFAM = len(fams)
+check("families present (>=31)", NFAM >= 31, "got %d" % NFAM)
 
 manifest = json.load(open(os.path.join(DATA, "manifest.json")))
 for f in ["count", "per_cat", "earliest_id", "latest_id", "schema_version",
@@ -86,11 +90,15 @@ check("per_cat matches", manifest.get("per_cat") == {k: per.get(k, 0) for k in f
 
 demos_src = open(os.path.join(ROOT, "code", "demos.js")).read()
 demo_keys = set(re.findall(r"DEMOS\.([a-z]+)\s*=", demos_src))
-fam_demos = {f["key"]: f["demo"] for f in fams}
-missing_demo = [k for k, d in fam_demos.items() if d not in demo_keys]
+fam_demos = {}
+for f in fams:
+    for d in f.get("demos") or [f["demo"]]:
+        fam_demos.setdefault(f["key"], []).append(d)
+missing_demo = [(k, d) for k, ds in fam_demos.items() for d in ds if d not in demo_keys]
 check("every family demo has a DEMOS renderer", not missing_demo, str(missing_demo))
 pytmpl = json.load(open(os.path.join(ROOT, "code", "pytmpl.json")))
-missing_py = [d for d in set(fam_demos.values()) if d not in pytmpl]
+all_demo_keys = {d for ds in fam_demos.values() for d in ds}
+missing_py = [d for d in all_demo_keys if d not in pytmpl]
 check("every demo has a Python template", not missing_py, str(missing_py))
 
 api = json.load(open(os.path.join(ROOT, "api.json")))
@@ -120,17 +128,44 @@ check("static count line present", bool(m))
 if m:
     txt = m.group(1)
     check("static count matches manifest", ("%s Signature apps" % f"{n:,}" in txt) and
-          ("30 app categories" in txt), txt[:90])
+          (("%d app categories" % NFAM) in txt), txt[:90])
 check("no stale 1,500 count", "1,500 Signature apps" not in html)
 # stamped stats chips: initial raw-HTML content must carry the real count (never bare "...")
 sm = re.search(r'<div class="stats" id="stats"[^>]*>(.*?)<!-- STATS-STAMP-END -->', html, re.S)
 check("stamped stats chips present", bool(sm))
 if sm:
     check("stamped stats count matches manifest",
-          ('<b>%s</b>' % f"{n:,}") in sm.group(1) and "<b>30</b>" in sm.group(1), sm.group(1)[:80])
+          ('<b>%s</b>' % f"{n:,}") in sm.group(1) and ("<b>%d</b>" % NFAM) in sm.group(1), sm.group(1)[:80])
 check("no bare ... stats boot", '<b>\u2026</b><span>loading</span>' not in html)
 ld_blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)
 check("no license field in JSON-LD", not any('"license"' in b for b in ld_blocks))
+
+# gate 11: inline script blocks must not leak (2026-10-05 Profiles-v2 incident)
+js_blocks = []
+for m in re.finditer(r'<script(\s[^>]*)?>(.*?)</script>', html, re.S):
+    attrs = m.group(1) or ""
+    if "src=" in attrs or "application/ld+json" in attrs:
+        continue
+    js_blocks.append(m.group(2))
+check("inline <script> blocks found", bool(js_blocks))
+unesc = []
+for i, b in enumerate(js_blocks):
+    for mm in re.finditer(r"</script", b):
+        if b[mm.start() - 1] != "\\":
+            unesc.append(i)
+            break
+check("no unescaped </script inside inline scripts", not unesc, "blocks %s" % unesc)
+try:
+    import tempfile
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as tf:
+        tf.write("\n;\n".join(js_blocks))
+        tpath = tf.name
+    r = subprocess.run(["node", "--check", tpath],
+                       capture_output=True, text=True, cwd=ROOT)
+    os.unlink(tpath)
+    check("inline scripts node --check clean", r.returncode == 0, r.stderr[:200])
+except Exception as e:
+    check("inline scripts node --check clean", False, str(e)[:100])
 
 print()
 if fails:

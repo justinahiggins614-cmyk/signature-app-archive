@@ -145,7 +145,11 @@ var CATS = [
     feats: ["Monthly budget builder", "Envelope-style categories", "Savings goal tracker", "Spending trends chart", "Bill reminders", "Net-worth snapshot", "Cash-flow forecast", "Receipt photo notes", "Debt payoff planner", "Export reports", "Private local storage", "Plain-words money tips"] },
   { key: "backup", name: "Signature Safekeep", icon: "💾", demo: "backup",
     blurb: "Backup buddy — manifests, packs, restore checks.",
-    feats: ["Backup manifest builder", "One-click data pack (.zip)", "Restore checklist", "Scheduled reminders", "Disc-label printer text", "Integrity self-check", "Thumbdrive layout guide", "CD/DVD layout guide", "Versioned pack names", "Exclude-list patterns", "Log of every backup", "Works with any files"] }
+    feats: ["Backup manifest builder", "One-click data pack (.zip)", "Restore checklist", "Scheduled reminders", "Disc-label printer text", "Integrity self-check", "Thumbdrive layout guide", "CD/DVD layout guide", "Versioned pack names", "Exclude-list patterns", "Log of every backup", "Works with any files"] },
+  { key: "ai", name: "Signature Mind", icon: "🧠", demo: "aichat",
+    demos: ["aichat", "aiimage", "aivoice", "aimusic", "aiwriter", "aicode", "aitranslate", "aivision"],
+    blurb: "Every kind of AI app — chat, image, voice, music, writing, code, translation, vision. Signature versions, running right here.",
+    feats: ["On-device demo brain", "Private by design — nothing leaves your device", "Plain-language explanations", "One-click export", "Works fully offline", "No account, no cloud", "Guided first-run tour", "Seeded outputs — same input, same result"] }
 ];
 
 var REQ_OS = ["SignatureOS 12 or newer", "Windows 10/11", "macOS 13 or newer", "Android 11 or newer", "iOS 16 or newer", "Any modern Linux"];
@@ -188,7 +192,7 @@ function solve(catKey, seed) {
     family: catKey, seed: seed,
     name: name, tagline: tagline,
     icon: c.icon, catName: c.name,
-    demo: c.demo,
+    demo: (c.demos ? c.demos[seed % c.demos.length] : c.demo),
     description: desc,
     features: features, how_to: how,
     versions: versions, requirements: req,
@@ -199,7 +203,7 @@ function solve(catKey, seed) {
 }
 
 function families() {
-  return CATS.map(function (c) { return { key: c.key, name: c.name, icon: c.icon, blurb: c.blurb, demo: c.demo }; });
+  return CATS.map(function (c) { return { key: c.key, name: c.name, icon: c.icon, blurb: c.blurb, demo: c.demo, demos: (c.demos || [c.demo]) }; });
 }
 
 /* batch(cat, start, n, baseIndex) -> rows [id, cat, seed, name, tagline] */

@@ -39,10 +39,15 @@ def iter_rows(chunks):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--per-cat", type=int, default=50)
+    ap.add_argument("--only", default=None, help="seed just one category key (e.g. ai)")
     a = ap.parse_args()
     os.makedirs(CHUNKS, exist_ok=True)
 
     fams = families()
+    if a.only:
+        fams = [f for f in fams if f["key"] == a.only]
+        if not fams:
+            raise SystemExit("unknown category: " + a.only)
     state = load_state()
     ns = state.setdefault("next_seed", {})
 
