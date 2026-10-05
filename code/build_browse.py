@@ -271,6 +271,8 @@ details.letter>summary{padding:10px 12px;cursor:pointer;color:var(--cy)}
 CAT_DETAILS
 </div>
 </div>
+<h2 style="color:var(--gold)">Fresh from the archive</h2>
+<div class="cards" id="fresh"><p class="note">Loading…</p></div>
 <p><a class="btn ghost bkbtn" href="./">&#8592; Back to the archive home</a></p>
 </div>
 %NAV%
@@ -367,6 +369,15 @@ document.querySelectorAll("details.cat").forEach(function(det){
     bar.appendChild(b);
   });
 })();
+/* Fresh from the archive — moved 2026-10-05 from the index.html front door */
+function freshCard(r){
+  var f=(FAMS&&FAMS[r[1]])||{};
+  return '<div class="card"><div class="sku">'+esc(r[0])+'</div><h4>'+esc((f.icon?f.icon+" ":"")+r[3])+'</h4><div class="tag">'+esc(r[4])+'</div><div style="margin-top:8px"><a class="btn gold" style="display:inline-block;text-decoration:none" href="./?app='+encodeURIComponent(r[0])+'">Open app &rarr;</a></div></div>';
+}
+loadIndex(function(rows){
+  var box=$("fresh");if(!box)return;
+  box.innerHTML=rows.slice(-12).reverse().map(freshCard).join("");
+});
 /* search across everything */
 var qt=null;
 $("bq").addEventListener("input",function(){
