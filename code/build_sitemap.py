@@ -229,7 +229,10 @@ def main():
                         '<!-- STATS-STAMP-START -->' + stats_inner + '<!-- STATS-STAMP-END -->',
                         html, flags=re.S, count=1)
     if n3 and html3 != html:
-        if 'id="stats" data-stamped' not in html3:
+        if 'id="stats" data-stamped' in html3:
+            html3 = re.sub(r'id="stats" data-stamped="\d{4}-\d{2}-\d{2}"',
+                           'id="stats" data-stamped="%s"' % TODAY, html3, count=1)
+        else:
             html3 = html3.replace('id="stats"', 'id="stats" data-stamped="%s"' % TODAY, 1)
         open(ip, "w", encoding="utf-8").write(html3)
     print("stats chips stamped (%d): %s" % (n3, stats_inner[:90]))
