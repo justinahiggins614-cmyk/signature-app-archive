@@ -29,9 +29,32 @@ def hesc(s):
     return str(s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+def _unescape_js_nav(s):
+    # Resolve one level of JS string escaping so a JS-embedded nav
+    # becomes real HTML:  \" -> " , \n -> newline , \\ -> \
+    s = s.replace(r'\n', '\n').replace(r'\"', '"').replace(r'\/', '/')
+    s = s.replace(r'\\', '\\')
+    return s
+
+
 def pull_index_html():
     html = open(os.path.join(ROOT, "index.html"), encoding="utf-8").read()
-    nav = re.search(r'<nav class="jahnet".*?</nav>', html, re.S).group(0)
+    m = re.search(r'<nav class="jahnet".*?</nav>', html, re.S)
+    if m:
+        nav = m.group(0)
+    else:
+        # 2026-10-06: index.html now carries the network nav JS-escaped
+        # (standalone single-file download builder). Rebuild the real nav
+        # from the concatenated JS string pieces.
+        m2 = re.search(r'"<nav class=\\"jahnet\\".*?</nav>\\n"', html, re.S)
+        if not m2:
+            raise SystemExit("pull_index_html: no jahnet nav found in index.html")
+        raw = m2.group(0)
+        raw = raw[1:-1]  # strip outer quotes
+        raw = re.sub(r'"\s*\+\s*\n\s*"', '', raw)  # join JS string pieces
+        nav = _unescape_js_nav(raw)
+        if not nav.startswith('<nav class="jahnet"') or '</nav>' not in nav:
+            raise SystemExit("pull_index_html: JS-escaped nav did not resolve to HTML")
     style = re.search(r'<style>.*?</style>', html, re.S).group(0)
     themescript = re.search(
         r'<script>try\{if\((?:localStorage\.getItem|PS\.get)\("jah-theme"\).*?</script>', html, re.S).group(0)
