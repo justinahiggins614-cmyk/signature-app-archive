@@ -6,6 +6,33 @@ var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, f
 function rnd(seed) { var a = seed * 2654435761 % 2147483647; return function () { a |= 0; a = (a + 0x6D2B79F5) | 0; var t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 function dl(name, text, mime) { var b = new Blob([text], { type: mime || "text/plain" }); var a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 900); }
 function btn(label, fn) { var b = document.createElement("button"); b.className = "dbtn"; b.textContent = label; b.onclick = fn; return b; }
+/* In-page prompt replacement — native prompt() is suppressed in Facebook's
+   in-app browser and unreliable on mobile, so data-entry demos use this.
+   dPrompt(el, title, fields, cb): fields=[{label,value,type}], cb(values|null). */
+function dPrompt(el, title, fields, cb) {
+  var ov = document.createElement("div");
+  ov.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px";
+  var box = document.createElement("div");
+  box.style.cssText = "background:#0d1526;border:1px solid #35e0ff;border-radius:12px;padding:18px;max-width:94vw;width:340px;color:#eaf2ff";
+  var h = document.createElement("h4"); h.style.cssText = "margin:0 0 6px;font-size:1em"; h.textContent = title; box.appendChild(h);
+  var inputs = fields.map(function (f) {
+    var lab = document.createElement("label"); lab.style.cssText = "display:block;margin:8px 0 4px;font-size:.85em;color:#9aa4b2"; lab.textContent = f.label;
+    var inp = document.createElement("input");
+    inp.type = f.type || "text"; inp.value = f.value || "";
+    inp.style.cssText = "width:100%;box-sizing:border-box;padding:9px 10px;border-radius:8px;border:1px solid #2a3a5f;background:#060b1c;color:#eaf2ff;font-size:1em";
+    box.appendChild(lab); box.appendChild(inp);
+    return inp;
+  });
+  var row = document.createElement("div"); row.style.cssText = "display:flex;gap:10px;justify-content:flex-end;margin-top:14px";
+  function close(v) { try { document.body.removeChild(ov); } catch (e) {} cb(v); }
+  var no = btn("Cancel", function () { close(null); });
+  var ok = btn("OK", function () { close(inputs.map(function (i) { return i.value; })); });
+  row.appendChild(no); row.appendChild(ok); box.appendChild(row);
+  ov.appendChild(box); document.body.appendChild(ov);
+  ov.addEventListener("click", function (e) { if (e.target === ov) close(null); });
+  var first = inputs[0];
+  if (first) { try { first.focus(); } catch (e) {} first.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); ok.onclick(); } }); }
+}
 function store(k, v) { try { if (v === undefined) return JSON.parse(localStorage.getItem("sigapp_" + k) || "null"); localStorage.setItem("sigapp_" + k, JSON.stringify(v)); } catch (e) { return null; } }
 /* --- minimal stored (uncompressed) ZIP writer + CRC32 ---
  * CRC is always computed over the UTF-8 *bytes* that are actually stored,
@@ -58,7 +85,7 @@ DEMOS.editor = { title: "Live demo — write something", render: function (el, a
   el.innerHTML = '<div class="drow"></div><div class="dedit" contenteditable="true" style="min-height:160px;border:1px solid var(--line);border-radius:8px;padding:12px;background:#060b1c">Type here — this is a real editor. Try the buttons above, then download your page.</div><div class="dnote"></div>';
   var row = el.querySelector(".drow"), ed = el.querySelector(".dedit"), note = el.querySelector(".dnote");
   [["B", "bold"], ["I", "italic"], ["U", "underline"]].forEach(function (x) { row.appendChild(btn(x[0], function () { document.execCommand(x[1]); ed.focus(); })); });
-  row.appendChild(btn("Word count", function () { var w = ed.innerText.trim().split(/\s+/).filter(Boolean).length; note.textContent = w + " words."; }));
+  row.appendChild(btn("Word count", function () { var w = (ed.innerText || ed.textContent || "").trim().split(/\s+/).filter(Boolean).length; note.textContent = w + " words."; }));
   row.appendChild(btn("Download .txt", function () { dl(app.id + "-document.txt", ed.innerText); }));
   if (app.demo === "editor" && /jotter|note/i.test(app.name)) ed.innerHTML = "Quick note — " + esc(app.name) + " keeps it safe.";
 }};
@@ -141,7 +168,7 @@ DEMOS.calendar = { title: "Live demo — your month, your events", render: funct
     for (var i = 0; i < first; i++) h += "<td></td>";
     for (var d = 1; d <= days; d++) { var k = y + "-" + mo + "-" + d; h += '<td data-d="' + d + '" style="cursor:pointer;min-width:34px">' + d + (ev[k] ? "<br><span class='ddot'>•</span>" : "") + "</td>"; if ((first + d) % 7 === 0) h += "</tr><tr>"; }
     el.innerHTML = h + "</tr></table><div class='dnote'>Click a day to add an event.</div>";
-    el.querySelectorAll("td[data-d]").forEach(function (td) { td.onclick = function () { var t = prompt("Event for " + (mo + 1) + "/" + td.dataset.d + "/" + y + ":"); if (t) { ev[y + "-" + mo + "-" + td.dataset.d] = t; save(); draw(); } }; });
+    el.querySelectorAll("td[data-d]").forEach(function (td) { td.onclick = function () { var key = y + "-" + mo + "-" + td.dataset.d; dPrompt(el, "Event for " + (mo + 1) + "/" + td.dataset.d + "/" + y, [{ label: "Event", value: ev[key] || "" }], function (v) { if (v && v[0]) { ev[key] = v[0]; save(); draw(); } }); }; });
   }
   draw();
 }};
@@ -154,8 +181,8 @@ DEMOS.ledger = { title: "Live demo — a real little ledger", render: function (
     el.innerHTML = '<div class="drow"><b>Balance: $' + bal.toFixed(2) + "</b></div><table class='dgrid'><tr><th>Description</th><th>Amount</th></tr>" +
       tx.map(function (t) { return "<tr><td>" + esc(t.d) + "</td><td>" + (t.a < 0 ? "−" : "+") + "$" + Math.abs(t.a).toFixed(2) + "</td></tr>"; }).join("") + "</table><div class='drow'></div>";
     var row = el.querySelector(".drow");
-    row.appendChild(btn("+ Income", function () { var d = prompt("Description:"), a = parseFloat(prompt("Amount:") || "0"); if (d && a) { tx.push({ d: d, a: Math.abs(a) }); save(); draw(); } }));
-    row.appendChild(btn("− Expense", function () { var d = prompt("Description:"), a = parseFloat(prompt("Amount:") || "0"); if (d && a) { tx.push({ d: d, a: -Math.abs(a) }); save(); draw(); } }));
+    row.appendChild(btn("+ Income", function () { dPrompt(el, "Income", [{ label: "Description" }, { label: "Amount", type: "number" }], function (v) { var a = v && parseFloat(v[1]); if (v && v[0] && a) { tx.push({ d: v[0], a: Math.abs(a) }); save(); draw(); } }); }));
+    row.appendChild(btn("− Expense", function () { dPrompt(el, "Expense", [{ label: "Description" }, { label: "Amount", type: "number" }], function (v) { var a = v && parseFloat(v[1]); if (v && v[0] && a) { tx.push({ d: v[0], a: -Math.abs(a) }); save(); draw(); } }); }));
     row.appendChild(btn("Export CSV", function () { dl(app.id + "-ledger.csv", "Description,Amount\n" + tx.map(function (t) { return '"' + t.d.replace(/"/g, '""') + '",' + t.a; }).join("\n"), "text/csv"); }));
   }
   draw();
@@ -172,7 +199,7 @@ DEMOS.stock = { title: "Live demo — stockroom in action", render: function (el
     }).join("") + "</table><div class='drow'></div>";
     el.querySelectorAll("button[data-a]").forEach(function (b) { b.onclick = function () { var it = items[+b.dataset.i]; it.q += b.dataset.a === "+" ? 1 : -1; if (it.q < 0) it.q = 0; save(); draw(); }; });
     var row = el.querySelector(".drow");
-    row.appendChild(btn("+ Add item", function () { var n = prompt("Item name:"); if (n) { items.push({ n: n, q: 0, low: 5 }); save(); draw(); } }));
+    row.appendChild(btn("+ Add item", function () { dPrompt(el, "Add item", [{ label: "Item name" }], function (v) { if (v && v[0]) { items.push({ n: v[0], q: 0, low: 5 }); save(); draw(); } }); }));
   }
   draw();
 }};
@@ -204,7 +231,7 @@ DEMOS.directory = { title: "Live demo — people directory", render: function (e
     f = (f || "").toLowerCase();
     el.innerHTML = '<input class="dsearch" placeholder="Search people…" value="' + esc(f) + '"><div class="dcards">' + people.filter(function (p) { return (p.n + p.r).toLowerCase().indexOf(f) >= 0; }).map(function (p) { return '<div class="dperson"><b>' + esc(p.n) + "</b><br>" + esc(p.r) + "<br><span class='dnote'>" + esc(p.p) + "</span></div>"; }).join("") + '</div><div class="drow"></div>';
     var row = el.querySelector(".drow");
-    row.appendChild(btn("+ Add person", function () { var n = prompt("Name:"); if (!n) return; var rr = prompt("Role:") || "", p = prompt("Phone:") || ""; people.push({ n: n, r: rr, p: p }); save(); draw(f); }));
+    row.appendChild(btn("+ Add person", function () { dPrompt(el, "Add person", [{ label: "Name" }, { label: "Role" }, { label: "Phone", type: "tel" }], function (v) { if (v && v[0]) { people.push({ n: v[0], r: v[1] || "", p: v[2] || "" }); save(); draw(f); } }); }));
     el.querySelector(".dsearch").addEventListener("input", function (e) { draw(e.target.value); var s = el.querySelector(".dsearch"); s.focus(); s.setSelectionRange(s.value.length, s.value.length); });
   }
   draw("");
@@ -219,7 +246,7 @@ DEMOS.kanban = { title: "Live demo — move real tasks", render: function (el, a
     }).join("") + '</div><div class="drow"></div>';
     var keys = Object.keys(cols);
     el.querySelectorAll("button[data-c]").forEach(function (b) { b.onclick = function () { var k = b.dataset.c, i = +b.dataset.i, nk = keys[keys.indexOf(k) + (+b.dataset.d)]; if (nk) { cols[nk].push(cols[k].splice(i, 1)[0]); save(); draw(); } }; });
-    el.querySelector(".drow").appendChild(btn("+ Add task", function () { var t = prompt("Task:"); if (t) { cols["To do"].push(t); save(); draw(); } }));
+    el.querySelector(".drow").appendChild(btn("+ Add task", function () { dPrompt(el, "Add task", [{ label: "Task" }], function (v) { if (v && v[0]) { cols["To do"].push(v[0]); save(); draw(); } }); }));
   }
   draw();
 }};
@@ -259,10 +286,10 @@ DEMOS.skyway = { title: "Live demo — a tiny web inside the page", render: func
 /* ---------- 13. tones (media player) ---------- */
 DEMOS.tones = { title: "Live demo — press play, hear tones", render: function (el, app) {
   var ctx = null;
-  function tone(f, t, d) { ctx = ctx || new (window.AudioContext || window.webkitAudioContext)(); var o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f; o.type = "sine"; g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.3, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + d); o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + d + 0.05); }
+  function tone(f, t, d) { var AC = window.AudioContext || window.webkitAudioContext; if (!AC) { note.textContent = "Sound needs WebAudio — try Chrome or Safari for audio."; return; } ctx = ctx || new AC(); var o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f; o.type = "sine"; g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.3, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + d); o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + d + 0.05); }
   var scale = [261.6, 293.7, 329.6, 392.0, 440.0, 523.3];
   el.innerHTML = '<div class="drow"></div><div class="dnote">Real sound, generated live with WebAudio — no files needed.</div>';
-  var row = el.querySelector(".drow");
+  var row = el.querySelector(".drow"), note = el.querySelector(".dnote");
   scale.forEach(function (f, i) { row.appendChild(btn("♪ " + (i + 1), function () { tone(f, ctx ? ctx.currentTime : 0, 0.4); })); });
   row.appendChild(btn("▶ Play scale", function () { var t = (ctx ? ctx.currentTime : 0) + 0.05; scale.forEach(function (f, i) { tone(f, t + i * 0.28, 0.25); }); }));
 }};
@@ -376,7 +403,7 @@ DEMOS.dbtable = { title: "Live demo — a real little database", render: functio
       rows.map(function (r, i) { return "<tr>" + cols.map(function (c) { return "<td>" + esc(r[c]) + "</td>"; }).join("") + "<td><button class='dbtn' data-i='" + i + "'>✕</button></td></tr>"; }).join("") + "</table><div class='drow'></div>";
     el.querySelectorAll("button[data-i]").forEach(function (b) { b.onclick = function () { rows.splice(+b.dataset.i, 1); save(); draw(); }; });
     var row = el.querySelector(".drow");
-    row.appendChild(btn("+ Add record", function () { var rec = {}; cols.forEach(function (c) { rec[c] = prompt(c + ":") || ""; }); rows.push(rec); save(); draw(); }));
+    row.appendChild(btn("+ Add record", function () { dPrompt(el, "Add record", cols.map(function (c) { return { label: c }; }), function (v) { if (!v) return; var rec = {}; cols.forEach(function (c, i) { rec[c] = v[i] || ""; }); rows.push(rec); save(); draw(); }); }));
     row.appendChild(btn("Export CSV", function () { dl(app.id + "-table.csv", cols.join(",") + "\n" + rows.map(function (r) { return cols.map(function (c) { return '"' + String(r[c]).replace(/"/g, '""') + '"'; }).join(","); }).join("\n"), "text/csv"); }));
   }
   draw();
@@ -395,7 +422,7 @@ DEMOS.workout = { title: "Live demo — log a workout", render: function (el, ap
     var days = {}; log.forEach(function (l) { days[l.d] = 1; });
     el.innerHTML = "<div class='dnote'>Days active: <b>" + Object.keys(days).length + "</b> · Sessions: <b>" + log.length + "</b></div><table class='dgrid'><tr><th>Date</th><th>Exercise</th><th>Reps/Time</th></tr>" +
       log.slice(-8).reverse().map(function (l) { return "<tr><td>" + esc(l.d) + "</td><td>" + esc(l.e) + "</td><td>" + esc(l.q) + "</td></tr>"; }).join("") + "</table><div class='drow'></div>";
-    el.querySelector(".drow").appendChild(btn("+ Log session", function () { var e = prompt("Exercise:"), q = prompt("Reps or time:"); if (e) { log.push({ d: new Date().toLocaleDateString(), e: e, q: q || "" }); save(); draw(); } }));
+    el.querySelector(".drow").appendChild(btn("+ Log session", function () { dPrompt(el, "Log session", [{ label: "Exercise" }, { label: "Reps or time" }], function (v) { if (v && v[0]) { log.push({ d: new Date().toLocaleDateString(), e: v[0], q: v[1] || "" }); save(); draw(); } }); }));
   }
   draw();
 }};
@@ -528,7 +555,7 @@ DEMOS.aicode = { title: "Live demo — AI code helper", render: function (el, ap
     "python: CSV to list": "import csv\nrows = list(csv.reader(open('in.csv')))\nprint(len(rows), 'rows')",
     "js: fetch JSON": "fetch('https://example.com/api')\n  .then(r => r.json())\n  .then(d => console.log(d));",
     "js: countdown timer": "let s = 10;\nconst t = setInterval(() => {\n  console.log(s);\n  if (--s < 0) clearInterval(t);\n}, 1000);",
-    "html: hello button": "<button onclick=\"greet()\">Say hi</button>\n<script>\nfunction greet(){ alert('Hello!'); }\n<\/script>"
+    "html: hello button": "<button onclick=\"greet()\">Say hi</button><p id=\"hi-msg\" aria-live=\"polite\"></p>\n<script>\nfunction greet(){ document.getElementById('hi-msg').textContent='Hello!'; }\n<\/script>"
   };
   var keys = Object.keys(SNIPS);
   el.innerHTML = '<div class="drow"><select class="dsearch" id="daicode_k">' + keys.map(function (k) { return '<option>' + esc(k) + '</option>'; }).join("") + '</select></div><div class="drow"><button class="dbtn" id="daicode_go">Generate</button><button class="dbtn" id="daicode_copy">Copy</button><button class="dbtn" id="daicode_dl">Download</button></div><pre class="dcode" id="daicode_out">Pick a task and press Generate.</pre><div class="dnote">Real, runnable snippets \u2014 the full app explains each line.</div>';
