@@ -2,7 +2,7 @@
  "site": "The Signature App Archive",
  "site_id": "SIGNATURE-APP-ARCHIVE",
  "api_version": "1.0",
- "apps": 97788,
+ "apps": 98842,
  "goal": 1000000,
  "categories": [
   {
@@ -198,9 +198,9 @@
  "ai_manifest": "ai-manifest.json",
  "llms": "llms.txt",
  "schema_version": "JAH-APP-RECORD/1.0",
- "index_sha256": "e9674be4f613e898db493d4111177206347c513118f0871675eb78fc1f428324",
+ "index_sha256": "f0d9e681f999e1adb1536cba73253dc0c4b93b6e36e44ce603141dd4c96f5dea",
  "app_engine_version": "802a3589548a5cca",
- "generated_at": "2026-10-12T04:13:53.859775+00:00",
+ "generated_at": "2026-10-12T06:13:53.686218+00:00",
  "deep_links": {
   "app": "?app=JAH-APP-000001",
   "category": "?cat=word"
