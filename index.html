@@ -245,13 +245,147 @@ try{
 }catch(e){}
 window.__JAHREAD=R;
 })();
+/* === SigTTS dead-voice guard (2026-10-11, full-network read-aloud sweep) ===
+   window.speechSynthesis may EXIST but be dead (notably FB in-app browser on
+   Android: speak() silently does nothing, onend/onerror never fire,
+   getVoices() returns [] forever). Never trust presence — probe aliveness,
+   watch every utterance, fall back to online-audio tiers when dead/stalled.
+   Controller rule: S.speak() stops current audio first (no stacking);
+   S.stop() kills everything. Wire page stop buttons to S.stop().
+   INJECT VERBATIM — do not rename the SigTTS namespace. */
+(function(){
+if(window.SigTTS && window.SigTTS.voiceAlive) return;
+var S = window.SigTTS = window.SigTTS || {};
+S.TTS_URLS = S.TTS_URLS || [
+  function(t){return "https://code.responsivevoice.org/getvoice.php?t="+encodeURIComponent(t)+"&tl=en-US&sv=g2&vn=&pitch=0.5&rate=0.95";},
+  function(t){return "https://translate.google.com/translate_tts?ie=UTF-8&q="+encodeURIComponent(t)+"&tl=en&client=tw-ob";},
+  function(t){return "https://translate.googleapis.com/translate_tts?ie=UTF-8&q="+encodeURIComponent(t)+"&tl=en&client=tw-ob";}
+];
+/* Probe: cb(true) = live voice exists, cb(false) = dead/missing.
+   Waits up to ~3s for onvoiceschanged (healthy browsers load voices async). */
+S.voiceAlive = function(cb){
+  var done=false;
+  function fin(a){ if(done)return; done=true; try{cb(!!a);}catch(e){} }
+  try{
+    var ss=window.speechSynthesis;
+    if(!ss){ fin(false); return; }
+    var v0=null; try{ v0=ss.getVoices(); }catch(e){}
+    if(v0 && v0.length){ fin(true); return; }
+    var to=setTimeout(function(){ fin(false); },3000);
+    var prev=null; try{ prev=ss.onvoiceschanged; }catch(e){}
+    ss.onvoiceschanged=function(){
+      try{ if(prev) prev.call(ss); }catch(e){}
+      if(done) return;
+      var v2=null; try{ v2=ss.getVoices(); }catch(e){}
+      if(v2 && v2.length){ clearTimeout(to); fin(true); }
+    };
+    try{ ss.getVoices(); }catch(e){}
+  }catch(e){ fin(false); }
+};
+S._fb={audio:null,stopped:true,timer:null};
+S.fbStop=function(){
+  var f=S._fb; f.stopped=true;
+  if(f.timer){ clearTimeout(f.timer); f.timer=null; }
+  if(f.audio){ try{f.audio.pause();}catch(e){} f.audio=null; }
+  try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
+};
+/* Online-audio fallback: chunk-by-chunk through the tiers.
+   onDone(true)=finished, onDone(false)=failed/stopped. 14s fail-fast/chunk. */
+S.fbSpeak=function(text,onDone){
+  var f=S._fb; S.fbStop(); f.stopped=false;
+  var chunks=String(text).replace(/\s+/g," ").trim().split(/(?<=[.!?;])\s+/).filter(Boolean).slice(0,90);
+  if(!chunks.length){ if(onDone)try{onDone(false);}catch(e){} return; }
+  var i=0,tier=0;
+  function next(){
+    if(f.stopped){ if(onDone)try{onDone(false);}catch(e){} return; }
+    if(i>=chunks.length){ if(onDone)try{onDone(true);}catch(e){} return; }
+    if(tier>=S.TTS_URLS.length){ if(onDone)try{onDone(false);}catch(e){} return; }
+    var a=new Audio(); f.audio=a; var settled=false;
+    function fin(ok){
+      if(settled) return; settled=true;
+      if(f.timer){ clearTimeout(f.timer); f.timer=null; }
+      try{a.pause();}catch(e){}
+      if(f.stopped){ if(onDone)try{onDone(false);}catch(e){} return; }
+      if(ok){ i++; tier=0; f.timer=setTimeout(next,220); }
+      else { tier++; next(); }
+    }
+    a.onended=function(){fin(true);};
+    a.onerror=function(){fin(false);};
+    f.timer=setTimeout(function(){fin(false);},14000);
+    var src=""; try{ src=S.TTS_URLS[tier](chunks[i]); }catch(e){ fin(false); return; }
+    a.src=src;
+    try{ var p=a.play(); if(p&&p.catch)p.catch(function(){fin(false);}); }
+    catch(e){ fin(false); }
+  }
+  next();
+};
+/* Guarded speak: probes first; dead engine -> straight to fbSpeak.
+   Live path: onstart watchdog 6s + absolute budget; stall -> cancel + fallback.
+   onDone(true/false) ALWAYS fires exactly once — reset button/UI state there. */
+S.speak=function(text,opts,onDone){
+  if(typeof opts==="function"){ onDone=opts; opts={}; }
+  opts=opts||{};
+  S.fbStop(); S._fb.stopped=false;
+  S.voiceAlive(function(alive){
+    if(S._fb.stopped){ if(onDone)try{onDone(false);}catch(e){} return; }
+    if(!alive){ S.fbSpeak(text,onDone); return; }
+    try{
+      var ss=window.speechSynthesis, u=new SpeechSynthesisUtterance(String(text));
+      if(opts.rate)u.rate=opts.rate; if(opts.pitch)u.pitch=opts.pitch; if(opts.lang)u.lang=opts.lang;
+      try{
+        var vs=ss.getVoices()||[], en=vs.filter(function(v){return v.lang&&/^en/i.test(v.lang);});
+        if(en.length) u.voice=en[0];
+      }catch(e){}
+      var settled=false, started=false;
+      var budget=Math.min(120000, 30000+Math.ceil(String(text).length/15)*1000);
+      var t1=setTimeout(function(){ if(!started) fin(false); },6000);
+      var t2=setTimeout(function(){ fin(false); },budget);
+      function fin(ok){
+        if(settled) return; settled=true;
+        clearTimeout(t1); clearTimeout(t2);
+        try{ ss.cancel(); }catch(e){}
+        if(ok){ if(onDone)try{onDone(true);}catch(e){} }
+        else { S.fbSpeak(text,onDone); }
+      }
+      u.onstart=function(){ started=true; };
+      u.onend=function(){ fin(true); };
+      u.onerror=function(){ fin(false); };
+      ss.speak(u);
+    }catch(e){ S.fbSpeak(text,onDone); }
+  });
+};
+S.stop=function(){ S.fbStop(); };
+})();
+
+/* === SigTTS glue (2026-10-11 dead-voice sweep) ===
+   Speak entries route through SigTTS.speak: aliveness probe (~3s for
+   onvoiceschanged) + per-utterance watchdog (6s onstart + absolute budget).
+   Fallback delegates to this page's proven FX online tier. SigTTS._fin resolves
+   the pending onDone exactly once; SigTTS.stop() is the one controller. */
+(function(){
+var S=window.SigTTS;if(!S||S._glue)return;S._glue=true;
+var pending=null,budgetT=null;
+function fin(ok){var f=pending;pending=null;if(budgetT){clearTimeout(budgetT);budgetT=null;}if(f){try{f(!!ok);}catch(e){}}}
+S._fin=fin;
+S.fbSpeak=function(text,onDone){
+  S._fb.stopped=false;
+  budgetT=setTimeout(function(){fin(false);try{auStop();}catch(e){}},Math.min(180000,60000+String(text).length*20));
+  try{fxStart(text);}catch(e){fin(false);}
+};
+S._killAudio=S.stop;
+S._killPage=function(){try{fxStop();}catch(e){}};
+S._arm=function(onDone){fin(false);pending=(typeof onDone==="function")?onDone:null;};
+var stopping=false;
+S.stop=function(){if(stopping)return;stopping=true;try{try{S._killAudio();}catch(e){}try{S._killPage();}catch(e){}fin(false);try{auStop();}catch(e){}}finally{stopping=false;}};
+})();
+
 /* ============ tiered read-aloud: speechSynthesis -> ResponsiveVoice -> Google TTS ============ */
 var AU={q:[],i:0,active:false,paused:false,rate:1,label:""};
 function auVoice(){try{var vs=window.speechSynthesis.getVoices().filter(function(v){return v.lang&&v.lang.toLowerCase().indexOf("en")===0});if(!vs.length)return null;var fem=/samantha|zira|joanna|amy|emma|kate|serena|moira|tessa|veena|fiona|karen|female|google us english/i;for(var i=0;i<vs.length;i++)if(fem.test(vs[i].name))return vs[i];var g=vs.filter(function(v){return v.name.toLowerCase().indexOf("google")>=0})[0];return g||vs[0]||null}catch(e){return null}}
 function auChunks(text){var out=[],cur="",parts=String(text).split(/([.!?]["']?(?:\s+|$))/);for(var i=0;i<parts.length;i+=2){var sent=((parts[i]||"")+(parts[i+1]||"")).replace(/\s+/g," ").trim();if(!sent)continue;if(cur&&(cur+" "+sent).length>220){out.push(cur.trim());cur=sent}else cur=cur?cur+" "+sent:sent}if(cur.trim())out.push(cur.trim());return out}
 function auShowBar(show){var bar=document.getElementById("aubar");if(bar)bar.style.display=show?"flex":"none"}
 function auPaintBtn(){var p=document.getElementById("aupause");if(p)p.innerHTML=AU.paused?"&#9654; Resume":"&#10074;&#10074; Pause";var l=document.getElementById("aulabel");if(l)l.textContent="Reading: "+AU.label;var pr=document.getElementById("auprog");if(pr)pr.textContent=AU.q.length?("chunk "+(AU.i+1)+" of "+AU.q.length):""}
-function auSpeakNext(){if(AU.i>=AU.q.length||!AU.active){auStop();return}auShowBar(true);auPaintBtn();var u;try{u=new SpeechSynthesisUtterance(AU.q[AU.i])}catch(e){auFallbackOnline();return}u.rate=AU.rate;u.lang="en-US";var v=auVoice();if(v)u.voice=v;var t0=Date.now();u.onend=function(){if(!AU.active)return;if(Date.now()-t0<250){AU.fast=(AU.fast||0)+1}else{AU.fast=0}if(AU.fast>=2){auFallbackOnline();return}AU.i++;auSpeakNext()};u.onerror=function(){if(!AU.active)return;auFallbackOnline()};try{window.speechSynthesis.speak(u)}catch(e){auFallbackOnline()}}
+function auSpeakNext(){if(AU.i>=AU.q.length||!AU.active){auStop();return}auShowBar(true);auPaintBtn();/* SigTTS dead-voice guard: probe aliveness + watchdog; dead/stalled engine -> online tier */var rest=AU.q.slice(AU.i).join(" ");AU.q=[];AU.i=0;var S=window.SigTTS;try{S._killAudio();}catch(e){}try{S._killPage();}catch(e){}S._arm(function(){auStop();});S.speak(rest,{rate:AU.rate},function(ok){S._fin(ok);});}
 /* Built-in voice accepted the text but produced nothing (no voices / dead engine): fall back to the online voice tiers, keeping visible state. */
 function auFallbackOnline(){var rest=AU.q.slice(AU.i).join(" ");AU.q=[];AU.i=0;AU.fast=0;if(!rest||!AU.active){auStop();return}auShowBar(true);auPaintBtn();fxStart(rest);audMsg("Built-in voice unavailable \u2014 reading with the online voice instead.")}
 function hasSpeech(){try{return("speechSynthesis" in window)&&!!window.speechSynthesis&&typeof window.speechSynthesis.speak==="function"}catch(e){return false}}
@@ -260,7 +394,7 @@ function audMsg(m){var t=document.getElementById("audmsg");if(!t){t=document.cre
 var FX={audio:null,active:false,errs:0};
 var TTS_TIERS=[function(t){return "https://code.responsivevoice.org/getvoice.php?t="+encodeURIComponent(t)+"&tl=en-US"},function(t){return "https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q="+encodeURIComponent(t)},function(t){return "https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q="+encodeURIComponent(t)}];
 function fxChunks(text){var out=[],cur="",parts=String(text).split(/([.!?]["']?(?:\s+|$))/);function pushWords(s){var w=s.split(" "),c="";for(var k=0;k<w.length;k++){var t=(c+" "+w[k]).trim();if(t.length>180){if(c)out.push(c);c=w[k]}else c=t}if(c)out.push(c)}for(var i=0;i<parts.length;i+=2){var s=((parts[i]||"")+(parts[i+1]||"")).replace(/\s+/g," ").trim();if(!s)continue;if(s.length>180){if(cur){out.push(cur);cur=""}pushWords(s);continue}if(cur&&(cur+" "+s).length>180){out.push(cur);cur=s}else cur=cur?cur+" "+s:s}if(cur)out.push(cur);return out}
-function fxPlay(list,i,tier,retry,proven){if(!FX.active||!AU.active)return;if(i>=list.length){auStop();return}var a;try{a=new Audio(TTS_TIERS[tier](list[i]))}catch(e){auStop();return}try{a.playbackRate=AU.rate||1}catch(e){}FX.audio=a;a.onended=function(){if(AU.active&&FX.active){FX.errs=0;fxPlay(list,i+1,tier,0,true)}};a.onerror=function(){if(!AU.active||!FX.active)return;if(!proven){if(retry<1){fxPlay(list,i,tier,retry+1,false);return}if(tier+1<TTS_TIERS.length){fxPlay(list,i,tier+1,0,false);return}auStop();audMsg("I couldn't reach a voice service — check your connection, or open this page in Chrome for built-in voices.");return}if(retry<1){fxPlay(list,i,tier,retry+1,true);return}FX.errs=(FX.errs||0)+1;if(FX.errs>4){auStop();audMsg("The voice service dropped — check your connection, or open this page in Chrome.");return}fxPlay(list,i+1,tier,0,true)};try{var pr=a.play();if(pr&&pr.catch)pr.catch(function(){if(!proven&&i===0)audMsg("The browser blocked audio — tap the pause button, then play, to start it.")})}catch(e){}}
+function fxPlay(list,i,tier,retry,proven){if(!FX.active||!AU.active)return;if(i>=list.length){if(window.SigTTS&&SigTTS._fin)SigTTS._fin(true);auStop();return}var a;try{a=new Audio(TTS_TIERS[tier](list[i]))}catch(e){if(window.SigTTS&&SigTTS._fin)SigTTS._fin(false);auStop();return}try{a.playbackRate=AU.rate||1}catch(e){}FX.audio=a;a.onended=function(){if(AU.active&&FX.active){FX.errs=0;fxPlay(list,i+1,tier,0,true)}};a.onerror=function(){if(!AU.active||!FX.active)return;if(!proven){if(retry<1){fxPlay(list,i,tier,retry+1,false);return}if(tier+1<TTS_TIERS.length){fxPlay(list,i,tier+1,0,false);return}if(window.SigTTS&&SigTTS._fin)SigTTS._fin(false);auStop();audMsg("I couldn't reach a voice service — check your connection, or open this page in Chrome for built-in voices.");return}if(retry<1){fxPlay(list,i,tier,retry+1,true);return}FX.errs=(FX.errs||0)+1;if(FX.errs>4){if(window.SigTTS&&SigTTS._fin)SigTTS._fin(false);auStop();audMsg("The voice service dropped — check your connection, or open this page in Chrome.");return}fxPlay(list,i+1,tier,0,true)};try{var pr=a.play();if(pr&&pr.catch)pr.catch(function(){if(!proven&&i===0)audMsg("The browser blocked audio — tap the pause button, then play, to start it.")})}catch(e){}}
 function fxStart(text){FX.active=true;FX.errs=0;fxPlay(fxChunks(text),0,0,0,false)}
 function fxStop(){FX.active=false;if(FX.audio){try{FX.audio.pause()}catch(e){}FX.audio=null}}
 function auPauseToggle(){if(!AU.active)return;if(FX.active){var fa=FX.audio;try{if(AU.paused){if(fa)fa.play()}else{if(fa)fa.pause()}}catch(e){}AU.paused=!AU.paused;auPaintBtn();return}try{if(AU.paused)window.speechSynthesis.resume();else window.speechSynthesis.pause()}catch(e){}AU.paused=!AU.paused;auPaintBtn()}
@@ -275,7 +409,7 @@ function appSpeakText(o){
 }
 /* FIX-WAVE: Audio-only read-aloud (tiered online voice). speechSynthesis-first hung on
    devices with a dead built-in voice (his phone's in-app browser) — straight to audio tiers. */
-function readApp(o){if(!o){audMsg("No app loaded to read yet.");return}if(window.__JAHREAD&&!window.__JAHREAD.playGuard("readApp"))return;auStop();AU.label=o.name;AU.active=true;AU.paused=false;auShowBar(true);auPaintBtn();fxStart(appSpeakText(o))}
+function readApp(o){if(!o){audMsg("No app loaded to read yet.");return}if(window.__JAHREAD&&!window.__JAHREAD.playGuard("readApp"))return;var S=window.SigTTS;try{S._killAudio();}catch(e){}try{S._killPage();}catch(e){}AU.label=o.name;AU.active=true;AU.paused=false;auShowBar(true);auPaintBtn();/* SigTTS dead-voice guard: probe aliveness + watchdog; dead/stalled engine -> FX online tier */S._arm(function(){auStop();});S.speak(appSpeakText(o),{rate:AU.rate},function(ok){S._fin(ok);});}
 
 /* ============ app ============ */
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
@@ -703,7 +837,7 @@ function askQA(){
   inp.value="";
 }
 document.getElementById("aupause").onclick=auPauseToggle;
-document.getElementById("austop").onclick=auStop;
+document.getElementById("austop").onclick=function(){try{window.SigTTS.stop();}catch(e){try{auStop();}catch(_){}}};
 document.addEventListener("DOMContentLoaded",boot);
 </script>
 <style>
