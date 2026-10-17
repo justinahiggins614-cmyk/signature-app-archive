@@ -185,18 +185,23 @@ document.getElementById("jah-askai-q").addEventListener("keydown",function(e){if
 """
 def main():
     nav, style, themescript = pull_index_html()
-    feed = json.load(open(os.path.join(ROOT, "apps-catalog.json"), encoding="utf-8"))
+    feed = json.load(open(os.path.join(ROOT, "apps-catalog", "index.json"), encoding="utf-8"))
     fams = feed["categories"]
-    # per-category counts from the real compact index row count
+    # per-category counts from the sharded catalog feed (rebuilt same run)
     cat_counts = {}
     with open(os.path.join(ROOT, "data", "manifest.json"), encoding="utf-8") as fh:
         total = json.load(fh).get("count", feed["count"])
-    apps = feed.get("apps", [])
-    for a in apps:
-        cat_counts[a["category_key"]] = cat_counts.get(a["category_key"], 0) + 1
-    if not apps or sum(cat_counts.values()) != total:
-        # apps-catalog.json feed built in the same run covers every app;
-        # fall back to even split if a feed app list is missing
+    shard_ok = True
+    for ent in feed.get("files", []):
+        try:
+            sh = json.load(open(os.path.join(ROOT, "apps-catalog", ent["file"]), encoding="utf-8"))
+            cat_counts[ent["category"]] = sh.get("count", len(sh.get("apps", [])))
+        except Exception:
+            shard_ok = False
+            cat_counts[ent["category"]] = 0
+    if not shard_ok or sum(cat_counts.values()) != total:
+        # catalog feed built in the same run covers every app;
+        # fall back to even split if a feed shard is missing
         cat_counts = {f["key"]: total // len(fams) for f in fams}
     per_cat = {f["key"]: cat_counts.get(f["key"], 0) for f in fams}
 
@@ -301,7 +306,7 @@ CAT_DETAILS
 %NAV%
 <footer style="border-top:1px solid var(--line);margin-top:30px;padding:20px 0 40px;color:var(--dim);font-size:.82em"><div class="wrap">
 <p><b style="color:var(--gold)">The Signature App Archive</b> &mdash; every app an original Signature-line program by <b>Justin Addam Higgins</b>. Demos run live in your browser; downloads pack the app for thumbdrive or CD-ROM.</p>
-<p class="note">Machine-readable: <a href="api.json">api.json</a> &middot; <a href="apps-catalog.json">apps-catalog.json</a> &middot; <a href="sitemap.xml">sitemap</a></p>
+<p class="note">Machine-readable: <a href="api.json">api.json</a> &middot; <a href="apps-catalog/index.json">apps catalog feed</a> &middot; <a href="sitemap.xml">sitemap</a></p>
 </div></footer>
 <script src="js/covers.js"></script>
 <script>

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Batch-solve full app records in ONE node process.
  * stdin: lines of "cat|seed|appid"  -> stdout: one JSON record per line.
- * Used by code/build_sitemap.py for the apps-catalog.json feed. */
+ * Used by code/build_sitemap.py for the per-category apps-catalog feed shards. */
 var SigApp = require("./appgen.js");
 var rl = require("readline").createInterface({ input: process.stdin, terminal: false });
 rl.on("line", function (line) {

@@ -4,8 +4,12 @@
 1. sitemap.xml          - sitemap INDEX -> sitemap-main.xml + sitemap-apps-N.xml batches
 2. sitemap-main.xml     - home + the ?cat= category pages (31 families)
 3. sitemap-apps-N.xml   - ?app= deep links, 1,000 URLs per file (modular batches)
-4. apps-catalog.json    - standardized machine-readable feed: id, name, category,
-                          platforms, tagline, description, deep link (full solve per app)
+4. apps-catalog/       - standardized machine-readable feed, sharded per category
+                          (id, name, category, platforms, tagline, description,
+                          deep link; full solve per app) + apps-catalog/index.json
+                          listing categories, counts and shard files.
+                          (A single apps-catalog.json hit GitHub's 100MB file limit
+                          at ~169k apps — hence the per-category shards.)
 5. catalog/<cat>.html   - pre-rendered static HTML tables (ID, name, description)
                           for non-JS crawlers + catalog/index.html hub
 """
@@ -140,17 +144,40 @@ def main():
     parts.append("</sitemapindex>\n")
     open(os.path.join(ROOT, "sitemap.xml"), "w").write("".join(parts))
 
-    # --- apps-catalog.json feed ---
-    feed = {"site": "The Signature App Archive",
-            "base": BASE,
-            "updated": TODAY,
-            "count": len(feed_apps),
-            "goal": 1000000,
-            "creator": CREATOR,
-            "categories": [{"key": f["key"], "name": f["name"], "icon": f["icon"],
-                            "blurb": f["blurb"]} for f in fams],
-            "apps": feed_apps}
-    open(os.path.join(ROOT, "apps-catalog.json"), "w").write(json.dumps(feed))
+    # --- apps-catalog/ sharded machine-readable feed ---
+    # NOTE (2026-10-17): the old single apps-catalog.json reached 100.06MB and
+    # tripped GitHub's 100MB per-file limit on push. The feed is now sharded
+    # per category (31 files, each ~3-4MB at current scale) plus a small
+    # apps-catalog/index.json with categories, counts and the shard file list.
+    catdir = os.path.join(ROOT, "apps-catalog")
+    os.makedirs(catdir, exist_ok=True)
+    cat_meta = [{"key": f["key"], "name": f["name"], "icon": f["icon"],
+                 "blurb": f["blurb"]} for f in fams]
+    index = {"site": "The Signature App Archive",
+             "base": BASE,
+             "updated": TODAY,
+             "count": len(feed_apps),
+             "goal": 1000000,
+             "creator": CREATOR,
+             "categories": cat_meta,
+             "files": []}
+    for f in fams:
+        key = f["key"]
+        capps = by_cat.get(key, [])
+        fn = "apps-catalog-%s.json" % key
+        shard = {"site": "The Signature App Archive",
+                 "base": BASE,
+                 "updated": TODAY,
+                 "category": key,
+                 "category_name": f["name"],
+                 "count": len(capps),
+                 "goal": 1000000,
+                 "creator": CREATOR,
+                 "apps": capps}
+        open(os.path.join(catdir, fn), "w").write(json.dumps(shard))
+        index["files"].append({"file": fn, "category": key,
+                               "category_name": f["name"], "count": len(capps)})
+    open(os.path.join(catdir, "index.json"), "w").write(json.dumps(index))
 
     # --- static catalog pages ---
     cdir = os.path.join(ROOT, "catalog")

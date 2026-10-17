@@ -105,8 +105,11 @@ api = json.load(open(os.path.join(ROOT, "api.json")))
 check("api.json apps == manifest", api.get("apps") == n, "%s vs %d" % (api.get("apps"), n))
 check("api.json index_sha256 == manifest", api.get("index_sha256") == manifest.get("index_sha256"))
 
-cat = json.load(open(os.path.join(ROOT, "apps-catalog.json")))
-check("apps-catalog.json count == manifest", cat.get("count") == n, "%s vs %d" % (cat.get("count"), n))
+cat = json.load(open(os.path.join(ROOT, "apps-catalog", "index.json")))
+check("apps-catalog/index.json count == manifest", cat.get("count") == n, "%s vs %d" % (cat.get("count"), n))
+shard_total = sum(e.get("count", 0) for e in cat.get("files", []))
+check("apps-catalog shard counts == manifest", shard_total == n, "%d vs %d" % (shard_total, n))
+check("apps-catalog has 31 shards", len(cat.get("files", [])) == 31, str(len(cat.get("files", []))))
 
 app_urls = 0
 for fn in sorted(os.listdir(ROOT)):
