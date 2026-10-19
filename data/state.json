@@ -1,6 +1,6 @@
 {
  "next_seed": {
-  "word": 6035,
+  "word": 6036,
   "sheet": 6035,
   "slides": 6035,
   "mail": 6035,
@@ -15,7 +15,7 @@
   "browser": 6035,
   "music": 6035,
   "games": 6035,
-  "utils": 6035,
+  "utils": 6056,
   "photo": 6035,
   "draw": 6035,
   "pdf": 6035,
@@ -27,10 +27,10 @@
   "weather": 6035,
   "fitness": 6035,
   "recipes": 6035,
-  "language": 6035,
+  "language": 6036,
   "finance": 6035,
   "backup": 6035,
-  "ai": 5305
+  "ai": 5308
  },
- "next_id": 37831
+ "next_id": 186351
 }

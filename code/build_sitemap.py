@@ -110,13 +110,15 @@ def main():
         if "error" in o:
             raise RuntimeError("solve failed for %s: %s" % (appid, o["error"]))
         fm = fmap.get(cat, {})
+        # Prefer the row's stored name/tagline: identical to the solved values
+        # for generator rows, and preserves curated names for hand-added rows.
         feed_apps.append({
             "id": appid,
-            "name": o["name"],
+            "name": r[3] or o["name"],
             "category": fm.get("name", cat),
             "category_key": cat,
             "platforms": o.get("platforms", "Phone + PC"),
-            "tagline": o.get("tagline", ""),
+            "tagline": r[4] or o.get("tagline", ""),
             "description": o.get("description", ""),
             "url": BASE + "?app=" + appid,
             "creator": CREATOR,
