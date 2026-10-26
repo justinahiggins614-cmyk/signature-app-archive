@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""2h drip for The Signature App Archive: +~1,000 apps/run toward 1,000,000.
+"""2h drip for The Signature App Archive: +~2,000 apps/run toward 1,000,000.
 
 Silent run: generates apps, rebuilds index/sitemap/api, commits + pushes.
 800MB repo-size guard: if data/ exceeds the guard, do NOT push; report.
@@ -9,7 +9,7 @@ import json, os, subprocess, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
 GUARD = 800 * 1024 * 1024
-PER_CAT = 34  # 31 categories x 34 = 1,054 apps/run
+PER_CAT = 68  # 31 categories x 68 = 2,108 apps/run
 
 def run(cmd, **kw):
     r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, **kw)
