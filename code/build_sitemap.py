@@ -83,18 +83,40 @@ def urlset(urls):
 
 
 def solve_all(rows):
-    """Solve full records for every (appid, cat, seed) in ONE node process."""
+    """Solve full records for every (appid, cat, seed) in ONE node process.
+
+    STREAMING (2026-10-26): the old version buffered node's entire stdout
+    plus the parsed record list plus feed_apps in RAM at once, which OOM-killed
+    this script at 286k apps (python RSS hit 4.8GB). Now the writer thread feeds
+    stdin while the caller consumes stdout line by line, so only one solved
+    record is ever held at a time.
+    """
     import subprocess as sp
+    import threading
     p = sp.Popen(["node", "code/solve_batch.js"], cwd=ROOT,
                  stdin=sp.PIPE, stdout=sp.PIPE, text=True)
-    inp = "".join("%s|%d|%s\n" % (r[1], r[2], r[0]) for r in rows)
-    out, _ = p.communicate(inp)
-    recs = []
-    for line in out.split("\n"):
+
+    def feed():
+        try:
+            for r in rows:
+                p.stdin.write("%s|%d|%s\n" % (r[1], r[2], r[0]))
+        except (BrokenPipeError, ValueError):
+            pass
+        finally:
+            try:
+                p.stdin.close()
+            except (BrokenPipeError, ValueError):
+                pass
+
+    t = threading.Thread(target=feed, daemon=True)
+    t.start()
+    for line in p.stdout:
         line = line.strip()
         if line:
-            recs.append(json.loads(line))
-    return recs
+            yield json.loads(line)
+    t.join()
+    if p.wait() != 0:
+        raise RuntimeError("solve_batch.js exited %d" % p.returncode)
 
 
 def main():
