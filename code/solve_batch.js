@@ -8,9 +8,15 @@ rl.on("line", function (line) {
   line = line.trim();
   if (!line) return;
   var p = line.split("|");
+  var out;
   try {
-    process.stdout.write(JSON.stringify(SigApp.solve(p[0], parseInt(p[1], 10), p[2])) + "\n");
+    out = JSON.stringify(SigApp.solve(p[0], parseInt(p[1], 10), p[2])) + "\n";
   } catch (e) {
-    process.stdout.write(JSON.stringify({ error: String(e && e.message || e), input: line }) + "\n");
+    out = JSON.stringify({ error: String(e && e.message || e), input: line }) + "\n";
   }
+  // Backpressure (2026-11-02): writing ~455k records without pausing
+  // overflows the stdout pipe when the consumer lags, and node then dies
+  // with "write ENOBUFS". Pause the line reader until the pipe drains.
+  if (!process.stdout.write(out)) rl.pause();
 });
+process.stdout.on("drain", function () { if (!rl.closed) rl.resume(); });
