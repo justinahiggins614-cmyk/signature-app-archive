@@ -3,7 +3,7 @@
 
 1. manifest.count == index rows == chunk rows == api.json apps == apps-catalog count
 2. sitemap ?app= URL count == manifest.count; all sitemap XML valid
-3. IDs unique, contiguous JAH-APP-000001..NNNNNN, zero-padded 6
+3. IDs unique, contiguous JAH-APP-000001..NNNNNN, zero-padded to 6 (7 digits past 999,999)
 4. every row's category is one of the families; every family has >=1 app
 5. every family's demo key(s) exist in the DEMOS registry (code/demos.js)
 6. every demo key has a Python template (code/pytmpl.json)
@@ -75,7 +75,7 @@ ids = [r[0] for r in rows]
 check("IDs unique", len(set(ids)) == len(ids), "dupes: %d" % (len(ids) - len(set(ids))))
 expect = ["JAH-APP-%06d" % i for i in range(1, n + 1)]
 check("IDs contiguous JAH-APP-000001..%06d" % n, ids == expect)
-check("ID format", all(re.match(r"^JAH-APP-\d{6}$", i) for i in ids))
+check("ID format", all(re.match(r"^JAH-APP-\d{6,}$", i) for i in ids))
 check("earliest/latest match", manifest["earliest_id"] == expect[0] and manifest["latest_id"] == expect[-1])
 
 bad_cat = [r[0] for r in rows if r[1] not in fam_keys]
@@ -119,7 +119,7 @@ for fn in sorted(os.listdir(ROOT)):
             ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
             locs = [u.find(ns + "loc").text for u in root]
             app_urls += len(locs)
-            bad = [l for l in locs if not re.match(re.escape(BASE) + r"\?app=JAH-APP-\d{6}$", l)]
+            bad = [l for l in locs if not re.match(re.escape(BASE) + r"\?app=JAH-APP-\d{6,}$", l)]
             check("sitemap URL shape: " + fn, not bad, str(bad[:2]))
         except Exception as e:
             check("sitemap XML valid: " + fn, False, str(e)[:100])
